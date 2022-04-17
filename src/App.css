@@ -1,0 +1,389 @@
+:root {
+  --text: white;
+  --textButton: white;
+  --basicButton: rgb(43, 43, 43);
+  --confirmButton: rgb(36, 128, 36);
+  --deleteButton: rgb(172, 21, 21);
+}
+
+.main-app {
+  text-align: left;
+}
+
+.container {
+  margin-top: 4%;
+  margin-left: 20%;
+  width: 60%;
+}
+
+.cta-button {
+  border-radius: 0.5em;
+  padding: 0.9em;
+  border: none;
+  min-width: 13em;
+  color: var(--textButton);
+  font-size: 1.1em;
+  cursor: pointer;
+  margin: 0.2em;
+  margin-left: 0;
+  font-family: "Poppins", sans-serif;
+  transition: transform 0.3s;
+}
+
+form > .cta-button {
+  margin-top: 0.5em;
+}
+
+.cta-button:hover {
+  transform: scale(0.97);
+}
+
+.delete-button {
+  background: var(--deleteButton);
+}
+
+.confirm-refund-button {
+  background: var(--confirmButton);
+}
+
+.basic-button {
+  background-color: var(--basicButton);
+}
+
+#logo{
+  width: 50%;
+}
+
+#qrcode {
+  height: 140px;
+  width: 140px;
+}
+
+#qrcode-container {
+  min-width: fit-content;
+  margin-left: 33%;
+  padding: 1em;
+  background-color: var(--basicButton);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#qrcode-container > h2 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+input[type="text" i] {
+  background-color: rgb(34, 34, 34);
+  border: none;
+  margin-left: 1em;
+  padding: 0.3em 0.9em;
+  width: 1.5%;
+}
+
+input[type="text" i]:hover {
+  background-color: rgb(39, 39, 39);
+}
+
+h1 {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+h2 {
+  margin-bottom: 0.3em;
+  font-weight: bold;
+}
+
+.box {
+  padding-top: 2.5em;
+  padding-bottom: 2.5em;
+}
+
+.box.top {
+  min-width: fit-content;
+  padding-top: 0;
+  padding-bottom: 1em;
+}
+
+#connectWallet {
+  text-align: center;
+  font-size: 1.3em;
+  margin-top: 15em;
+}
+
+th, td {
+  border: 2px solid hsla(0, 0%, 74%, 0.089);
+  /* border-color: rgb(19, 19, 19); */
+  /* backdrop-filter: blur(15px) saturate(200%); -webkit-backdrop-filter: blur(15px) saturate(200%); background-color: rgba(21, 21, 21, 0.67);  */
+  text-align: left;
+  padding: 0.7em 1em;
+}
+
+th {
+  background-color: rgba(21, 21, 21, 0.253); 
+}
+
+.orderTable, td {
+  /* background-color: rgb(32, 32, 32); */
+}
+
+.orderTable {
+  /* border-collapse: collapse; */
+  width: 100%;
+  /* background-color: rgb(43, 43, 43); */
+}
+
+nav .container {
+  margin: 0;
+}
+
+nav.navbar.navbar-dark {
+  background-color: var(--basicButton);
+  padding-left: 12em;
+  padding-right: 12em;
+}
+
+.navbar-dark .navbar-brand {
+  color: var(--text);
+  font-size: 1.5em;
+  padding-right: 1em;;
+  margin-right: 0;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.navbar-dark .navbar-brand:hover {
+  color: #999999;
+}
+
+nav > div.nav-item > p {
+  margin-bottom: 0;
+}
+
+.nav-link {
+  color: var(--text);
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #999999;
+}
+
+.user-data {
+  padding: 0.3em 0;
+  margin-left: auto;
+}
+
+.avaxLogoMin {
+  width: 1em;
+  height: 1em;
+  margin-left: 0.3em;
+  margin-bottom: 0.1em;
+}
+
+.navbar-expand {
+  justify-content: center;
+}
+
+.register-seller {
+  text-align: center;
+}
+
+.register-button {
+  margin-top: 1em;
+}
+
+form > .getQRCode {
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.tableLabel {
+  display: flex;
+  align-items: center;
+}
+
+.TVL {
+  margin-left: auto;
+  margin-bottom: 0;
+}
+
+.label-selectBox {
+  margin-left: 1em;
+}
+
+select {
+  border: none;
+  margin-left: 1em;
+  padding: 0.3em 0.9em;
+  min-width: 4em;
+}
+
+select:hover {
+  background-color: rgb(39, 39, 39);
+}
+
+.content-and-qrcode {
+  display: inline-flex;
+  align-items: center;
+}
+
+.button-label-select {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.button-label-select > label {
+  margin-bottom: 0;
+  min-width: 11.5em;
+}
+
+body::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(21, 21, 21, 0.67);        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--basicButton);    /* color of the scroll thumb */
+}
+
+/* .blur {
+  backdrop-filter: blur(15px) saturate(200%) !important; 
+  -webkit-backdrop-filter: blur(15px) saturate(200%) !important; 
+  background-color: rgb(51 50 52 / 52%) !important; 
+} */
+
+.blur {
+  backdrop-filter: blur(15px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(200%) !important;
+  background-color: rgb(7 6 8 / 67%) !important;
+}
+
+.spinner {
+  margin-top: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.spinner span {
+  font-size: 2rem;
+  animation: fade 1s linear 0s infinite;
+  padding-right: 1rem;
+}
+
+.half-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #03fc4e;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.5s linear 0s infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.material-icons {
+  float: right;
+}
+
+/*order-page*/
+.orderContainer{
+  margin: 10% 20% 10% 20%;
+}
+
+.order-button-cell{
+  
+  text-align: center;
+  vertical-align: middle;
+  min-width: 8em;
+}
+
+.order-button{
+  color: black;
+  border-radius: 0.5em;
+  padding: 0.25em 0.5em;
+  background-color: #AAAAAA;
+}
+
+.order-button:hover{
+  background-color: #272727;
+  color: white;
+  text-decoration: none;
+}
+
+.landing-title {
+  font-size: 2em;
+  margin: 2em;
+  text-align: center;
+}
+
+.user-data-landing {
+  padding: 0.3em 0;
+  margin-left: auto;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.user-data-landing {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.total-price {
+  margin-top: 2em;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.create-transaction {
+  background-color: #d4d3d3;
+  color: black;
+  margin-left: 45%;
+  margin-top: 5em;
+}
+
+.transaction-hash {
+  padding: 0.3em 0;
+  margin-left: 3em;
+  font-size: 1.25em;
+}
+
+.transaction-hash p {
+  margin: 2em 0;
+}
+
+.transaction-hash a {
+  border: 1px solid var(--text);
+  border-radius: 0.5em;
+  color: var(--textButton);
+  background-color: black;
+  padding: 1em;
+  width: 20%;
+  margin-left: 40%;
+  text-decoration: none;
+}
