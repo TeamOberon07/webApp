@@ -7,7 +7,7 @@ import { DApp } from './components/DApp';
 import { RegisterSeller } from './components/RegisterSeller';
 import { StateProvider } from './components/StateContext';
 import { OrderPage } from './components/OrderPage';
-import { LandingPage } from './components/LandingPage';
+import { LandingPage } from './components/LandingPage/LandingPage';
 
 ReactDOM.render(
   <StateProvider>

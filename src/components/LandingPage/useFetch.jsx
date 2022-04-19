@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { StateContext } from './StateContext';
+import { StateContext } from '../StateContext';
 
 async function _getSellers(context) {
   const sellerAddresses = await context._contract.getSellers();
@@ -26,30 +26,51 @@ export function useFetch (url, method, setHasNotified, setError) {
     const context = useContext(StateContext);
 
     const checkOrder = (order) => {
-      order.price = order.price.toString();
-      isAuthorizedSeller(context, order.sellerAddress)
-      .then(res => {
-        if (res) {
-          if(order.confirmed === true) {
-            // NEED to actually check using res.hash
-            setError('Order already in chain, Tx hash: ' + order.hash);
-            setIsLoaded(true);
-          } else if (isValidAmount(order.price)) {
-            setOrder(order);
-            setIsLoaded(true);
-          } else {
-            setError('Invalid price format (price: ' + order.price + ')');
+      if(order.confirmed === true) {
+        // NEED to actually check using res.hash
+        setError('Order already in chain, Tx hash: ' + order.hash);
+        setIsLoaded(true);
+      } else if (false){
+        // MUST Check if order already in chain but e-comm doesn't know it
+        // something like:
+        // const hash = getHash(order); (contract function)
+        // if(hash){
+        //   setError('Order already in chain with hash:' + hash);
+        //   setIsLoaded(true);
+        //THEN try to contact e-comm
+        // POSSIBLE SOLUTION: 
+        // setError('Order already in chain')
+        // THEN on LandingPage something like
+        // if (error === 'Order already in chain){
+        //   setMethod('PUT');
+        // }
+      } else {
+        order.price = order.price.toString();
+        isAuthorizedSeller(context, order.sellerAddress)
+        .then(res => {
+          if (res) {
+            if (isValidAmount(order.price)) {
+              setOrder(order);
+              setIsLoaded(true);
+            } else {
+              setError('Invalid price format (price: ' + order.price + ')');
+              setIsLoaded(true);
+            }
+          }
+          else {
+            setError('Seller Address not recognized (Address: ' + order.sellerAddress + ')');
             setIsLoaded(true);
           }
-        }
-        else {
+        })
+        .catch(err => {
           setError('Seller Address not recognized (Address: ' + order.sellerAddress + ')');
           setIsLoaded(true);
-        }
-      });
+        });
+      }
     }
    
     useEffect( () => {
+//      setTimeout(() => {
 
       //Associate AbortController w/ fetch request, then use it to stop fetch
       const abortCont = new AbortController();
@@ -73,7 +94,7 @@ export function useFetch (url, method, setHasNotified, setError) {
       fetch(url, fetchOptions)
       .then(res => {
         if(!res.ok) {
-              throw Error('Could not fetch data'); //reached server and got a response
+              throw Error('Fetch failed: (!res.ok)'); //reached server and got a response
         }
         return res.json()
       })
@@ -117,6 +138,7 @@ export function useFetch (url, method, setHasNotified, setError) {
           abortCont.abort()
           console.log('return useFetch');
         };
+//      }, 5000);
     }, [url, method])
 
     return [order, isLoaded];

@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react';
-import {StateContext} from "./StateContext";
-import {NoWalletDetected} from "./NoWalletDetected";
-import {ConnectWallet} from "./ConnectWallet";
-import { Loading } from './Loading';
+import {StateContext} from "../StateContext";
+import {NoWalletDetected} from "../NoWalletDetected";
+import {ConnectWallet} from "../ConnectWallet";
+import { Loading } from '../Loading';
 import { ethers } from "ethers";
-import avaxLogo from "../assets/avaxLogoMin.png";
 import { useFetch } from "./useFetch";
+import { UserData } from "./UserData";
+import { OrderData } from './OrderData';
 
 async function createOrder(context, orderAmount, sellerAddress, setLoadingText) {
   try {
@@ -64,18 +65,6 @@ export function LandingPage() {
     });
   }
 
-  const UserData = () => {
-    return (
-      <div>
-      <h1 className="landing-title">ShopChain</h1>
-        <div className="user-data-landing blur">
-          <p>Current address: &nbsp; {context.currentAddress}</p>
-          <p>Current balance: &nbsp; {parseFloat(context.balance).toFixed(4)}<img src={avaxLogo} className="avaxLogoMin" alt="avax logo"/></p>
-        </div>
-      </div>
-    );
-  }
-
   if(window.ethereum === undefined) {
     return <NoWalletDetected/>;
   }
@@ -104,21 +93,12 @@ export function LandingPage() {
       <Loading />
     </>);
   } else {
-    return (
-      <>
+    return (<>
       <UserData />
 
-        { loadingText === '' && hash === '' &&
-          <><p className="total-price">Payment amount: &nbsp; {order.price} AVAX<img src={avaxLogo} className="avaxLogoMin" alt="avax logo"/></p>
-            <button onClick={confirmOrder} 
-            className="cta-button basic-button create-transaction" id="createOrder">Create transaction</button></>
-        }
+      <OrderData order={order} confirmOrder={confirmOrder} loadingText={loadingText} />
 
-        { loadingText !== '' && hash === '' &&
-          <Loading text={loadingText} />
-        }
-
-        { hash !== '' &&
+        { order.confirmed &&
           <div className="transaction-hash">
             <h3>Transaction completed successfully!</h3>
             <p>Transaction hash: {hash}</p>
@@ -126,14 +106,13 @@ export function LandingPage() {
           </div>
         }
 
-        { hash !== '' && !hasNotified &&
+        { order.confirmed && !hasNotified &&
           <Loading text='Notifying e-commerce...' />
         }
 
-        { hash !== '' && hasNotified &&
+        { order.confirmed && hasNotified &&
           <p style={{'fontSize': '2em', 'margin': '2em', 'textAlign': 'center'}}>E-commerce notified correctly</p>
         }
-      </>
-    );
+    </>);
   }
 }
