@@ -26,24 +26,24 @@ export function useFetch (url, method, setHasNotified, setError) {
     const context = useContext(StateContext);
 
     const checkOrder = (order) => {
+      const setInChain = (error) => {
+        setOrder(order); // in chain => already checked
+        setError(error);
+        setIsLoaded(true);
+      };
       if(order.confirmed === true) {
         // NEED to actually check using res.hash
-        setError('Order already in chain, Tx hash: ' + order.hash);
-        setIsLoaded(true);
-      } else if (false){
-        // MUST Check if order already in chain but e-comm doesn't know it
-        // something like:
-        // const hash = getHash(order); (contract function)
-        // if(hash){
-        //   setError('Order already in chain with hash:' + hash);
-        //   setIsLoaded(true);
-        //THEN try to contact e-comm
-        // POSSIBLE SOLUTION: 
-        // setError('Order already in chain')
-        // THEN on LandingPage something like
-        // if (error === 'Order already in chain){
-        //   setMethod('PUT');
+        // if(getHash(order.hash)) { // check in chain
+          setInChain('Order in chain');
         // }
+        // else {
+        //   setError('e-comm is wrong');
+        //   setLoaded(true);
+        // }
+      } else if (false) { // if(!order.confirmed && getHash(order.hash)) (order in chain but e-comm not notified)
+        order.hash = '0x3a99c01bc896891e324a62bf687843631d17164acd3cfbb341a93198744f3801'; // GET actual hash 
+        order.confirmed = true;
+        setInChain('Order in chain & !notified');
       } else {
         order.price = order.price.toString();
         isAuthorizedSeller(context, order.sellerAddress)
@@ -51,26 +51,25 @@ export function useFetch (url, method, setHasNotified, setError) {
           if (res) {
             if (isValidAmount(order.price)) {
               setOrder(order);
-              setIsLoaded(true);
             } else {
               setError('Invalid price format (price: ' + order.price + ')');
-              setIsLoaded(true);
             }
           }
           else {
             setError('Seller Address not recognized (Address: ' + order.sellerAddress + ')');
-            setIsLoaded(true);
           }
         })
         .catch(err => {
-          setError('Seller Address not recognized (Address: ' + order.sellerAddress + ')');
-          setIsLoaded(true);
-        });
+          setError(err);
+        })
+        .finally(() => 
+          setIsLoaded(true)
+        );
       }
     }
    
     useEffect( () => {
-//      setTimeout(() => {
+    //  setTimeout(() => {
 
       //Associate AbortController w/ fetch request, then use it to stop fetch
       const abortCont = new AbortController();
@@ -94,7 +93,7 @@ export function useFetch (url, method, setHasNotified, setError) {
       fetch(url, fetchOptions)
       .then(res => {
         if(!res.ok) {
-              throw Error('Fetch failed: (!res.ok)'); //reached server and got a response
+              throw Error(`${method} request failed (Code ${res.status}:  ${res.statusText})`); //reached server and got a response
         }
         return res.json()
       })
@@ -106,27 +105,14 @@ export function useFetch (url, method, setHasNotified, setError) {
           else if(method === 'PUT') {
             setHasNotified(true);
           }
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          if(error.name === 'AbortError') {
-            // ...
-            console.log('fetch aborted (onRejected)');
-          }
-          else {
-            setError(error);
-            setIsLoaded(true);
-          }
-        }
-      ).catch(error => {
+        })
+        .catch(error => {
         if(error.name === 'AbortError') {
           // ...
           console.log('fetch aborted (catch)');
         }
         else {
-          setError(error);
+          setError(error.message);
           setIsLoaded(true);
         };
       })
@@ -138,7 +124,7 @@ export function useFetch (url, method, setHasNotified, setError) {
           abortCont.abort()
           console.log('return useFetch');
         };
-//      }, 5000);
+    //  }, 3000);
     }, [url, method])
 
     return [order, isLoaded];

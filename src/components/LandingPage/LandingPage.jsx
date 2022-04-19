@@ -3,19 +3,22 @@ import {StateContext} from "../StateContext";
 import {NoWalletDetected} from "../NoWalletDetected";
 import {ConnectWallet} from "../ConnectWallet";
 import { Loading } from '../Loading';
+import { Error } from '../Error';
 import { ethers } from "ethers";
 import { useFetch } from "./useFetch";
 import { UserData } from "./UserData";
 import { OrderData } from './OrderData';
+import { TxHash } from './TxHash';
+import { Notify } from './Notify';
 
-async function createOrder(context, orderAmount, sellerAddress, setLoadingText) {
+async function createOrder(context, orderAmount, sellerAddress, afterConfirm) {
   try {
     const overrides = {
       value: ethers.utils.parseEther(orderAmount),
     }
     
     const tx = await context._contract.createOrder(sellerAddress, overrides);
-    setLoadingText('Please wait for the transaction to be mined...'); // Here for now...
+    afterConfirm();
     const receipt = await tx.wait();
     if (receipt.status) {
       context._updateBalance();
@@ -38,6 +41,8 @@ export function LandingPage() {
   const [hash, setHash] = useState('');
   const [hasNotified, setHasNotified] = useState(false);
   const [error, setError] = useState('');
+  const [isInChain, setIsInChain] = useState(false);
+  const [ecommIsNotSynched, setEcommIsNotSynched] = useState(false);
   const context = useContext(StateContext);
 
   const [fetchUrl, setFetchUrl] = useState('');
@@ -46,15 +51,16 @@ export function LandingPage() {
 
   const confirmOrder = () => {
     setLoadingText('Please confirm the transaction on MetaMask');
-    createOrder(context, order.price, order.sellerAddress, setLoadingText)
+    createOrder(context, order.price, order.sellerAddress, () => setLoadingText('Please wait for the transaction to be mined...'))
     .then(res => {
       setHash(res);
-      setLoadingText('Notifying e-commerce...')
+      // setLoadingText('Notifying e-commerce...');
       order.confirmed = true;
       order.hash = res;
       setFetchMethod('PUT');
     })
     .catch(err => {
+      setLoadingText('');
       setError(err.message + ' (Code: ' + err.code + ')');
       // Useful for testing without accepting transaction on MetaMask, just decline transaction
       // setHash('TransactionHashString');
@@ -81,37 +87,55 @@ export function LandingPage() {
     setFetchMethod('GET');
   }
 
-  if (error) {
-    return (<>
-        <UserData />
-        <h2>Error: {error}</h2>
-      </>); 
+  if(error && error.includes('Order in chain')) {
+    const err = error;
+    setError(null);
+    setIsInChain(true);
+    setHash(order.hash);
+    if(err === 'Order in chain & !notified') {
+      setEcommIsNotSynched(true);
+      // setLoadingText('Notifying e-commerce...');
+      setFetchMethod('PUT');
+    }
   }
-  else if (!isLoaded) {
+
+  if (!isLoaded) {
     return (<>
       <UserData />
       <Loading />
     </>);
+  } else if(isInChain) {
+    return (<>
+      <UserData />
+      <p>Tx is already in chain!</p>
+      <TxHash hash={hash} />
+
+      { !error && ecommIsNotSynched && 
+      <Notify hasNotified={hasNotified} />
+      }
+
+      { error && 
+        <Error message={error} />
+        }
+      </>);
   } else {
     return (<>
       <UserData />
 
       <OrderData order={order} confirmOrder={confirmOrder} loadingText={loadingText} />
 
-        { order.confirmed &&
-          <div className="transaction-hash">
-            <h3>Transaction completed successfully!</h3>
-            <p>Transaction hash: {hash}</p>
-            <a href={"https://testnet.snowtrace.io/tx/" + hash} target="_blank" rel="noopener noreferrer">View on Snowtrace</a>
-          </div>
+        { order.confirmed && <>
+          <h3>Transaction completed successfully!</h3>
+          <TxHash hash={hash} />
+          </>
+        }
+        
+        {!error && order.confirmed && 
+          <Notify hasNotified={hasNotified} />
         }
 
-        { order.confirmed && !hasNotified &&
-          <Loading text='Notifying e-commerce...' />
-        }
-
-        { order.confirmed && hasNotified &&
-          <p style={{'fontSize': '2em', 'margin': '2em', 'textAlign': 'center'}}>E-commerce notified correctly</p>
+        { error && 
+          <Error message={error} />
         }
     </>);
   }

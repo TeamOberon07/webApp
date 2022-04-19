@@ -387,3 +387,9 @@ body::-webkit-scrollbar-thumb {
   margin-left: 40%;
   text-decoration: none;
 }
+
+.error {
+  color: rgb(209, 56, 18);
+  font-weight: bold;
+  margin: 1em;
+}
