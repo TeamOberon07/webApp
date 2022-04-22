@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import avaxLogo from "../assets/avaxLogoMin.png";
+import shopChainLogo from "../assets/logoShopChain.png";
 
 export function Header({currentAddress, balance}) {
 
@@ -13,6 +14,7 @@ export function Header({currentAddress, balance}) {
     <header>
       <div className="navigation">
         <nav className="navbar navbar-expand navbar-dark blur">
+            <img id="imgLogo" src={shopChainLogo}/>
             <NavLink className="navbar-brand" to="/">
               ShopChain
             </NavLink>

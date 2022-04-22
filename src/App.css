@@ -393,3 +393,13 @@ body::-webkit-scrollbar-thumb {
   font-weight: bold;
   margin: 1em;
 }
+
+#paginator-buttons{
+  display: flex;
+  justify-content: space-around;
+}
+
+#imgLogo{
+  padding: 0 1em;
+  width: 7em;
+}
