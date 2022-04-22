@@ -1,6 +1,7 @@
 import React from "react";
 import { ethers } from "ethers";
 import avaxLogo from "../assets/avaxLogoMin.png";
+import { useEffect, useState, useContext } from 'react';
 //import { OrderPage } from "./OrderPage";
 //import { render } from "@testing-library/react";
 
@@ -12,6 +13,13 @@ export function Orders({orders, isBuyer, State}) {
 
   let n = 6;
 
+  const [first, setFirst] = useState(0);
+
+  useEffect(()=> {
+    //fetchData();
+    console.log("useEffect")
+  }, [first]);
+
   if (isBuyer) {
     i = 2;
     view = "Seller";
@@ -20,6 +28,7 @@ export function Orders({orders, isBuyer, State}) {
     i = 1;
     view = "Buyer"
   }
+
 
   // style foreach different state
   const Icon = ['check_circle', 'verified', 'delete', 'assignment_return', 'reply'];
@@ -32,7 +41,7 @@ export function Orders({orders, isBuyer, State}) {
   ];
 
   if (orders.length) {
-    content = orders.map((element) => (
+    content = orders.slice(first, first+20).map((element) => (
         <tr key={element[0].toString()}>
           <td>{element[0].toString()}</td>
           <td>
@@ -89,6 +98,10 @@ export function Orders({orders, isBuyer, State}) {
           {content}
         </tbody>
       </table>
+      <div id="paginator-buttons">
+        {first > 0 && <button class = "cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
+        {first + 20 < orders.length && < button class = "cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}
+      </div>
     </div>
   );
 
