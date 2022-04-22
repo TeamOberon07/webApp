@@ -1,7 +1,5 @@
 import React, { createContext } from "react";
-
 import { ethers } from "ethers";
-
 import Escrow from "../contracts/escrow.json";
 
 export const StateContext = createContext();
@@ -31,9 +29,7 @@ export class StateProvider extends React.Component {
         },
 
         _connectWallet: async () => {
-
             const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-
             const provider = new ethers.providers.Web3Provider(window.ethereum);
 
             this.setState({
@@ -51,13 +47,9 @@ export class StateProvider extends React.Component {
             this.setState({
                 currentAddress: currentAddress,
             });
-            // console.log( window.ethereum.chainId)
-            // console.log( this.state.networks[this.state.ourNetwork].chainId)
-
             this.setState({
                 rightChain: window.ethereum.chainId === this.state.networks[this.state.ourNetwork].chainId,
             })
-
             this.state._updateBalance();
         },
 
@@ -159,6 +151,36 @@ export class StateProvider extends React.Component {
             const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
             orders.forEach(order => {console.log(order[0].toString());/*if(order[0]==id){ return true;}*/});
             return false;
+        },
+
+        _orderOperation: async (id, expr, orderAmount) => {
+            try {
+                var tx, error = undefined;
+                switch(expr) {
+                    case "Confirm":
+                        tx = await this.state._contract.confirmOrder(id);
+                        break;
+                    case "Delete":
+                        tx = await this.state._contract.deleteOrder(id);
+                        break;
+                    case "AskRefund":
+                        tx = await this.state._contract.askRefund(id);
+                        break;
+                    case "RefundBuyer":
+                        const overrides = {
+                            value: orderAmount,
+                        }
+                        tx = await this.state._contract.refundBuyer(id, overrides);
+                        console.log("Refund: ", tx);
+                        break;
+                    default:
+                        error = "Errore, non è prevista un'operazione " + expr;
+                        break;
+                }
+                return [tx, error];
+            } catch(err) {
+                return [tx, error];
+            }
         }
     };
 

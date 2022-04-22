@@ -9,12 +9,9 @@ import { SwitchNetwork } from "./SwitchNetwork";
 import { Buyer } from './Buyer';
 import { Seller } from './Seller';
 import { Loading } from './Loading';
+import { Error } from './Error';
 
 import { StateContext } from './StateContext';
-
-const orderAmount = "0.03";
-const selectedSeller = 0;
-const State = ['Created', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'];
 
 export class DApp extends React.Component {
     constructor(props) {
@@ -27,6 +24,7 @@ export class DApp extends React.Component {
             totalOrders: undefined,
             getQRCode: undefined,
             userIsBuyer: false,
+            orderState: ['Created', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
         };
 
         this.state = this.initialState;
@@ -40,60 +38,45 @@ export class DApp extends React.Component {
         this._setListenerNetworkChanged();
     }
 
-    componentWillUnmount() {
-        // window.ethereum.on('accountsChanged', null);
-        // window.ethereum.on('chainChanged', null);
-    }
+    // componentWillUnmount() {
+    //     window.ethereum.on('accountsChanged', null);
+    //     window.ethereum.on('chainChanged', null);
+    // }
 
     render() {
-
-        if(window.ethereum === undefined) {
+        if (window.ethereum === undefined) {
             return <NoWalletDetected/>;
         }
         
-        if(!this.context.currentAddress) {
-            return (
-                <ConnectWallet connectWallet={() => this._initialize()}/>
-            );
+        if (!this.context.currentAddress) {
+            return <ConnectWallet connectWallet={() => this._initialize()}/>;
         }
 
-        if(!this.state.orders || !this.context.balance) {
-            return (
-                <Loading/>
-            );
+        if (!this.state.orders || !this.context.balance) {
+            return <Loading/>;
         }
         
-        if(window.ethereum.chainId !== this.context.networks[this.context.ourNetwork].chainId || !this.context.rightChain) {
-            return (
-                <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>
-            );
+        if (window.ethereum.chainId !== this.context.networks[this.context.ourNetwork].chainId || !this.context.rightChain) {
+            return <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>;
         }
 
-        if(this.state.userIsBuyer) {
-            return (
-                <Buyer  currentAddress={this.context.currentAddress}
+        if (this.state.userIsBuyer) {
+            return <Buyer  currentAddress={this.context.currentAddress}
                         balance={this.context.balance}
-                        seller={this.state.sellerAddress}
                         orders={this.state.orders}
-                        askRefund={(id) => this._askRefund(id)}
-                        createOrder={() => this._createOrder()}
-                        orderAmount={orderAmount}
-                        State={State}
-                />
-            );
+                        askRefund={(id) => this._orderOperation(id, "AskRefund")}
+                        State={this.state.orderState}
+                />;
         } else {
-            return (
-                <Seller currentAddress={this.context.currentAddress}
+            return <Seller currentAddress={this.context.currentAddress}
                         balance={this.context.balance}
                         orders={this.state.orders}
-                        deleteOrder={(id) => this._deleteOrder(id)}
-                        refundBuyer={(id, orderAmount) => this._refundBuyer(id, orderAmount)}
+                        deleteOrder={(id) => this._orderOperation(id, "Delete")}
+                        refundBuyer={(id, orderAmount) => this._orderOperation(id, "RefundBuyer", orderAmount)}
                         getQRCode={(id) => this._getQRCode(id)}
-                        State={State}
-                />
-            );
+                        State={this.state.orderState}
+                />;
         }
-
     };
 
     async _setListenerMetamaksAccount() {
@@ -133,6 +116,7 @@ export class DApp extends React.Component {
 
     async _initializeSeller() {
         const sellerAddresses = await this._getSellers();
+        const selectedSeller = 0;
         let sellerAddress = sellerAddresses[selectedSeller];
         this.setState({ sellerAddress });
         this._userIsBuyer();
@@ -165,62 +149,16 @@ export class DApp extends React.Component {
         }
         this.setState({ orders });
     }
+
+    //Funzioni confirmOrder, deleteOrder, askRefund e refundBuyer spostate in StateContext
+    async _orderOperation(id, expr, orderAmount=0) {
+        const res = await this.context._orderOperation(id, expr, orderAmount);
+        if (res[0])
+            this._refreshInfo(res[0]);
+        else if (res[1])
+            return <Error message={res[1]}/>;
+    }
     
-    async _createOrder() {
-        try {
-            const overrides = {
-                value: ethers.utils.parseEther(orderAmount),
-            }
-            const tx = await this.context._contract.createOrder(this.state.sellerAddress, overrides);
-            const receipt = await tx.wait();
-            if (receipt.status) {
-                this._initializeOrders();
-                this.context._updateBalance();
-            }
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-    async _confirmOrder(id) {
-        try {
-            const tx = await this.context._contract.confirmOrder(id);
-            this._refreshInfo(tx);
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-    async _deleteOrder(id) {
-        try {
-            const tx = await this.context._contract.deleteOrder(id);
-            this._refreshInfo(tx);
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-    async _askRefund(id) {
-        try {
-            const tx = await this.context._contract.askRefund(id);
-            this._refreshInfo(tx);
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-    async _refundBuyer(id, orderAmount) {
-        try {
-            const overrides = {
-                value: orderAmount,
-            }
-            const tx = await this.context._contract.refundBuyer(id, overrides);
-            this._refreshInfo(tx);
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
     async _getTotalOrders() {
         var totalOrders = await this.context._contract.getTotalOrders();
         totalOrders = totalOrders.toNumber();
@@ -251,17 +189,16 @@ export class DApp extends React.Component {
             }
         }
         QRCode.toCanvas(canvas, orderQRCode, opts, function (error) {
-            if (error) console.error(error)
+            if (error)
+                return <Error message={error}/>
         })
     }
 
     async _removeQRCode() {
         let qrcode = document.getElementById('qrcode');
-        try {
+        if (qrcode) {
             var context = qrcode.getContext('2d');
             context.clearRect(0, 0, qrcode.width, qrcode.height);
-        } catch (error) {
-            console.log(error);
         }
     }
 }

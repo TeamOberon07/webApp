@@ -1,15 +1,9 @@
 import React from "react";
 import { Header } from './Header';
 import { Orders } from "./Orders";
-import avaxLogo from "../assets/avaxLogoMin.png";
 
-export function Buyer({currentAddress, balance, seller, orders, askRefund, createOrder, orderAmount, State}) {
-
+export function Buyer({currentAddress, balance, orders, askRefund, State}) {
   let options = "";
-
-  let n = 6;
-  let sellerAddress = seller.substring(0,n) + "..." + seller.substring(seller.length-n, seller.length);
-
   return (
     <div>
       <Header currentAddress={currentAddress}
@@ -19,8 +13,6 @@ export function Buyer({currentAddress, balance, seller, orders, askRefund, creat
         <div className="content-and-qrcode">
           <div className="box top">
             <h2>Buyer view</h2>
-            <p>Seller address: &nbsp; {sellerAddress}</p>
-            <button onClick={createOrder} className="cta-button basic-button blur">Create order ({orderAmount}<img src={avaxLogo} className="avaxLogoMin" alt="avax logo"/>)</button>
             <form onSubmit={(event) => {
                 event.preventDefault();
                 const formData = new FormData(event.target);
@@ -54,5 +46,4 @@ export function Buyer({currentAddress, balance, seller, orders, askRefund, creat
       </div>
     </div>
   );
-
 }
