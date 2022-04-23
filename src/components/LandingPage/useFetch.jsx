@@ -19,6 +19,7 @@ const isValidAmount = (price) => {
     return false;
   }
 }
+export { isValidAmount }; // Necessary for unit testing
 
 export function useFetch (url, method, setHasNotified, setError) {
     const [order, setOrder] = useState('');
@@ -93,9 +94,9 @@ export function useFetch (url, method, setHasNotified, setError) {
       fetch(url, fetchOptions)
       .then(res => {
         if(!res.ok) {
-              throw Error(`${method} request failed (Code ${res.status}:  ${res.statusText})`); //reached server and got a response
+              throw Error(`${method} request failed (Code ${res.status}: ${res.statusText})`); //reached server and got a response
         }
-        return res.json()
+        return res.json();
       })
       .then(
         (res) => {
@@ -119,10 +120,9 @@ export function useFetch (url, method, setHasNotified, setError) {
     }
   
         //useEffect cleanup + abort controller to avoid trying to update the state of unmounted component
-        // but without react-router ...
         return () => {
-          abortCont.abort()
-          console.log('return useFetch');
+          abortCont.abort();
+          //console.log('return useFetch');
         };
     //  }, 3000);
     }, [url, method])

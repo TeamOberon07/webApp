@@ -30,7 +30,7 @@ async function createOrder(context, orderAmount, sellerAddress, afterConfirm) {
   }
 }
 
-function parseUrl() {
+export function parseUrl() {
   const windowUrl = window.location.search;
   const params = new URLSearchParams(windowUrl);
   return "http://localhost:8000/orders/" + params.get('order');
