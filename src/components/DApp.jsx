@@ -23,10 +23,7 @@ export class DApp extends React.Component {
             orders: undefined,
             totalOrders: undefined,
             getQRCode: undefined,
-            userIsBuyer: false,
-            orderState: ['Created', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
         };
-
         this.state = this.initialState;
     }
 
@@ -60,12 +57,12 @@ export class DApp extends React.Component {
             return <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>;
         }
 
-        if (this.state.userIsBuyer) {
+        if (!this.context.userIsSeller) {
             return <Buyer  currentAddress={this.context.currentAddress}
                         balance={this.context.balance}
                         orders={this.state.orders}
                         askRefund={(id) => this._orderOperation(id, "AskRefund")}
-                        State={this.state.orderState}
+                        State={this.context.orderState}
                 />;
         } else {
             return <Seller currentAddress={this.context.currentAddress}
@@ -73,8 +70,8 @@ export class DApp extends React.Component {
                         orders={this.state.orders}
                         deleteOrder={(id) => this._orderOperation(id, "Delete")}
                         refundBuyer={(id, orderAmount) => this._orderOperation(id, "RefundBuyer", orderAmount)}
-                        getQRCode={(id) => this._getQRCode(id)}
-                        State={this.state.orderState}
+                        getQRCode={(id) => this.context._getQRCode(id)}
+                        State={this.context.orderState}
                 />;
         }
     };
@@ -106,32 +103,13 @@ export class DApp extends React.Component {
 
     async _loadBlockchainData() {
         this._getContractBalance();
-        this._initializeSeller();
         this._getTotalOrders();
         this._initializeOrders();
-        if(!this.state.userIsBuyer) {
+        if(this.context.userIsSeller) {
             this._removeQRCode();
         }
     }
-
-    async _initializeSeller() {
-        const sellerAddresses = await this._getSellers();
-        const selectedSeller = 0;
-        let sellerAddress = sellerAddresses[selectedSeller];
-        this.setState({ sellerAddress });
-        this._userIsBuyer();
-    }
-
-    async _userIsBuyer() {
-        const userIsBuyer = this.context.currentAddress.toLowerCase() !== this.state.sellerAddress.toLowerCase();
-        this.setState({ userIsBuyer });
-    }
-
-    async _getSellers() {
-        const sellerAddresses = await this.context._contract.getSellers();
-        return sellerAddresses;
-    }
-
+    // Spostato _getSellers, _userIsBuyer, _getQRCode in StateContext
     async _refreshInfo(tx) {
         const receipt = await tx.wait();
         if (receipt.status) {
@@ -170,28 +148,6 @@ export class DApp extends React.Component {
         const contractBalanceInAvax = ethers.utils.formatEther(contractBalance);
         contractBalance = contractBalanceInAvax.toString()+" AVAX";
         this.setState({ contractBalance });
-    }
-
-    async _getQRCode(index) {
-        const orders = await this.context._contract.getOrdersOfUser(this.context.currentAddress);
-        const order = orders.at(parseInt(index));
-        const order_id = order.id;
-        const buyer_address = order.buyer;
-        const orderQRCode = buyer_address+":"+order_id;
-        var QRCode = require('qrcode')
-        var canvas = document.getElementById('qrcode')
-        var opts = {
-            margin: 1,
-            width: 140,
-            color: {
-                dark:"#131313",
-                light:"#e7e7e7"
-            }
-        }
-        QRCode.toCanvas(canvas, orderQRCode, opts, function (error) {
-            if (error)
-                return <Error message={error}/>
-        })
     }
 
     async _removeQRCode() {

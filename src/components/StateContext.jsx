@@ -14,6 +14,8 @@ export class StateProvider extends React.Component {
         rightChain: true,
         _contract: undefined,
         _provider: undefined,
+        userIsSeller: false,
+        orderState: ['Created', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
         networks: {
             "fuji": {
                 chainId: "0xa869",
@@ -51,6 +53,7 @@ export class StateProvider extends React.Component {
                 rightChain: window.ethereum.chainId === this.state.networks[this.state.ourNetwork].chainId,
             })
             this.state._updateBalance();
+            this.state._userIsSeller();
         },
 
         // _initialize: (userAddress) => {
@@ -181,6 +184,45 @@ export class StateProvider extends React.Component {
             } catch(err) {
                 return [tx, error];
             }
+        },
+
+        _getSellers: async () => {
+            const sellerAddresses = await this.state._contract.getSellers();
+            return sellerAddresses;
+        },
+        
+        _userIsSeller: async () => {
+            const sellerAddresses = await this.state._getSellers();
+            var userIsSeller = false;
+            sellerAddresses.forEach((seller) => {
+                if (seller.toLowerCase() === this.state.currentAddress)
+                    userIsSeller = true;
+            });
+            this.setState({ userIsSeller });
+        },
+
+        _getQRCode: async (index) => {
+            const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
+            const order = orders.at(parseInt(index));
+            const order_id = order.id;
+            const buyer_address = order.buyer;
+            const orderQRCode = buyer_address+":"+order_id;
+            var QRCode = require('qrcode')
+            var canvas = document.getElementById('qrcode')
+            var opts = {
+                margin: 1,
+                width: 140,
+                color: {
+                    dark:"#131313",
+                    light:"#e7e7e7"
+                }
+            }
+            QRCode.toCanvas(canvas, orderQRCode, opts, function (error) {
+                if (error)
+                    console.log(error);
+                    //TO DO: gestione errore
+                    //return <Error message={error}/>
+            })
         }
     };
 

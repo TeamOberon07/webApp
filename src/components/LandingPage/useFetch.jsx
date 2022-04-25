@@ -1,13 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { StateContext } from '../StateContext';
 
-async function _getSellers(context) {
-  const sellerAddresses = await context._contract.getSellers();
-  return sellerAddresses;
-}
-
 async function isAuthorizedSeller(context, sellerAddress) {
-  const sellers = await _getSellers(context);
+  const sellers = await context._getSellers();
   return sellers.includes(sellerAddress);
 }
 

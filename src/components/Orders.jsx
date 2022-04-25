@@ -1,35 +1,21 @@
 import React from "react";
 import { ethers } from "ethers";
 import avaxLogo from "../assets/avaxLogoMin.png";
-import { useEffect, useState, useContext } from 'react';
-//import { OrderPage } from "./OrderPage";
-//import { render } from "@testing-library/react";
-
+import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 
 export function Orders({orders, isBuyer, State}) {
 
-  let content, view, i, amount, totalHeldForSeller=0;
-
-  let n = 6;
-
+  let content, view, i, amount, totalHeldForSeller=0, n=6;
   const [first, setFirst] = useState(0);
-
-  useEffect(()=> {
-    //fetchData();
-    console.log("useEffect")
-  }, [first]);
 
   if (isBuyer) {
     i = 2;
     view = "Seller";
-  }
-  else {
+  } else {
     i = 1;
     view = "Buyer"
   }
-
-
   // style foreach different state
   const Icon = ['check_circle', 'verified', 'delete', 'assignment_return', 'reply'];
   const Color = [
@@ -65,7 +51,9 @@ export function Orders({orders, isBuyer, State}) {
           <td className = "order-button-cell">
             <NavLink 
             to="/order-page"
-            state={{ myState: element[0].toString()}}
+            state={{ id: element[0].toString(),
+                     amount: amount,
+                     orderState: State[element[4]]}}
             className = "order-button">See order</NavLink>
           </td>
           {(() => {
@@ -99,8 +87,8 @@ export function Orders({orders, isBuyer, State}) {
         </tbody>
       </table>
       <div id="paginator-buttons">
-        {first > 0 && <button class = "cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
-        {first + 20 < orders.length && < button class = "cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}
+        {first > 0 && <button className="cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
+        {first + 20 < orders.length && < button className="cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}
       </div>
     </div>
   );
