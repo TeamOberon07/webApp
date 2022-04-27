@@ -61,7 +61,7 @@ form > .cta-button {
 
 #qrcode-container {
   min-width: fit-content;
-  margin-left: 33%;
+  margin-left: 30em;
   padding: 1em;
   background-color: var(--basicButton);
   display: flex;
@@ -125,9 +125,9 @@ th {
   background-color: rgba(21, 21, 21, 0.253); 
 }
 
-.orderTable, td {
-  /* background-color: rgb(32, 32, 32); */
-}
+/*.orderTable, td {
+   background-color: rgb(32, 32, 32); 
+}*/
 
 .orderTable {
   /* border-collapse: collapse; */
@@ -227,14 +227,17 @@ select:hover {
 }
 
 .content-and-qrcode {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-label-select {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding-bottom: 2em;
 }
 
 .button-label-select > label {
@@ -402,4 +405,19 @@ body::-webkit-scrollbar-thumb {
 #imgLogo{
   padding: 0 1em;
   width: 7em;
+}
+
+.order-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.order-container p {
+  padding: 2em;
+  font-size: 2em;
+}
+.address {
+  font-size: 0.75em !important;
 }

@@ -51,9 +51,8 @@ export function Orders({orders, isBuyer, State}) {
           <td className = "order-button-cell">
             <NavLink 
             to="/order-page"
-            state={{ id: element[0].toString(),
-                     amount: amount,
-                     orderState: State[element[4]]}}
+            state={{ orderState: State[element[4]],
+                     order: element}}
             className = "order-button">See order</NavLink>
           </td>
           {(() => {

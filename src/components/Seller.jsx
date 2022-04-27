@@ -71,7 +71,7 @@ export function Seller({currentAddress, balance, orders, deleteOrder, refundBuye
                 </select>
               </div>
             </form>
-            <form onSubmit={(event) => {
+            {/* <form onSubmit={(event) => {
                 event.preventDefault();
                 const formData = new FormData(event.target);
                 const id = formData.get("orderIDs");
@@ -92,13 +92,13 @@ export function Seller({currentAddress, balance, orders, deleteOrder, refundBuye
                   {options}
                 </select>
               </div>
-            </form>
+            </form> */}
           </div>
-          <div id="qrcode-container" className="blur">
+          {/* <div id="qrcode-container" className="blur">
             <h2>QRCode</h2>
             <canvas id="qrcode"></canvas>
-          </div>
-        </div>
+          </div>*/}
+        </div> 
 
         <Orders orders={orders} isBuyer={false} State={State}/>
       </div>

@@ -156,6 +156,14 @@ export class StateProvider extends React.Component {
             return false;
         },
 
+        getOrderById: async (id) => {
+            const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
+            for (var i=0; i<orders.length; i++) {
+                if (id === orders[i][0].toString())
+                    return orders[i];
+            }
+        },
+
         _orderOperation: async (id, expr, orderAmount) => {
             try {
                 var tx, error = undefined;
@@ -170,11 +178,11 @@ export class StateProvider extends React.Component {
                         tx = await this.state._contract.askRefund(id);
                         break;
                     case "RefundBuyer":
+                        console.log(orderAmount);
                         const overrides = {
                             value: orderAmount,
                         }
                         tx = await this.state._contract.refundBuyer(id, overrides);
-                        console.log("Refund: ", tx);
                         break;
                     default:
                         error = "Errore, non è prevista un'operazione " + expr;
@@ -201,12 +209,10 @@ export class StateProvider extends React.Component {
             this.setState({ userIsSeller });
         },
 
-        _getQRCode: async (index) => {
-            const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
-            const order = orders.at(parseInt(index));
-            const order_id = order.id;
-            const buyer_address = order.buyer;
-            const orderQRCode = buyer_address+":"+order_id;
+        _getQRCode: async (order) => {
+            console.log(order);
+            const buyer_address = order[1];
+            const orderQRCode = buyer_address+":"+order[0].toString();
             var QRCode = require('qrcode')
             var canvas = document.getElementById('qrcode')
             var opts = {
@@ -219,10 +225,9 @@ export class StateProvider extends React.Component {
             }
             QRCode.toCanvas(canvas, orderQRCode, opts, function (error) {
                 if (error)
-                    console.log(error);
-                    //TO DO: gestione errore
-                    //return <Error message={error}/>
+                    return [null, error];
             })
+            return null;
         }
     };
 
