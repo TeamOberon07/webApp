@@ -11,7 +11,7 @@
 }
 
 .container {
-  margin-top: 4%;
+  margin-top: 1%;
   margin-left: 20%;
   width: 60%;
 }
@@ -97,8 +97,6 @@ h2 {
 }
 
 .box {
-  padding-top: 2.5em;
-  padding-bottom: 2.5em;
 }
 
 .box.top {
@@ -237,7 +235,6 @@ select:hover {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-bottom: 2em;
 }
 
 .button-label-select > label {
@@ -420,4 +417,43 @@ body::-webkit-scrollbar-thumb {
 }
 .address {
   font-size: 0.75em !important;
+}
+
+input#FilterAddress{
+  width: 27em;
+  background-color: rgb(7 6 8 / 67%);
+  padding: 0.5em;
+  border-radius: 0.5em;
+  margin-left: 0;
+}
+#FilterAddressLabel{
+  padding-right: 0;
+}
+label.FilterLabel{
+  font-size: 1.25em;
+  min-width: 0;
+  margin-right: 0.25em;
+}
+div#buyerAddressFilter{
+  display: block;
+}
+p.errorP{
+  padding-left: 1.5em;
+  color: #ff2543;
+  padding-left: 7em;
+}
+#FilterState{
+  background-color: rgb(7 6 8 / 67%);
+  padding: 0.5em;
+  border-radius: 0.5em;
+  margin-left: 0;
+}
+#filters{
+  margin-bottom: 1em;
+  display: flex;
+  /*flex-wrap: wrap;*/
+}
+#filterButtons{
+  display: flex;
+  justify-content: space-evenly;
 }
