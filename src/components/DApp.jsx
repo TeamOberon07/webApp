@@ -2,16 +2,15 @@ import '../App.css';
 import React from "react";
 
 import { ethers } from "ethers";
-
+import { Header } from './Header';
 import { NoWalletDetected } from "./NoWalletDetected";
 import { ConnectWallet } from "./ConnectWallet";
 import { SwitchNetwork } from "./SwitchNetwork";
-import { Buyer } from './Buyer';
-import { Seller } from './Seller';
 import { Loading } from './Loading';
 import { Error } from './Error';
 
 import { StateContext } from './StateContext';
+import { Orders } from './Orders';
 
 export class DApp extends React.Component {
     constructor(props) {
@@ -56,22 +55,12 @@ export class DApp extends React.Component {
             return <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>;
         }
 
-        if (!this.context.userIsSeller) {
-            return <Buyer   currentAddress={this.context.currentAddress}
-                            balance={this.context.balance}
-                            orders={this.state.orders}
-                            askRefund={(id) => this._orderOperation(id, "AskRefund")}
-                            State={this.context.orderState}
-                    />;
-        } else {
-            return <Seller  currentAddress={this.context.currentAddress}
-                            balance={this.context.balance}
-                            orders={this.state.orders}
-                            deleteOrder={(id) => this._orderOperation(id, "Delete")}
-                            refundBuyer={(id, orderAmount) => this._orderOperation(id, "RefundBuyer", orderAmount)}
-                            State={this.context.orderState}
-                    />;
-        }
+        return <div>
+            <Header currentAddress={this.context.currentAddress} balance={this.context.balance} />
+            <div className='container'>
+                <Orders orders={this.state.orders} isBuyer={!this.context.userIsSeller} State={this.context.orderState}/>
+            </div>
+        </div>
     };
 
     async _setListenerMetamaksAccount() {

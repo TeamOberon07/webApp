@@ -68,8 +68,8 @@ export function Orders({orders, isBuyer, State}) {
 
   function visualizeOrder(element) {
     const res = <tr key={element[0].toString()}>
-            <td>{element[0].toString()}</td>
-            <td>
+            <td aria-label="Id">{element[0].toString()}</td>
+            <td aria-label="Address">
               {
                 element[i].toString().substring(0,6)
                 +"..."+
@@ -82,8 +82,8 @@ export function Orders({orders, isBuyer, State}) {
             {(() => {
               amount = ethers.utils.formatEther(element[3].toString());
             })()}
-            <td>{amount}</td>
-            <td>
+            <td aria-label="Amount">{amount}</td>
+            <td aria-label="Icon">
               {State[element[4]]}
               <span className="material-icons" style={Color[element[4]]}>{Icon[element[4]]}</span>
             </td>
