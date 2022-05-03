@@ -35,11 +35,9 @@ export function Orders({orders, isBuyer, State}) {
   }
 
   function filterOrdersByState(ordersToFilter, state) {
-    if(state === -1)
-      return;
     let res = [];
     ordersToFilter.forEach(element => {
-      if (element[4] === state) {
+      if (state === -1 || element[4] === state) {
         res.push(element);
       }
     });
