@@ -2,7 +2,7 @@ import React from "react";
 import { Header } from './Header';
 import { Orders } from "./Orders";
 
-export function Seller({currentAddress, balance, orders, deleteOrder, refundBuyer, getQRCode, State}) {
+export function Seller({currentAddress, balance, orders, deleteOrder, refundBuyer, State}) {
 
   let options;
 

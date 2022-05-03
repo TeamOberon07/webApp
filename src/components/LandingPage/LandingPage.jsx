@@ -25,8 +25,8 @@ async function createOrder(context, orderAmount, sellerAddress, afterConfirm) {
     }
     return tx.hash;
   } catch(err) {
-    console.log(err);
-    throw err;
+      // return <Error message={err}/>;
+      throw err;
   }
 }
 

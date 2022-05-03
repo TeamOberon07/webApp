@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Header } from './Header';
-
+import { Error } from "./Error";
 import { StateContext } from './StateContext';
 
 export class RegisterSeller extends React.Component {
@@ -47,7 +47,7 @@ export class RegisterSeller extends React.Component {
         await this._refreshInfo(tx);
         window.location.href = '/';
     } catch(err) {
-        console.log(err);
+        <Error message={err}/>;
     }
   }
 }

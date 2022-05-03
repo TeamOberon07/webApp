@@ -93,9 +93,11 @@ export class StateProvider extends React.Component {
                     ]
                 });
                 await this.state._connectWallet();
-            } catch (err) {
-                console.log(err.message);
+            } catch (error) {
+                return error;
+                //console.log(err.message);
             }
+            return undefined;
         },
 
         _wrongChain: () => {
@@ -178,7 +180,6 @@ export class StateProvider extends React.Component {
                         tx = await this.state._contract.askRefund(id);
                         break;
                     case "RefundBuyer":
-                        console.log(orderAmount);
                         const overrides = {
                             value: orderAmount,
                         }
@@ -190,7 +191,7 @@ export class StateProvider extends React.Component {
                 }
                 return [tx, error];
             } catch(err) {
-                return [tx, error];
+                return [tx, err];
             }
         },
 
@@ -210,7 +211,6 @@ export class StateProvider extends React.Component {
         },
 
         _getQRCode: async (order) => {
-            console.log(order);
             const buyer_address = order[1];
             const orderQRCode = buyer_address+":"+order[0].toString();
             var QRCode = require('qrcode')

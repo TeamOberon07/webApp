@@ -7,11 +7,10 @@ import { Button } from "./Button";
 
 export function OrderPage () {
     const context = useContext(StateContext);
-    const location = useLocation();
-    const order = location.state.order;
+    const order = useLocation().state.order;
     const id = parseInt(order[0]._hex);
     const amount = order[3];
-    const orderState = location.state.orderState;
+    const orderState = useLocation().state.orderState;
    
     return (<div>
             <Header currentAddress={context.currentAddress}

@@ -22,7 +22,6 @@ export class DApp extends React.Component {
             contractBalance: undefined,
             orders: undefined,
             totalOrders: undefined,
-            getQRCode: undefined,
         };
         this.state = this.initialState;
     }
@@ -58,21 +57,20 @@ export class DApp extends React.Component {
         }
 
         if (!this.context.userIsSeller) {
-            return <Buyer  currentAddress={this.context.currentAddress}
-                        balance={this.context.balance}
-                        orders={this.state.orders}
-                        askRefund={(id) => this._orderOperation(id, "AskRefund")}
-                        State={this.context.orderState}
-                />;
+            return <Buyer   currentAddress={this.context.currentAddress}
+                            balance={this.context.balance}
+                            orders={this.state.orders}
+                            askRefund={(id) => this._orderOperation(id, "AskRefund")}
+                            State={this.context.orderState}
+                    />;
         } else {
-            return <Seller currentAddress={this.context.currentAddress}
-                        balance={this.context.balance}
-                        orders={this.state.orders}
-                        deleteOrder={(id) => this._orderOperation(id, "Delete")}
-                        refundBuyer={(id, orderAmount) => this._orderOperation(id, "RefundBuyer", orderAmount)}
-                        getQRCode={(id) => this.context._getQRCode(id)}
-                        State={this.context.orderState}
-                />;
+            return <Seller  currentAddress={this.context.currentAddress}
+                            balance={this.context.balance}
+                            orders={this.state.orders}
+                            deleteOrder={(id) => this._orderOperation(id, "Delete")}
+                            refundBuyer={(id, orderAmount) => this._orderOperation(id, "RefundBuyer", orderAmount)}
+                            State={this.context.orderState}
+                    />;
         }
     };
 
@@ -97,8 +95,11 @@ export class DApp extends React.Component {
     }
 
     async _changeNetwork() {
-        await this.context._changeNetwork(this.context.ourNetwork);
-        this._loadBlockchainData();
+        let error = await this.context._changeNetwork(this.context.ourNetwork);
+        if (!error)
+            this._loadBlockchainData();
+        else 
+            return <Error message={error}/>;
     }
 
     async _loadBlockchainData() {
@@ -123,7 +124,7 @@ export class DApp extends React.Component {
         try {
             orders = await this.context._contract.getOrdersOfUser(this.context.currentAddress);
         } catch (error) {
-            console.log(error);
+            return <Error message={error}/>;
         }
         this.setState({ orders });
     }
