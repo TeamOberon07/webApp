@@ -33,11 +33,13 @@ export class StateProvider extends React.Component {
         _connectWallet: async () => {
             const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
             const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+            console.log(provider)
+            console.log(this.state);
+           
             this.setState({
                 _provider: provider,
             })
-
+            
             if (this.state._provider.getSigner(0)) {
                 this.state._contract = new ethers.Contract(
                     this.state.contractAddress,
