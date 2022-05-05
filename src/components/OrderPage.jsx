@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import { Button } from "./Button";
 
 export function OrderPage () {
-    const context = useContext(StateContext);
+    const context = useContext(StateContext);    
     const order = useLocation().state.order;
     const id = parseInt(order[0]._hex);
     const amount = order[3];
@@ -50,7 +50,7 @@ export function OrderPage () {
                                                 />;
                                 })()}
                                 
-                                <Button method = {(order) => context._getQRCode(order)}
+                                <Button method = {() => context._getQRCode(order)}
                                         id = {id}
                                         text = {"Get QRCode"}
                                 />

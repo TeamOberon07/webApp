@@ -212,9 +212,9 @@ export class StateProvider extends React.Component {
 
         _getQRCode: async (order) => {
             const buyer_address = order[1];
-            const orderQRCode = buyer_address+":"+order[0].toString();
-            var QRCode = require('qrcode')
-            var canvas = document.getElementById('qrcode')
+            const orderQRCode = buyer_address+":"+parseInt(order[0]._hex);
+            var QRCode = require('qrcode');
+            var canvas = document.getElementById('qrcode');
             var opts = {
                 margin: 1,
                 width: 140,

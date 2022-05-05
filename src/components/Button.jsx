@@ -1,7 +1,7 @@
 import { Error } from "./Error";
 
 export function Button({ method, id, text, amount }) {
-    console.log(JSON.stringify(method)  + " " + id + " " +  text  + " " +  amount )
+    // console.log(JSON.stringify(method)  + " " + id + " " +  text  + " " +  amount )
     return (
         <form onSubmit={(event) => {
             event.preventDefault();
