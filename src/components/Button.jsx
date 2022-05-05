@@ -1,12 +1,13 @@
 import { Error } from "./Error";
 
 export function Button({ method, id, text, amount}) {
-    // console.log(JSON.stringify(method)  + " " + id + " " +  text  + " " +  amount )
+    //console.log(JSON.stringify(method)  + " " + id + " " +  text  + " " +  amount )
+    console.log(method);
     return (
         <form onSubmit={(event) => {
             event.preventDefault();
                 if(id){
-                   var error =  method(id, amount);
+                   var error = method(id, amount);
                    if (error)
                     return <Error message={error}/>;
                 }

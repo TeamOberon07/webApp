@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { ethers } from "ethers";
-import Escrow from "../contracts/escrow.json";
+import Escrow from "../contracts/SCEscrow.json";
 
 export const StateContext = createContext();
 
@@ -9,24 +9,24 @@ export class StateProvider extends React.Component {
     initialState = {
         currentAddress: undefined,
         balance: undefined,
-        contractAddress: "0x1648471B1b56bd703de37216Aa298077628Dcf27",
-        ourNetwork: "fuji",
+        contractAddress: "0x43475E700EA89b4082A21799Bf3eeA6C17717835",
+        ourNetwork: "rinkeby",
         rightChain: true,
         _contract: undefined,
         _provider: undefined,
         userIsSeller: false,
-        orderState: ['Created', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
+        orderState: ['Created', 'Shipped', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
         networks: {
-            "fuji": {
-                chainId: "0xa869",
-                chainName: "Avalanche Fuji Testnet",
+            "rinkeby": {
+                chainId: "0x4",
+                chainName: "Ethereum Rinkeby Testnet",
                 nativeCurrency: {
                     name: "AVAX",
                     symbol: "AVAX",
                     decimals: 18
                 },
-                rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
-                blockExplorerUrls: ["https://testnet.snowtrace.io/"]
+                rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                blockExplorerUrls: ["https://rinkey.etherscan.io"]
             }
         },
 
@@ -173,6 +173,8 @@ export class StateProvider extends React.Component {
                     case "Confirm":
                         tx = await this.state._contract.confirmOrder(id);
                         break;
+                    case "SetAsShipped":
+                            tx = await this.state._contract.shipOrder(id);
                     case "Delete":
                         tx = await this.state._contract.deleteOrder(id);
                         break;
@@ -211,8 +213,9 @@ export class StateProvider extends React.Component {
         },
 
         _getQRCode: (order) => {
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaah");
             const buyer_address = order[1];
-            const orderQRCode = buyer_address+":"+parseInt(order[0]._hex);
+            const orderQRCode = buyer_address + ":"+parseInt(order[0]._hex);
             var QRCode = require('qrcode');
             var canvas = document.getElementById('qrcode');
             var opts = {

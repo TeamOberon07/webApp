@@ -57,9 +57,10 @@ export function Orders({orders, isBuyer, State}) {
     view = "Buyer"
   }
   // style foreach different state
-  const Icon = ['check_circle', 'verified', 'delete', 'assignment_return', 'reply'];
+  const Icon = ['check_circle', 'local_shipping', 'verified', 'delete', 'assignment_return', 'reply'];
   const Color = [
     {color: 'rgb(105 235 115)'}, // green 
+    {color: 'rgb(255 255 255)'},
     {color: 'rgb(77 165 255)'}, // blue
     {color: 'rgb(227 85 86)'}, // red
     {color: 'rgb(242 245 70)'}, // yellow

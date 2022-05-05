@@ -41,6 +41,14 @@ export function OrderPage () {
                                                             text = {"Delete"}
                                                     />;
                                     })()}
+
+                                    {(() => {
+                                        if (orderState === "Created")
+                                            return <Button  method = {(id) => context._orderOperation(id, "SetAsShipped")}
+                                                            id = {id}
+                                                            text = {"Set as Shipped"}
+                                                    />;
+                                    })()}
                                     
                                     {(() => {
                                         if (orderState === "Asked Refund")
@@ -50,11 +58,16 @@ export function OrderPage () {
                                                             amount = {amount}
                                                     />;
                                     })()}
-                                    
-                                    <Button method = {() => context._getQRCode(order)}
+
+                                    <button
+                                        className="cta-button basic-button blur"
+                                        type="button"
+                                        onClick={() =>  context._getQRCode(order)}
+                                    >Set as Shipped</button>
+                                    {/*<Button method = {() =>  context._getQRCode(order)}
                                             id = {id}
                                             text = {"Get QRCode"}
-                                    />
+                                    />}*/}
                                 </div>
                                 <div id="qrcode-container" className="blur">
                                     <h2>QRCode</h2>
@@ -62,6 +75,7 @@ export function OrderPage () {
                                 </div>
                             </div>
                     ); 
+                    console.log("qualcsoa");
                     return comp;
                     } else {        //vista Buyer
                         return (
