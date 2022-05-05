@@ -210,7 +210,7 @@ export class StateProvider extends React.Component {
             this.setState({ userIsSeller });
         },
 
-        _getQRCode: async (order) => {
+        _getQRCode: (order) => {
             const buyer_address = order[1];
             const orderQRCode = buyer_address+":"+parseInt(order[0]._hex);
             var QRCode = require('qrcode');
