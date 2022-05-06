@@ -11,12 +11,15 @@ export function OrderPage () {
     const id = parseInt(order[0]._hex);
     const amount = order[3];
     const orderState = useLocation().state.orderState;
-   
-    return (<div>
-            <Header currentAddress={context.currentAddress}
-                balance={context.balance}
-            />
-            <div id="order-page-container">
+    //_getLogById() da implementare
+    // const log = context._getLogById();
+    
+
+    return (<div className="orderPage">
+        <Header currentAddress={context.currentAddress}
+            balance={context.balance}
+        />
+        <div id="order-page-container">
             {(() => {
                 if (context.userIsSeller)
                     return <p id="orderPageAddress">Buyer Address: <span className="address">{order[1]}</span></p>
