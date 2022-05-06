@@ -17,9 +17,9 @@ export function Log({log}) {
         return res;
     }
 
-    if (log.length) {
-        content = log.map((element) => (visualizeOrder(element)));
-    }
+    // if (log.length) {
+    //     content = log.map((element) => (visualizeOrder(element)));
+    // }
 
 
     return (

@@ -4,9 +4,10 @@ import { Header } from './Header';
 import { StateContext } from "./StateContext";
 import { useLocation } from 'react-router-dom'
 import { Button } from "./Button";
+import { Log } from "./Log";
 
-export function OrderPage () {
-    const context = useContext(StateContext);    
+export function OrderPage() {
+    const context = useContext(StateContext);
     const order = useLocation().state.order;
     const id = parseInt(order[0]._hex);
     const amount = order[3];
@@ -111,7 +112,9 @@ export function OrderPage () {
                         );
                     }
                 })()}
-            </div>
         </div>
+
+        <Log></Log>
+    </div>
     );
 }
