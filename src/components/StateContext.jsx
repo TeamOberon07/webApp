@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import Escrow from "../contracts/SCEscrow.json";
 
 export const StateContext = createContext();
@@ -231,6 +231,10 @@ export class StateProvider extends React.Component {
                     return [null, error];
             })
             return null;
+        },
+
+        _getLog:async (id) =>  {
+            return await this.state._contract.getLogsOfOrder(id);
         }
     };
 

@@ -523,17 +523,9 @@ p.errorP{
 }
 
 .logTable{
-  display: flex;
-  flex-direction: column;
   align-self:center;
   margin: 2em;
-  border-collapse: collapse;
-}
 
-.logTable tr{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
 }
 
 .logTable tr *{
