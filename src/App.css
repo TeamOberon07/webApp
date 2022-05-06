@@ -97,9 +97,6 @@ h2 {
   font-weight: bold;
 }
 
-.box {
-}
-
 .box.top {
   min-width: fit-content;
   padding-top: 0;
@@ -114,8 +111,6 @@ h2 {
 
 th, td {
   border: 2px solid hsla(0, 0%, 74%, 0.089);
-  /* border-color: rgb(19, 19, 19); */
-  /* backdrop-filter: blur(15px) saturate(200%); -webkit-backdrop-filter: blur(15px) saturate(200%); background-color: rgba(21, 21, 21, 0.67);  */
   text-align: left;
   padding: 0.7em 1em;
 }
@@ -124,14 +119,8 @@ th {
   background-color: rgba(21, 21, 21, 0.253); 
 }
 
-/*.orderTable, td {
-   background-color: rgb(32, 32, 32); 
-}*/
-
 .orderTable {
-  /* border-collapse: collapse; */
   width: 100%;
-  /* background-color: rgb(43, 43, 43); */
 }
 
 nav .container {
@@ -252,12 +241,6 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background-color: var(--basicButton);    /* color of the scroll thumb */
 }
-
-/* .blur {
-  backdrop-filter: blur(15px) saturate(200%) !important; 
-  -webkit-backdrop-filter: blur(15px) saturate(200%) !important; 
-  background-color: rgb(51 50 52 / 52%) !important; 
-} */
 
 .blur {
   backdrop-filter: blur(15px) saturate(200%) !important;
@@ -404,8 +387,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 #order-page-container{
-  max-width: 50em;
-  margin: 2em auto;
+  width: 70em;
+  margin-top: 4em;
+  align-self: center;
 }
 #order-page-container .actions{
   width: 67%;
@@ -457,7 +441,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.5em;
 }
 #orderPageAddress{
-  font-size: 1.75em;
+  font-size: 1.5em;
   margin-bottom: 0.25em;
   padding: 1em;
   background-color: rgb(7 6 8 / 67%);
@@ -469,19 +453,21 @@ body::-webkit-scrollbar-thumb {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  
 }
 .order-container p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 33%;
   padding: 2em;
-  font-size: 2em;
+  font-size: 1.5em;
   margin-bottom: 0;
   background-color: rgb(7 6 8 / 67%);
   border-radius: 0.5em;
+  height: 1em;
+  white-space: nowrap;
 }
-.order-container :first-child{
-  padding: 2.7em 2.5em;
-}
+
 .order-container :nth-child(2){
   margin: 0 0.25em;
 }
@@ -522,9 +508,30 @@ p.errorP{
 #filters{
   margin-bottom: 1em;
   display: flex;
-  /*flex-wrap: wrap;*/
 }
 #filterButtons{
   display: flex;
   justify-content: space-evenly;
+}
+
+.orderPage{
+  display: flex;
+  flex-direction: column;
+}
+
+.logTable{
+  display: flex;
+  flex-direction: column;
+  align-self:center;
+  margin: 2em;
+}
+
+.logTable tr{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.logTable tr *{
+  padding: 1em 12em;
 }
