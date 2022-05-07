@@ -48,13 +48,13 @@ contract SCEscrow {
 	 ***** CUSTOM PARAMETERS BEGIN *****
 	 ***********************************/
 
-    IJoeRouter01 public immutable tjRouter = IJoeRouter01(0x60aE616a2155Ee3d9A68541Ba4544862310933d4);
-    IJoeFactory public immutable tjFactory = IJoeFactory(0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10);
+    IJoeRouter01 public immutable tjRouter = IJoeRouter01(0x7E2528476b14507f003aE9D123334977F5Ad7B14);
+    IJoeFactory public immutable tjFactory = IJoeFactory(0x86f83be9770894d8e46301b12E88e14AdC6cdb5F);
 
-    AggregatorV3Interface internal priceFeedStablecoin = AggregatorV3Interface(0xF096872672F44d6EBA71458D74fe67F9a77a23B9);
+    AggregatorV3Interface internal priceFeedStablecoin = AggregatorV3Interface(0xa24de01df22b63d23Ebc1882a5E3d4ec0d907bFB);
 
-    address public immutable WAVAX = 0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7;
-    address public STABLECOIN = 0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E; // USDC address
+    address public immutable WAVAX = 0xc778417E063141139Fce010982780140Aa0cD5Ab;
+    address public STABLECOIN = 0x5b8470fbc6B31038aa07aBD3010aCffCA6E36611; // fUSDt address
 
 	// this sets a boundary where we decide the stablecoin is pegged (or not) to USD
     uint256 public pegThreshold = 10**16; // threshold = 0.01     -->     0.99 <= stablecoinPrice <= 1.01

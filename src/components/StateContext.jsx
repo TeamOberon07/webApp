@@ -9,7 +9,7 @@ export class StateProvider extends React.Component {
     initialState = {
         currentAddress: undefined,
         balance: undefined,
-        contractAddress: "0x7419970Bb76dD5bB893666368923d24f43191E61",
+        contractAddress: "0xF2A05049352dFAA2BdefE1357cc2beD4486E2E5e",
         ourNetwork: "rinkeby",
         rightChain: true,
         _contract: undefined,
