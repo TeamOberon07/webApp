@@ -79,7 +79,7 @@ contract SCEscrow {
 	mapping(address => uint[]) private ordersSellers;
 	mapping(uint256 => Log[]) private logs;
 
-    modifier onlyOwner() {
+    modifier onlyOwner {
 		require(
             msg.sender == owner,
             "ERROR: Only the owner of this smart contract can perform this action."
@@ -127,16 +127,6 @@ contract SCEscrow {
         _;
     }
 
-    modifier addressIsAggregator(address newAddress) {
-        (,int truncatedPrice,,,) = AggregatorV3Interface(newAddress).latestRoundData(); 
-
-        require(
-            truncatedPrice > 0, 
-            "ERROR: Address not convertible to AggregatorV3Interface"
-        );
-        _;
-    }
-
 	event OrderCreated(Order);
 	event OrderConfirmed(Order);
 	event OrderDeleted(Order);
@@ -179,7 +169,6 @@ contract SCEscrow {
 		emit OrderCreated(newOrder);
 	}
 
-	// DA TESTARE --> buyer deve fare approve da frontend
 	function createOrderWithStable(
 		address payable seller, 
 		uint256 amount
@@ -199,14 +188,14 @@ contract SCEscrow {
 		);
 	}
 
-	// DA TESTARE
 	function createOrderWithAVAXToStable(
 		address payable seller, 
 		uint256 amount
 	) 
 		external 
 		payable 
-		sellerExists(seller) 
+		sellerExists(seller)
+		peggedStablecoin
 		returns (uint256[] memory amounts) 
 	{
 		require(
@@ -218,9 +207,11 @@ contract SCEscrow {
         path[0] = WAVAX;
         path[1] = STABLECOIN;
 		amounts = tjRouter.swapAVAXForExactTokens{value:msg.value}(amount, path, address(this), block.timestamp);
+		if (amounts[0] < msg.value) {
+			payable(msg.sender).transfer(msg.value - amounts[0]);
+		}
 	}
 
-	// DA TESTARE --> buyer deve fare approve da frontend
 	function createOrderWithTokensToStable(
 		address payable seller, 
 		uint256 amount, 
@@ -229,7 +220,8 @@ contract SCEscrow {
 	) 
 		external 
 		payable 
-		sellerExists(seller) 
+		sellerExists(seller)
+		peggedStablecoin
 		returns (uint256[] memory amounts) 
 	{
 		require(
@@ -284,7 +276,6 @@ contract SCEscrow {
 	 *	The buyer confirms the specified order, and the smart contract 
 	 *  sends the funds (from the object orderToConfirm) to the seller.
 	 */
-	// DA TESTARE
 	function confirmOrder(uint256 orderId) external orderExists(orderId) buyerIsOwner(orderId) {
 		Order memory orderToConfirm = orders[orderId];
 		require(
@@ -303,14 +294,12 @@ contract SCEscrow {
             IERC20(STABLECOIN).transfer(seller, amount), 
             "ERROR: transfer failed."
         );
-		//seller.transfer(amount);
 	}
 
 	/*
 	 *	The seller can delete the order if it's not been already confirmed
 	 *	Money goes from contract to buyer
 	 */
-	// DA TESTARE
 	function deleteOrder(uint256 orderId) external orderExists(orderId) sellerIsOwner(orderId) {
 		Order memory orderToDelete = orders[orderId];
 		require(
@@ -328,7 +317,6 @@ contract SCEscrow {
             IERC20(STABLECOIN).transfer(orderToDelete.buyer, amount), 
             "ERROR: transfer failed."
         );
-		//orderToDelete.buyer.transfer(amount);
 	}
 
 	/*
@@ -336,7 +324,6 @@ contract SCEscrow {
 	 *	- confirmed: money from the seller to the buyer;
 	 *	- not confirmed: money from the smart contract to the buyer, immediately;
 	 */
-	// DA TESTARE
 	function askRefund(uint256 orderId) external orderExists(orderId) buyerIsOwner(orderId) {
 		Order memory orderToAskRefund = orders[orderId];
 		require(
@@ -360,7 +347,6 @@ contract SCEscrow {
                 IERC20(STABLECOIN).transfer(orderToAskRefund.buyer, orderToAskRefund.amount), 
                 "ERROR: transfer failed."
             );
-			//orderToAskRefund.buyer.transfer(orderToAskRefund.amount);
 		} 
 		// else, it can be a shipped/confirmed order so seller has to refund the buyer later with refundBuyer(_orderID)
 		else {
@@ -378,7 +364,6 @@ contract SCEscrow {
 	 *  and the order has already been shipped/confirmed.
 	 * 	- Money from buyer to seller
 	 */ 
-	// DA TESTARE --> seller deve prima fare approve da frontend
 	function refundBuyer(uint256 orderId, uint256 amount)
 		external
 		payable
@@ -404,7 +389,6 @@ contract SCEscrow {
 			IERC20(STABLECOIN).transferFrom(msg.sender, orderToRefund.buyer, amount), 
 			"ERROR: transferFrom failed."
 		);
-		//orderToRefund.buyer.transfer(msg.value);	
 	}
 
 	/**
@@ -435,7 +419,6 @@ contract SCEscrow {
     function setStablecoinDataFeed(address newDataFeed) 
 	    external
         onlyOwner
-        addressIsAggregator(newDataFeed)
     {
         priceFeedStablecoin = AggregatorV3Interface(newDataFeed);
         require(
