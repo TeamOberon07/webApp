@@ -22,7 +22,7 @@ export function useFetch (url, method, setHasNotified, setError) {
     const context = useContext(StateContext);
 
     const checkOrder = (order) => {
-      const setInChain = (error) => {
+      const setOnChain = (error) => {
         setOrder(order); // in chain => already checked
         setError(error);
         setIsLoaded(true);
@@ -30,7 +30,7 @@ export function useFetch (url, method, setHasNotified, setError) {
       if(order.confirmed === true) {
         // NEED to actually check using res.hash
         // if(getHash(order.hash)) { // check in chain
-          setInChain('Order in chain');
+          setOnChain('Order on-chain');
         // }
         // else {
         //   setError('e-comm is wrong');
@@ -39,7 +39,7 @@ export function useFetch (url, method, setHasNotified, setError) {
       } else if (false) { // if(!order.confirmed && getHash(order.hash)) (order in chain but e-comm not notified)
         order.hash = '0x3a99c01bc896891e324a62bf687843631d17164acd3cfbb341a93198744f3801'; // GET actual hash 
         order.confirmed = true;
-        setInChain('Order in chain & !notified');
+        setOnChain('Order on-chain & !notified');
       } else {
         order.price = order.price.toString();
         isAuthorizedSeller(context, order.sellerAddress)

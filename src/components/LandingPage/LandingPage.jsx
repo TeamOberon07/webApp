@@ -41,7 +41,7 @@ export function LandingPage() {
   const [hash, setHash] = useState('');
   const [hasNotified, setHasNotified] = useState(false);
   const [error, setError] = useState('');
-  const [isInChain, setIsInChain] = useState(false);
+  const [isOnChain, setIsOnChain] = useState(false);
   const [ecommIsNotSynched, setEcommIsNotSynched] = useState(false);
   const context = useContext(StateContext);
 
@@ -87,12 +87,12 @@ export function LandingPage() {
     setFetchMethod('GET');
   }
 
-  if(error && error.includes('Order in chain')) {
+  if(error && error.includes('Order on-chain')) {
     const err = error;
     setError(null);
-    setIsInChain(true);
+    setIsOnChain(true);
     setHash(order.hash);
-    if(err === 'Order in chain & !notified') {
+    if(err === 'Order on-chain & !notified') {
       setEcommIsNotSynched(true);
       // setLoadingText('Notifying e-commerce...');
       setFetchMethod('PUT');
@@ -104,10 +104,12 @@ export function LandingPage() {
       <UserData />
       <Loading />
     </>);
-  } else if(isInChain) {
+  } else if(isOnChain) {
     return (<>
       <UserData />
-      <p>Tx is already in chain!</p>
+      <div class="tx-message">
+        <p>Tx is already on-chain!</p>
+      </div>
       <TxHash hash={hash} />
 
       { !error && ecommIsNotSynched && 

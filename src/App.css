@@ -99,6 +99,10 @@ h2 {
   font-weight: bold;
 }
 
+p {
+  margin: 0.5em;
+}
+
 .box.top {
   min-width: fit-content;
   padding-top: 0;
@@ -166,7 +170,7 @@ nav > div.nav-item > p {
   margin-left: auto;
 }
 
-.avaxLogoMin {
+.tokenLogoMin {
   width: 1em;
   height: 1em;
   margin-left: 0.3em;
@@ -344,32 +348,42 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.5em;
 }
 
-.create-transaction {
-  background-color: #d4d3d3;
-  color: black;
-  margin-left: 45%;
-  margin-top: 5em;
-}
-
-.transaction-hash {
-  padding: 0.3em 0;
-  margin-left: 3em;
+.create-tx-button {
   font-size: 1.25em;
 }
 
+.create-tx {
+  text-align: center;
+}
+
+.create-tx button {
+  margin-top: 1em;
+}
+
+.transaction-hash {
+  margin-top: 3em;
+  text-align: center;
+  font-size: 1.25em;
+  min-height: 10em;;
+}
+
 .transaction-hash p {
-  margin: 2em 0;
+  margin-bottom: 1.5em;
 }
 
 .transaction-hash a {
-  border: 1px solid var(--text);
-  border-radius: 0.5em;
-  color: var(--textButton);
-  background-color: black;
-  padding: 1em;
-  width: 20%;
-  margin-left: 40%;
   text-decoration: none;
+  transition: transform 0.3s;
+}
+
+.transaction-hash a:hover {
+  transform: scale(1.3);
+  color: white;
+}
+
+.tx-message {
+  margin-top: 3em;
+  text-align: center;
 }
 
 .error {

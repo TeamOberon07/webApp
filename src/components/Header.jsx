@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import avaxLogo from "../assets/avaxLogoMin.png";
+import avaxLogo from "../assets/avaxLogo.png";
 import shopChainLogo from "../assets/logoShopChain.png";
 
 export function Header({currentAddress, balance}) {
@@ -23,7 +23,7 @@ export function Header({currentAddress, balance}) {
             </NavLink>
             <div className="user-data nav-item">
               <p>Address: &nbsp; {address}</p>
-              <p>Balance: &nbsp; {parseFloat(balance).toFixed(4)}<img src={avaxLogo} className="avaxLogoMin" alt="avax logo"/></p>
+              <p>Balance: &nbsp; {parseFloat(balance).toFixed(4)}<img src={avaxLogo} className="tokenLogoMin" alt="avax logo"/></p>
             </div>
         </nav>
       </div>

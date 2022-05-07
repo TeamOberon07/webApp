@@ -16,7 +16,7 @@ ReactDOM.render(
         <Route path="/" exact element={<DApp />} />
         <Route path="/register-seller" element={<RegisterSeller />} />
         <Route path="/order-page" element={<OrderPage />} />
-        <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/landing-page" element={<LandingPage />} />
       </Routes>
     </Router>
   </StateProvider>,

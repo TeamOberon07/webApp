@@ -1,6 +1,6 @@
 import React from "react";
 import { ethers } from "ethers";
-import avaxLogo from "../assets/avaxLogoMin.png";
+import tokenLogo from "../assets/usdcLogo.png";
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 
@@ -149,14 +149,14 @@ export function Orders({orders, isBuyer, State}) {
       </div>
         <div className="tableLabel">
           <h2>Order List</h2>
-          <p className="TVL">Your TVL: {totalHeldForSeller.toFixed(4)}<img src={avaxLogo} className="avaxLogoMin" alt="avax logo"/></p>
+          <p className="TVL">Your TVL: {totalHeldForSeller.toFixed(4)}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
         </div>
       <table className="orderTable blur">
         <thead>
           <tr>
             <th>OrderID</th>
             <th>{view} Address</th>
-            <th>Amount <img src={avaxLogo} className="avaxLogoMin" alt="avax logo"/></th>
+            <th>Amount <img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></th>
             <th>State</th>
             <th>Actions</th>
           </tr>
