@@ -10,6 +10,7 @@ export class StateProvider extends React.Component {
         currentAddress: undefined,
         balance: undefined,
         contractAddress: "0xF2A05049352dFAA2BdefE1357cc2beD4486E2E5e",
+        listedTokensAddress: "0x5cb76c0f1deBba7E974c8e114Cd91e7A51abD938",
         ourNetwork: "rinkeby",
         rightChain: true,
         _contract: undefined,

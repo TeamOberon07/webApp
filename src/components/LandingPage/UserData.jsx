@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import {StateContext} from "../StateContext";
-import tokenLogo from "../../assets/usdcLogoMin.png";
+import tokenLogo from "../../assets/avaxLogoMin.png";
 
 export function UserData() {
     const context = useContext(StateContext);
