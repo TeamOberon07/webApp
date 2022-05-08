@@ -103,6 +103,10 @@ p {
   margin: 0;
 }
 
+button:focus {
+  outline: none;
+}
+
 .box.top {
   min-width: fit-content;
   padding-top: 0;
@@ -349,9 +353,22 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.25em;
 }
 
-.create-tx-button {
-  font-size: 1.25em;
+.blur-light {
+  background-color: #ffffff2b;
+}
 
+.insufficient-balance-button {
+  background-color: #ffffff0a;
+  color: #ffffff2b;
+}
+
+.insufficient-balance-button:hover {
+  transform: scale(1);
+  cursor: unset;
+}
+
+.insufficient-balance-button:focus {
+  outline: none;
 }
 
 .create-tx {
@@ -360,6 +377,8 @@ body::-webkit-scrollbar-thumb {
   margin: auto;
   margin-top: 7em;
   font-size: 1.1em;
+  padding: 3em;
+  border-radius: 1.5em;
 }
 
 .create-tx button {
@@ -378,6 +397,7 @@ body::-webkit-scrollbar-thumb {
   margin: 0;
   min-width: 5em;
   margin-bottom: 0.1em;
+  margin-top: 0.1em;
   padding: 0.6em 0.9em;
   display: flex;
   align-items: center;
@@ -392,6 +412,7 @@ body::-webkit-scrollbar-thumb {
 .button-and-balance {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
 
 .select-button img {

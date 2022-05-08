@@ -1,8 +1,8 @@
 import React, { createContext } from "react";
 import { Contract, ethers } from "ethers";
-import ERC20ABI from "../assets/ERC20.json";
+import ERC20_ABI from "../assets/ERC20.json";
+import TJROUTER_ABI from "../assets/router.json";
 import Escrow from "../contracts/SCEscrow.json";
-import { createElement } from "react/cjs/react.production.min";
 
 export const StateContext = createContext();
 
@@ -241,10 +241,39 @@ export class StateProvider extends React.Component {
         },
 
         _getERC20Balance: async (token) => {
-            let erc20contract = new ethers.Contract(token.address, ERC20ABI, this.state._provider.getSigner(0));
+            let erc20contract = new ethers.Contract(token.address, ERC20_ABI, this.state._provider.getSigner(0));
             const balanceInWei = await erc20contract.balanceOf(this.state.currentAddress);
             return ethers.utils.formatEther(balanceInWei);
-        }
+        },
+
+        _getAmountsIn: async (token, amountOut) => {
+            let tokenOut = await this.state._contract.STABLECOIN();
+            let maxAmountIn;
+            amountOut = ethers.utils.parseUnits(amountOut, 18);
+            if (token.address.toLowerCase() === tokenOut.toLowerCase()) {
+                return amountOut;
+            } else {
+                let tokenIn = token.address;
+                let routerAddress = await this.state._contract.tjRouter();
+                let WAVAX = await this.state._contract.WAVAX();
+                let IJoeRouter = new ethers.Contract(routerAddress, TJROUTER_ABI, this.state._provider.getSigner(0));
+                const avaxPath = [
+                    WAVAX,
+                    tokenOut
+                ]
+                const tokenPath = [
+                    tokenIn,
+                    WAVAX,
+                    tokenOut
+                ]
+                if (token.symbol === "AVAX" || token.symbol === "WAVAX") {
+                    maxAmountIn = await IJoeRouter.getAmountsIn(amountOut, avaxPath);
+                } else {
+                    maxAmountIn = await IJoeRouter.getAmountsIn(amountOut, tokenPath);
+                }
+                return maxAmountIn[0];
+            }
+        },
     };
 
     render() {
