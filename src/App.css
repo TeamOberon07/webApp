@@ -11,9 +11,8 @@
 }
 
 .container {
-  margin-top: 1%;
-  margin-left: 20%;
   width: 60%;
+  margin: auto;
 }
 
 .cta-button {
@@ -103,6 +102,11 @@ p {
   margin: 0;
 }
 
+.page-title {
+  font-size: 3em;
+  margin: 1em 0;
+}
+
 button:focus {
   outline: none;
 }
@@ -126,7 +130,7 @@ th, td {
 }
 
 th {
-  background-color: rgba(21, 21, 21, 0.253); 
+  background-color: rgb(48 48 48 / 36%); 
 }
 
 .orderTable {
@@ -187,6 +191,12 @@ nav > div.nav-item > p {
 
 .register-seller {
   text-align: center;
+  margin-top: 8em;
+  font-size: 1.5em;
+}
+
+.register-seller h2 {
+  font-size: 1.5em;
 }
 
 .register-button {
@@ -207,10 +217,6 @@ form > .getQRCode {
 .TVL {
   margin-left: auto;
   margin-bottom: 0;
-}
-
-.label-selectBox {
-  margin-left: 1em;
 }
 
 select {
@@ -259,7 +265,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .spinner {
-  margin-top: 4em;
+  margin-top: 20em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -315,10 +321,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 .order-button{
-  color: black;
   border-radius: 0.5em;
   padding: 0.25em 0.5em;
-  background-color: #AAAAAA;
+  transition: all 0.2s;
 }
 
 .order-button:hover{
@@ -373,9 +378,8 @@ body::-webkit-scrollbar-thumb {
 
 .create-tx {
   text-align: center;
-  max-width: 50em;
+  min-width: -webkit-fill-available;
   margin: auto;
-  margin-top: 7em;
   font-size: 1.1em;
   padding: 3em;
   border-radius: 1.5em;
@@ -503,7 +507,7 @@ body::-webkit-scrollbar-thumb {
 
 #imgLogo{
   padding: 0 1em;
-  width: 7em;
+  width: 5.5em;
 }
 
 #order-page-amount-logo{
@@ -511,7 +515,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 #order-page-container{
-  width: 60em;
+  width: -webkit-fill-available;
   margin-top: 2em;
   align-self: center;
 }
@@ -525,17 +529,10 @@ body::-webkit-scrollbar-thumb {
   width: 12em;
   font-weight: bold;
   font-size: 1.5em;
-  background-color: rgb(7 6 8 / 67%);
 }
 #order-page-container td{
-  background-color: rgb(0, 0, 0);
   font-size: 1.25em;
   
-}
-
-
-#order-page-container .address{
-  text-align: center;
 }
 
 #order-page-container .button-label-select{
@@ -593,12 +590,20 @@ body::-webkit-scrollbar-thumb {
   font-size: 0.75em !important;
 }
 
+#filters-and-labels {
+  display: flex;
+}
+
+#FilterStateDiv {
+  margin-left: 1.5em;
+}
+
 input#FilterAddress{
-  width: 27em;
+  width: 20em;
   background-color: rgb(7 6 8 / 67%);
   padding: 0.5em;
   border-radius: 0.5em;
-  margin-left: 0;
+  margin-left:0.3em;
 }
 #FilterAddressLabel{
   padding-right: 0;
@@ -619,15 +624,20 @@ p.errorP{
   background-color: rgb(7 6 8 / 67%);
   padding: 0.5em;
   border-radius: 0.5em;
-  margin-left: 0;
+  margin-left:0.3em;
 }
 #filters{
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
   display: flex;
+  justify-content: space-between;
 }
 #filterButtons{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+}
+#filterButtons button {
+  padding: 0.5em 1.5em;
+  min-width: 0;
 }
 
 .orderPage{
@@ -637,9 +647,8 @@ p.errorP{
 
 .logTable{
   align-self:center;
-  margin: 2em;
-  width: 60em;
-
+  margin: 2em 0;
+  width: -webkit-fill-available;
 }
 
 .logTable td[aria-label="State"]{

@@ -93,7 +93,7 @@ export function Orders({orders, isBuyer, State}) {
               to="/order-page"
               state={{ orderState: State[element[4]],
                        order: element}}
-              className = "order-button">See order</NavLink>
+              className = "cta-button order-button blur-light">See order</NavLink>
             </td>
             {(() => {
               if(State[element[4]] === "Created") {
@@ -113,44 +113,46 @@ export function Orders({orders, isBuyer, State}) {
   }
   return (
     <div className="box">
+      <h1 class="page-title">Your Orders</h1>
       <form id="filters">
-        <div className="button-label-select">
-          <label className="label-selectBox FilterLabel" id="FilterAddressLabel">Address:</label>
-          <div id="buyerAddressFilter">
-            <input type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
-              const address = document.getElementById("FilterAddress").value;
-              if(address === "" || ethers.utils.isAddress(address)){
-                setErrorFilter("");
-              }
-              else{
-                setErrorFilter("Inserted address is not valid");
-              }
-            }}></input>
+        <div id="filters-and-labels">
+          <div className="button-label-select">
+            <label className="FilterLabel" id="FilterAddressLabel">Address:</label>
+            <div id="buyerAddressFilter">
+              <input type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
+                const address = document.getElementById("FilterAddress").value;
+                if(address === "" || ethers.utils.isAddress(address)){
+                  setErrorFilter("");
+                }
+                else{
+                  setErrorFilter("Inserted address is not valid");
+                }
+              }}></input>
+            </div>
+          </div>
+          <div className="button-label-select" id="FilterStateDiv">
+            <label className="FilterLabel" id="FilterStateLabel">State:</label>
+            <div id="stateFilter">
+              <select name="FilterState" id="FilterState">
+                <option value="-1" key="-1">Any</option>
+                <option value="0" key="0">Created</option>
+                <option value="1" key="1">Confirmed</option>
+                <option value="2" key="2">Deleted</option>
+                <option value="3" key="3">Refund Asked</option>
+                <option value="4" key="4">Refunded</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div className="button-label-select">
-          <label className="label-selectBox FilterLabel" id="FilterStateLabel">State:</label>
-          <div id="stateFilter">
-            <select name="FilterState" id="FilterState">
-              <option value="-1" key="-1">Any</option>
-              <option value="0" key="0">Created</option>
-              <option value="1" key="1">Confirmed</option>
-              <option value="2" key="2">Deleted</option>
-              <option value="3" key="3">Refund Asked</option>
-              <option value="4" key="4">Refunded</option>
-            </select>
-          </div>
+        <div id="filterButtons">
+          <button className="cta-button basic-button blur" onClick = {() => applyFilters()}>Apply Filters</button>
+          <button className="cta-button basic-button blur" onClick = {() => setFiltered_orders([])}>Reset Filters</button>
         </div>
       </form> 
       <p className="errorP">{errorFilter}</p>
-      <div id="filterButtons">
-        <button className="cta-button basic-button blur" onClick = {() => applyFilters()}>Apply Filters</button>
-        <button className="cta-button basic-button blur" onClick = {() => setFiltered_orders([])}>Reset Filters</button>
+      <div className="tableLabel">
+        <p className="TVL">Your TVL: {totalHeldForSeller.toFixed(4)}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
       </div>
-        <div className="tableLabel">
-          <h2>Order List</h2>
-          <p className="TVL">Your TVL: {totalHeldForSeller.toFixed(4)}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
-        </div>
       <table className="orderTable blur">
         <thead>
           <tr>

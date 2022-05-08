@@ -18,9 +18,6 @@ export function Header({currentAddress, balance}) {
             <NavLink className="navbar-brand" to="/">
               ShopChain
             </NavLink>
-            <NavLink className="nav-link" to="/register-seller">
-              Register as a Seller
-            </NavLink>
             <div className="user-data nav-item">
               <p>Address: &nbsp; {address}</p>
               <p>Balance: &nbsp; {parseFloat(balance).toFixed(4)}<img src={avaxLogo} className="tokenLogoMin" alt="avax logo"/></p>

@@ -52,7 +52,7 @@ export function OrderData ({order, confirmOrder, loadingText}) {
         context._getAmountsIn(selectedValue, order.price).then((maxAmountIn) => {
             setAmountIn(maxAmountIn);
             let displayed = maxAmountIn/10**18;
-            displayed = displayed.toFixed(5);
+            displayed = displayed.toFixed(4);
             displayed = parseFloat(displayed);
             setDisplayedAmountIn(displayed);
             setTokenBalance(selectedValue.balance);
@@ -65,40 +65,43 @@ export function OrderData ({order, confirmOrder, loadingText}) {
     }, [selectedValue])
     
     return (<>
-        <div className="create-tx blur">
-            <p className="total-price">
-                <span>
-                    Payment amount:
-                </span>
-                <span>
-                    {order.price} USDC<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/>
-                </span>
-            </p>
+        <div className="container">
+            <h1 class="page-title">Order Details</h1>
+            <div className="create-tx blur">
+                <p className="total-price">
+                    <span>
+                        Payment amount:
+                    </span>
+                    <span>
+                        {order.price} USDC<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/>
+                    </span>
+                </p>
 
-            <div id="selectToken">
-                <p>Select the token you want to pay with:</p>
-                <div className="button-and-balance">
-                    <p className="token-balance">Amount and selected token:</p>
-                    <button onClick={handleClickOpen} className="cta-button select-button blur-light">
-                        {displayedAmountIn} &nbsp;
-                        {selectedValue.symbol}
-                        <img src={selectedValue.logoURI} className="tokenLogoMin" alt="token logo"/>
-                        <span className="material-icons">expand_more</span>
-                    </button>
-                    <p className="token-balance">Balance: {tokenBalance}</p>
+                <div id="selectToken">
+                    <p>Select the token you want to pay with:</p>
+                    <div className="button-and-balance">
+                        <p className="token-balance">Amount and selected token:</p>
+                        <button onClick={handleClickOpen} className="cta-button select-button blur-light">
+                            {displayedAmountIn} &nbsp;
+                            {selectedValue.symbol}
+                            <img src={selectedValue.logoURI} className="tokenLogoMin" alt="token logo"/>
+                            <span className="material-icons">expand_more</span>
+                        </button>
+                        <p className="token-balance">Balance: {tokenBalance}</p>
+                    </div>
+                    <TokenDialog
+                        selectedValue={selectedValue}
+                        open={open}
+                        onClose={handleClose}
+                    />
                 </div>
-                <TokenDialog
-                    selectedValue={selectedValue}
-                    open={open}
-                    onClose={handleClose}
-                />
+
+                { !clickedConfirm && button }
+
+                { !order.confirmed && loadingText !== '' && 
+                <Loading text={loadingText} />
+                }
             </div>
-
-            { !clickedConfirm && button }
-
-            { !order.confirmed && loadingText !== '' && 
-            <Loading text={loadingText} />
-            }
         </div>
     </>);
 }

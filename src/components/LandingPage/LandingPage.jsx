@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {StateContext} from "../StateContext";
 import {NoWalletDetected} from "../NoWalletDetected";
 import {ConnectWallet} from "../ConnectWallet";
@@ -49,6 +49,10 @@ export function LandingPage() {
   const [fetchUrl, setFetchUrl] = useState('');
   const [fetchMethod, setFetchMethod] = useState('');
   const [order, isLoaded] = useFetch(fetchUrl, fetchMethod, setHasNotified, setError);
+
+  useEffect(() => {
+    context._setListenerMetamaksAccount();
+  }, []);
 
   const confirmOrder = () => {
     setLoadingText('Please confirm the transaction on MetaMask');
