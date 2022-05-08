@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { StateContext } from "../StateContext";
 import tokenLogo from "../../assets/usdcLogo.png";
 import avaxLogo from "../../assets/avaxLogo.png";
 import { Loading } from '../Loading';
@@ -6,15 +7,14 @@ import { TokenDialog } from "./TokenDialog"
 
 export function OrderData ({order, confirmOrder, loadingText}) {
     const [clickedConfirm, setClickedConfirm] = useState(false);
-
-    let selectedToken = "AVAX";
-    let selectedTokenLogo = avaxLogo;
+    const context = useContext(StateContext);
 
     const AVAX = {
         "address": "NULL",
         "name": "AVAX",
         "symbol": "AVAX",
-        "logoURI": avaxLogo
+        "logoURI": avaxLogo,
+        "balance": parseFloat(context.balance).toFixed(4)
     }
 
     const [open, setOpen] = useState(false);
@@ -41,12 +41,15 @@ export function OrderData ({order, confirmOrder, loadingText}) {
             </p>
 
             <div id="selectToken">
-                <p>Select the token you want to pay:</p>
-                <button onClick={handleClickOpen} className="cta-button select-button blur">
-                    {selectedValue.symbol}
-                    <img src={selectedValue.logoURI} className="tokenLogoMin" alt="token logo"/>
-                    <span className="material-icons">expand_more</span>
-                </button>
+                <p>Select the token you want to pay with:</p>
+                <div className="button-and-balance">
+                    <button onClick={handleClickOpen} className="cta-button select-button blur">
+                        {selectedValue.symbol}
+                        <img src={selectedValue.logoURI} className="tokenLogoMin" alt="token logo"/>
+                        <span className="material-icons">expand_more</span>
+                    </button>
+                    <span className="token-balance">Balance: {selectedValue.balance}</span>
+                </div>
                 <TokenDialog
                     selectedValue={selectedValue}
                     open={open}

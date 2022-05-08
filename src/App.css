@@ -99,6 +99,10 @@ h2 {
   font-weight: bold;
 }
 
+p {
+  margin: 0;
+}
+
 .box.top {
   min-width: fit-content;
   padding-top: 0;
@@ -342,36 +346,38 @@ body::-webkit-scrollbar-thumb {
   justify-content: space-between;
   margin-top: 2em;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 1.25em;
 }
 
 .create-tx-button {
   font-size: 1.25em;
+
 }
 
 .create-tx {
   text-align: center;
-  max-width: 40em;
+  max-width: 50em;
   margin: auto;
   margin-top: 7em;
   font-size: 1.1em;
 }
 
 .create-tx button {
-  margin-top: 1em;
+  margin-top: 3em;
 }
 
 #selectToken {
+  margin-top: 1em;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 1.1em;
+  font-size: 1.25em;
 }
 
 #selectToken .select-button {
   margin: 0;
   min-width: 5em;
-  margin-left: 0.5em;
+  margin-bottom: 0.1em;
   padding: 0.6em 0.9em;
   display: flex;
   align-items: center;
@@ -381,6 +387,19 @@ body::-webkit-scrollbar-thumb {
 #selectToken .select-button:hover {
   transform: scale(1);
   color: rgb(168, 168, 168);
+}
+
+.button-and-balance {
+  display: flex;
+  flex-direction: column;
+}
+
+.select-button img {
+  border-radius: 100%;
+}
+
+.cta-button .tokenLogoMin {
+  margin-bottom: 0;
 }
 
 .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper {
@@ -414,21 +433,35 @@ body::-webkit-scrollbar-thumb {
 
 .dialogTitle {
   font-family: inherit !important;
+  font-size: 1.4em !important;
+  padding: 1.5em 3em !important;
 }
 
 .ul-tokens {
   list-style: none;
-  padding: 0 3em;
+  padding: 0 2em;
   font-size: 1.25em;
+  margin-bottom: 1.5em;
 }
 
 .li-tokens {
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+  padding: 0.3em;
+}
+
+.li-tokens:hover {
+  background-color: rgba(255, 255, 255, 0.144);
 }
 
 .li-img-token {
   margin-right: 0.5em;
+  border-radius: 100%;
+}
+
+.token-balance {
+  font-size: 0.7em;
 }
 
 .tx-message {

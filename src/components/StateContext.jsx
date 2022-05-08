@@ -1,5 +1,6 @@
 import React, { createContext } from "react";
 import { Contract, ethers } from "ethers";
+import ERC20ABI from "../assets/ERC20.json";
 import Escrow from "../contracts/SCEscrow.json";
 
 export const StateContext = createContext();
@@ -214,7 +215,6 @@ export class StateProvider extends React.Component {
         },
 
         _getQRCode: (order) => {
-            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaah");
             const buyer_address = order[1];
             const orderQRCode = buyer_address + ":"+parseInt(order[0]._hex);
             var QRCode = require('qrcode');
@@ -234,8 +234,14 @@ export class StateProvider extends React.Component {
             return null;
         },
 
-        _getLog:async (id) =>  {
+        _getLog: async (id) =>  {
             return await this.state._contract.getLogsOfOrder(id);
+        },
+
+        _getERC20Balance: async (token) => {
+            let erc20contract = new ethers.Contract(token.address, ERC20ABI, this.state._provider.getSigner(0));
+            const balanceInWei = await erc20contract.balanceOf(this.state.currentAddress);
+            return ethers.utils.formatEther(balanceInWei);
         }
     };
 

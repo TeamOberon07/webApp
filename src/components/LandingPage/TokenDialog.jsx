@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { useContext } from "react";
 import tokenLogo from "../../assets/usdcLogoMin.png";
 import avaxLogo from "../../assets/avaxLogo.png";
 import { Loading } from '../Loading';
 import TOKENS from "./tokenlist.js";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
+import { StateContext } from "../StateContext";
 
 export function TokenDialog(props) {
 
+    const context = useContext(StateContext);
     const { onClose, selectedValue, open } = props;
 
     const handleClose = () => {
@@ -25,8 +25,14 @@ export function TokenDialog(props) {
       "address": "NULL",
       "name": "AVAX",
       "symbol": "AVAX",
-      "logoURI": avaxLogo
-  }
+      "logoURI": avaxLogo,
+      "balance": parseFloat(context.balance).toFixed(4)
+    }
+
+    TOKENS.map(async (token) => {
+      let balance = await context._getERC20Balance(token);
+      token.balance = balance;
+    })
 
     return (
       <Dialog onClose={handleClose} open={open}>
@@ -34,25 +40,21 @@ export function TokenDialog(props) {
         <ul className="ul-tokens">
             <li onClick={() => handleListItemClick(AVAX)} key={AVAX.name} className="li-tokens">
               <span>
-                <img href={AVAX.logoURI} className="tokenLogoMin li-img-token"/>
+                <img src={AVAX.logoURI} className="tokenLogoMin li-img-token"/>
                 {AVAX.symbol}
               </span>
               <span>
-                9.99
+                {AVAX.balance}
               </span>
             </li>
           {TOKENS.map((token) => (
-            // <ListItem button onClick={() => handleListItemClick(token)} key={token}>
-            //   {/* <img></img> */}
-            //   <ListItemText primary={token} />
-            // </ListItem>
             <li onClick={() => handleListItemClick(token)} key={token.name} className="li-tokens">
               <span>
-                <img href={token.logoURI} className="tokenLogoMin li-img-token"/>
+                <img src={token.logoURI} className="tokenLogoMin li-img-token"/>
                 {token.symbol}
               </span>
               <span>
-                9.99
+                {token.balance}
               </span>
             </li>
           ))}
