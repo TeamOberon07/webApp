@@ -1,17 +1,16 @@
 import { useState } from "react";
+import { useContext } from "react";
 import tokenLogo from "../../assets/usdcLogoMin.png";
+import avaxLogo from "../../assets/avaxLogo.png";
 import { Loading } from '../Loading';
 import TOKENS from "./tokenlist.js";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
+import { StateContext } from "../StateContext";
 
 export function TokenDialog(props) {
 
-    console.log(TOKENS);
-
+    const context = useContext(StateContext);
     const { onClose, selectedValue, open } = props;
 
     const handleClose = () => {
@@ -22,17 +21,44 @@ export function TokenDialog(props) {
         onClose(value);
     };
 
+    const AVAX = {
+      "address": "NULL",
+      "name": "AVAX",
+      "symbol": "AVAX",
+      "logoURI": avaxLogo,
+      "balance": parseFloat(context.balance).toFixed(4)
+    }
+
+    TOKENS.map(async (token) => {
+      let balance = await context._getERC20Balance(token);
+      token.balance = balance;
+    })
+
     return (
-        <Dialog onClose={handleClose} open={open}>
-          <DialogTitle>Chose token for the payment</DialogTitle>
-          <List sx={{ pt: 0 }}>
-            {TOKENS.map((token) => (
-              <ListItem button onClick={() => handleListItemClick(token)} key={token}>
-                {/* <img></img> */}
-                <ListItemText primary={token} />
-              </ListItem>
-            ))}
-          </List>
-        </Dialog>
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle className="dialogTitle">Chose a token for the payment:</DialogTitle>
+        <ul className="ul-tokens">
+            <li onClick={() => handleListItemClick(AVAX)} key={AVAX.name} className="li-tokens">
+              <span>
+                <img src={AVAX.logoURI} className="tokenLogoMin li-img-token"/>
+                {AVAX.symbol}
+              </span>
+              <span>
+                {AVAX.balance}
+              </span>
+            </li>
+          {TOKENS.map((token) => (
+            <li onClick={() => handleListItemClick(token)} key={token.name} className="li-tokens">
+              <span>
+                <img src={token.logoURI} className="tokenLogoMin li-img-token"/>
+                {token.symbol}
+              </span>
+              <span>
+                {token.balance}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Dialog>
     );
 }

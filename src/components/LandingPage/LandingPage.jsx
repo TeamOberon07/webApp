@@ -7,6 +7,7 @@ import { Error } from '../Error';
 import { ethers } from "ethers";
 import { useFetch } from "./useFetch";
 import { UserData } from "./UserData";
+import { Header } from "../Header";
 import { OrderData } from './OrderData';
 import { TxHash } from './TxHash';
 import { Notify } from './Notify';
@@ -101,12 +102,16 @@ export function LandingPage() {
 
   if (!isLoaded) {
     return (<>
-      <UserData />
+      <Header currentAddress={context.currentAddress}
+              balance={context.balance}
+      />
       <Loading />
     </>);
   } else if(isOnChain) {
     return (<>
-      <UserData />
+      <Header currentAddress={context.currentAddress}
+              balance={context.balance}
+      />
       <div class="tx-message">
         <p>Tx is already on-chain!</p>
       </div>
@@ -122,7 +127,9 @@ export function LandingPage() {
       </>);
   } else {
     return (<>
-      <UserData />
+      <Header currentAddress={context.currentAddress}
+              balance={context.balance}
+      />
 
       <OrderData order={order} confirmOrder={confirmOrder} loadingText={loadingText} />
 
