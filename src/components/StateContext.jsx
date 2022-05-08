@@ -2,6 +2,7 @@ import React, { createContext } from "react";
 import { Contract, ethers } from "ethers";
 import ERC20ABI from "../assets/ERC20.json";
 import Escrow from "../contracts/SCEscrow.json";
+import { createElement } from "react/cjs/react.production.min";
 
 export const StateContext = createContext();
 
@@ -218,7 +219,6 @@ export class StateProvider extends React.Component {
             const buyer_address = order[1];
             const orderQRCode = buyer_address + ":"+parseInt(order[0]._hex);
             var QRCode = require('qrcode');
-            var canvas = document.getElementById('qrcode');
             var opts = {
                 margin: 1,
                 width: 140,
@@ -227,10 +227,12 @@ export class StateProvider extends React.Component {
                     light:"#e7e7e7"
                 }
             }
+            var canvas = document.getElementById("qrcode");
             QRCode.toCanvas(canvas, orderQRCode, opts, function (error) {
                 if (error)
                     return [null, error];
             })
+            document.getElementById("qrcode-container").appendChild(canvas);
             return null;
         },
 

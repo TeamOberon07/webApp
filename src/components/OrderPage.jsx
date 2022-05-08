@@ -1,10 +1,12 @@
-import React, { useContext, useRef, useMemo, usePrevious, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { ethers } from "ethers";
 import { Header } from './Header';
 import { StateContext } from "./StateContext";
 import { useLocation } from 'react-router-dom'
 import { Button } from "./Button";
 import { Log } from "./Log";
+import tokenLogo from "../assets/usdtLogo.png";
+
 
 export function OrderPage() {
     const context = useContext(StateContext);
@@ -17,29 +19,51 @@ export function OrderPage() {
         context._connectWallet();
         context._setListenerMetamaksAccount();
     }, []);
+    //_getLogById() da implementare
+    // const log = context._getLogById();
+
+    useEffect(() => {
+        if(context.userIsSeller)
+            context._getQRCode(order);
+    }, [order]);
 
     return (<div className="orderPage">
         <Header currentAddress={context.currentAddress}
             balance={context.balance}
         />
 
-        <div id="order-page-container">
+        <table id="order-page-container">
+        <tbody>
             {(() => {
                 if (context.userIsSeller)
-                    return <p id="orderPageAddress">Buyer Address: <span className="address">{order[1]}</span></p>
+                    return <tr><th id="orderPageAddress">Buyer Address</th><td colSpan={2} className="address">{order[1]}</td></tr>
                 else
-                    return <p id="orderPageAddress">Seller Address: <span className="address">{order[2]}</span></p>
+                    return <tr><th id="orderPageAddress">Seller Address</th><td className="address">{order[2]}</td></tr>
             })()}
-                <div className = "order-container">
-                    <p>ID: {id}</p>
-                    <p>Amount: {ethers.utils.formatEther(amount)}</p>
-                    <p>State: {orderState}</p>
-                </div>
+                <tr>
+                    <th>ID</th><td>{id}</td>
+                    {(() => {
+                        if(context.userIsSeller)
+                            return <td rowSpan={3}>
+                                <div id="qrcode-container" className="blur">
+                                    <h2>QRCode</h2>
+                                    <canvas id="qrcode"></canvas>
+                                </div>
+                            </td>
+                    })()}
+                </tr>  
+                <tr>
+                    <th>Amount</th><td>{ethers.utils.formatEther(amount)}<img src={tokenLogo} id="order-page-amount-logo" className="tokenLogoMin"/></td>
+                </tr>  
+                <tr>
+                    <th>State</th><td>{orderState}</td>
+                </tr>
                 {(() => {
                     if (context.userIsSeller) {     //vista Seller
-                        var comp = (
-                            <div className="content-and-qrcode">
-                                <div className="box top actions">         
+                        return <tr>
+                            <th>Actions</th>     
+                            <td colSpan={3}>  
+                                <div class="actions">
                                     {(() => {
                                         if (orderState === "Created" || orderState === "Shipped")
                                             return <button
@@ -79,42 +103,34 @@ export function OrderPage() {
                                                             amount = {amount}
                                                     />;*/
                                     })()}
-
-                                    <button
-                                        className="cta-button basic-button blur"
-                                        type="button"
-                                        onClick={() =>  context._getQRCode(order)}
-                                    >Get QR Code</button>
                                     {/*<Button method = {() =>  context._getQRCode(order)}
                                             id = {id}
                                             text = {"Get QRCode"}
                                     />}*/}
                                 </div>
-                                <div id="qrcode-container" className="blur">
-                                    <h2>QRCode</h2>
-                                    <canvas id="qrcode"></canvas>
-                                </div>
-                            </div>
-                    ); 
-                    return comp;
+                            </td>
+                        </tr>
                     } else {        //vista Buyer
-                        return (
-                            <div className="content-and-qrcode">
-                                <div className="box top actions-buyer">
+                        return <tr>
+                            <th>Actions</th>     
+                                <td colSpan={3}>  
+                                    <div class="actions">
                                     {(() => {
                                         if (orderState === "Created" || orderState === "Shipped" || orderState === "Confirmed") {
-                                            return <Button  method={(id) => context._orderOperation(id, "AskRefund")}
-                                                            id = {id}
-                                                            text = {"Ask refund"}
-                                                    />;
+                                            return <button
+                                                className="cta-button basic-button blur"
+                                                type="button"
+                                                onClick={() =>  context._orderOperation(id, "AskRefund")}
+                                            >Ask Refund</button>
                                         }
                                     })()}
                                 </div>
-                            </div>
-                        );
+                            </td>
+                        </tr>
                     }
                 })()}
-        </div>
+        </tbody>
+        </table>
 
         <Log></Log>
     </div>
