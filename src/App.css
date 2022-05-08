@@ -510,10 +510,6 @@ body::-webkit-scrollbar-thumb {
   width: 5.5em;
 }
 
-#order-page-amount-logo{
-  margin-bottom: 0.3em;
-}
-
 #order-page-container{
   width: -webkit-fill-available;
   margin-top: 2em;

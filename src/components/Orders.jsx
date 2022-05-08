@@ -83,7 +83,7 @@ export function Orders({orders, isBuyer, State}) {
             {(() => {
               amount = ethers.utils.formatEther(element[3].toString());
             })()}
-            <td aria-label="Amount">{amount}</td>
+            <td aria-label="Amount">${amount}</td>
             <td aria-label="Icon">
               {State[element[4]]}
               <span className="material-icons" style={Color[element[4]]}>{Icon[element[4]]}</span>
@@ -151,7 +151,7 @@ export function Orders({orders, isBuyer, State}) {
       </form> 
       <p className="errorP">{errorFilter}</p>
       <div className="tableLabel">
-        <p className="TVL">Your TVL: {totalHeldForSeller.toFixed(4)}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
+        <p className="TVL">Your TVL: ${parseFloat(totalHeldForSeller.toFixed(4))}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
       </div>
       <table className="orderTable blur">
         <thead>

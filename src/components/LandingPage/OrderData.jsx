@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { StateContext } from "../StateContext";
-import tokenLogo from "../../assets/usdcLogoMin.png";
+import tokenLogo from "../../assets/usdtLogo.png";
 import avaxLogo from "../../assets/avaxLogo.png";
 import { Loading } from '../Loading';
 import { TokenDialog } from "./TokenDialog"
@@ -73,7 +73,7 @@ export function OrderData ({order, confirmOrder, loadingText}) {
                         Payment amount:
                     </span>
                     <span>
-                        {order.price} USDC<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/>
+                        ${order.price} fUSDt<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/>
                     </span>
                 </p>
 

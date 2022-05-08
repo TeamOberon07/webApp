@@ -19,8 +19,6 @@ export function OrderPage() {
         context._connectWallet();
         context._setListenerMetamaksAccount();
     }, []);
-    //_getLogById() da implementare
-    // const log = context._getLogById();
 
     useEffect(() => {
         if(context.userIsSeller)
@@ -54,7 +52,7 @@ export function OrderPage() {
                         })()}
                     </tr>  
                     <tr>
-                        <th>Amount</th><td>{ethers.utils.formatEther(amount)}<img src={tokenLogo} id="order-page-amount-logo" className="tokenLogoMin"/></td>
+                        <th>Amount</th><td>${ethers.utils.formatEther(amount)}<img src={tokenLogo} id="order-page-amount-logo" className="tokenLogoMin"/></td>
                     </tr>  
                     <tr>
                         <th>State</th><td>{orderState}</td>

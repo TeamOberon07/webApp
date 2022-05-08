@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {StateContext} from "../StateContext";
-import {NoWalletDetected} from "../NoWalletDetected";
-import {ConnectWallet} from "../ConnectWallet";
+import { StateContext } from "../StateContext";
+import { NoWalletDetected } from "../NoWalletDetected";
+import { ConnectWallet } from "../ConnectWallet";
 import { Loading } from '../Loading';
 import { Error } from '../Error';
 import { ethers } from "ethers";
 import { useFetch } from "./useFetch";
-import { UserData } from "./UserData";
 import { Header } from "../Header";
 import { OrderData } from './OrderData';
 import { TxHash } from './TxHash';
