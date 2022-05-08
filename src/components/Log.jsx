@@ -24,6 +24,7 @@ export function Log() {
 
         console.log(parseInt(element[1].toString()));
         let date = new Date(parseInt(element[1].toString())*1000).toLocaleString();
+        date = date.replace(",", "").substring(0, date.length -4);
 
         const res =
             <tr key={orderState}>

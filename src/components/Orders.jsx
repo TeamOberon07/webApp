@@ -1,6 +1,6 @@
 import React from "react";
 import { ethers } from "ethers";
-import tokenLogo from "../assets/usdcLogo.png";
+import tokenLogo from "../assets/usdtLogo.png";
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 

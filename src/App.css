@@ -485,40 +485,36 @@ body::-webkit-scrollbar-thumb {
   width: 7em;
 }
 
+#order-page-amount-logo{
+  margin-bottom: 0.3em;
+}
+
 #order-page-container{
-  width: 70em;
-  margin-top: 4em;
+  width: 60em;
+  margin-top: 2em;
   align-self: center;
 }
 #order-page-container .actions{
-  width: 67%;
-  margin-top:0.5em;
-  margin-right: 0.25em;
-  min-width: auto;
-  height: 17em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
-/* one item */
-#order-page-container .actions>:first-child:nth-last-child(1) {
-/* -or- li:only-child { */
-    height: 100%;
-    margin: 0;
+#order-page-container th{
+  width: 12em;
+  font-weight: bold;
+  font-size: 1.5em;
+  background-color: rgb(7 6 8 / 67%);
+}
+#order-page-container td{
+  background-color: rgb(0, 0, 0);
+  font-size: 1.25em;
+  
 }
 
-/* two items */
-#order-page-container .actions>:first-child:nth-last-child(2),
-#order-page-container .actions>:nth-child(2):last-child  {
-    height: 50%;
-    margin-bottom: 0.5em;
-}
-#order-page-container .actions>:nth-child(2):last-child{
-  margin-bottom: 0;;
-}
 
-/* three items */
-#order-page-container .actions>:first-child:nth-last-child(3),
-#order-page-container .actions>:first-child:nth-last-child(3) {
-    height: 33.3333%;
+#order-page-container .address{
+  text-align: center;
 }
 
 #order-page-container .button-label-select{
@@ -526,9 +522,11 @@ body::-webkit-scrollbar-thumb {
 }
 
 #order-page-container .actions button{
-  width: 100%;
-  font-size: 1.5em;
-  text-decoration: underline;
+  background-color: rgba(29, 29, 29, 0.67) !important;
+  font-size: 1.25em;
+  margin: 0 0.25em;
+  padding: 0.25em;
+  min-width: 10em;
 }
 #order-page-container .actions-buyer{
   width: 100%;
@@ -544,8 +542,6 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.5em;
   margin-bottom: 0.25em;
   padding: 1em;
-  background-color: rgb(7 6 8 / 67%);
-  border-radius: 0.5em;
 }
 
 .order-container {
@@ -621,9 +617,19 @@ p.errorP{
 .logTable{
   align-self:center;
   margin: 2em;
+  width: 60em;
 
 }
 
-.logTable tr *{
-  padding: 1em 12em;
+.logTable td[aria-label="State"]{
+  width: 18em;
+}
+
+.logTable td{
+  background-color: black;
+}
+
+
+.logTable td[aria-label="Timestamp"]{
+  font-family: "DM Mono", monospace;
 }
