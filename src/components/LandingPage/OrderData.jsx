@@ -10,8 +10,15 @@ export function OrderData ({order, confirmOrder, loadingText}) {
     let selectedToken = "AVAX";
     let selectedTokenLogo = avaxLogo;
 
+    const AVAX = {
+        "address": "NULL",
+        "name": "AVAX",
+        "symbol": "AVAX",
+        "logoURI": avaxLogo
+    }
+
     const [open, setOpen] = useState(false);
-    const [selectedValue, setSelectedValue] = "AVAX";
+    const [selectedValue, setSelectedValue] = useState(AVAX);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -24,13 +31,20 @@ export function OrderData ({order, confirmOrder, loadingText}) {
     
     return (<>
         <div className="create-tx">
-            <p className="total-price">Payment amount: &nbsp; {order.price} USDC<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
+            <p className="total-price">
+                <span>
+                    Payment amount:
+                </span>
+                <span>
+                    {order.price} USDC<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/>
+                </span>
+            </p>
 
             <div id="selectToken">
                 <p>Select the token you want to pay:</p>
                 <button onClick={handleClickOpen} className="cta-button select-button blur">
-                    {selectedToken}
-                    <img src={selectedTokenLogo} className="tokenLogoMin" alt="token logo"/>
+                    {selectedValue.symbol}
+                    <img src={selectedValue.logoURI} className="tokenLogoMin" alt="token logo"/>
                     <span className="material-icons">expand_more</span>
                 </button>
                 <TokenDialog
