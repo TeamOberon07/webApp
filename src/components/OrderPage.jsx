@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useMemo, usePrevious, useEffect } from "react";
 import { ethers } from "ethers";
 import { Header } from './Header';
 import { StateContext } from "./StateContext";
@@ -12,14 +12,17 @@ export function OrderPage() {
     const id = parseInt(order[0]._hex);
     const amount = order[3];
     const orderState = useLocation().state.orderState;
-    //_getLogById() da implementare
-    // const log = context._getLogById();
-    
+
+    useEffect(() => {
+        context._connectWallet();
+        context._setListenerMetamaksAccount();
+    }, []);
 
     return (<div className="orderPage">
         <Header currentAddress={context.currentAddress}
             balance={context.balance}
         />
+
         <div id="order-page-container">
             {(() => {
                 if (context.userIsSeller)
@@ -31,7 +34,6 @@ export function OrderPage() {
                     <p>ID: {id}</p>
                     <p>Amount: {ethers.utils.formatEther(amount)}</p>
                     <p>State: {orderState}</p>
-                    
                 </div>
                 {(() => {
                     if (context.userIsSeller) {     //vista Seller

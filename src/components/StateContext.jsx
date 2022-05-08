@@ -6,7 +6,7 @@ export const StateContext = createContext();
 
 export class StateProvider extends React.Component {
 
-    initialState = {
+    state = {
         currentAddress: undefined,
         balance: undefined,
         contractAddress: "0xF2A05049352dFAA2BdefE1357cc2beD4486E2E5e",
@@ -238,8 +238,6 @@ export class StateProvider extends React.Component {
             return await this.state._contract.getLogsOfOrder(id);
         }
     };
-
-    state = this.initialState;
 
     render() {
         return(
