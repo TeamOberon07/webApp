@@ -6,6 +6,10 @@ import Escrow from "../contracts/SCEscrow.json";
 
 export const StateContext = createContext();
 
+const stable = 0
+const avaxToStable = 1;
+const tokenToStable = 2;
+
 export class StateProvider extends React.Component {
 
     state = {
@@ -171,6 +175,30 @@ export class StateProvider extends React.Component {
         //     }
         // },
 
+        _callCreateOrder: async (functionToCall, tokenAddress, orderAmount, maxAmountIn, sellerAddress, afterConfirm) => {
+            try {
+              const amountOut = ethers.utils.parseEther(orderAmount);
+              let tx;
+              if (functionToCall === stable) {
+                tx = await this.state._contract.createOrderWithStable(sellerAddress, amountOut);
+              } else 
+              if (functionToCall === avaxToStable) {
+                tx = await this.state._contract.createOrderWithAVAXToStable(sellerAddress, amountOut, { value: maxAmountIn });
+              } else {
+                tx = await this.state._contract.createOrderWithTokensToStable(sellerAddress, amountOut, maxAmountIn, tokenAddress);
+              }
+              afterConfirm();
+              const receipt = await tx.wait();
+              if (receipt.status) {
+                this.state._updateBalance();
+              }
+              return tx.hash;
+            } catch(err) {
+                // return <Error message={err}/>;
+                throw err;
+            }
+          },
+
         _orderOperation: async (id, expr, orderAmount) => {
             try {
                 var tx, error = undefined;
@@ -217,6 +245,11 @@ export class StateProvider extends React.Component {
             });
             this.setState({ userIsSeller });
         },
+
+        _isAuthorizedSeller: async (sellerAddress) => {
+            const sellers = await this.state._getSellers();
+            return sellers.includes(sellerAddress);
+          },
 
         _getQRCode: (order) => {
             const buyer_address = order[1];

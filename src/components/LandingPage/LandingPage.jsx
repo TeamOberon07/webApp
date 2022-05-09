@@ -15,30 +15,6 @@ const stable = 0
 const avaxToStable = 1;
 const tokenToStable = 2;
 
-async function callCreateOrder(functionToCall, tokenAddress, context, orderAmount, maxAmountIn, sellerAddress, afterConfirm) {
-  try {
-    const amountOut = ethers.utils.parseEther(orderAmount);
-    let tx;
-    if (functionToCall === stable) {
-      tx = await context._contract.createOrderWithStable(sellerAddress, amountOut);
-    } else 
-    if (functionToCall === avaxToStable) {
-      tx = await context._contract.createOrderWithAVAXToStable(sellerAddress, amountOut, { value: maxAmountIn });
-    } else {
-      tx = await context._contract.createOrderWithTokensToStable(sellerAddress, amountOut, maxAmountIn, tokenAddress);
-    }
-    afterConfirm();
-    const receipt = await tx.wait();
-    if (receipt.status) {
-      context._updateBalance();
-    }
-    return tx.hash;
-  } catch(err) {
-      // return <Error message={err}/>;
-      throw err;
-  }
-}
-
 export function parseUrl() {
   const windowUrl = window.location.search;
   const params = new URLSearchParams(windowUrl);
@@ -58,8 +34,9 @@ export function LandingPage() {
   const [fetchMethod, setFetchMethod] = useState('');
   const [order, isLoaded] = useFetch(fetchUrl, fetchMethod, setHasNotified, setError);
 
-  useEffect(() => {
-    context._setListenerMetamaksAccount();
+  useEffect(async () => {
+    await context._connectWallet();
+    await context._setListenerMetamaksAccount();
   }, []);
 
   const approve = async (token, maxAmountIn) => {
@@ -77,10 +54,9 @@ export function LandingPage() {
       functionToCall = tokenToStable;
     }
     setLoadingText('Please confirm the transaction on MetaMask');
-    callCreateOrder(
+    context._callCreateOrder(
       functionToCall, 
       token.address, 
-      context, 
       order.price, 
       maxAmountIn, 
       order.sellerAddress, 
@@ -110,7 +86,9 @@ export function LandingPage() {
   
   if(!context.currentAddress) {
     return (
-      <ConnectWallet connectWallet={() => context._connectWallet()}/>
+      <ConnectWallet connectWallet={async() => {
+        await context._connectWallet();
+      }}/>
     );
   }
 

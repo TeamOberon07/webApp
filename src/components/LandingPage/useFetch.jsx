@@ -1,11 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { StateContext } from '../StateContext';
 
-async function isAuthorizedSeller(context, sellerAddress) {
-  const sellers = await context._getSellers();
-  return sellers.includes(sellerAddress);
-}
-
 const isValidAmount = (price) => {
   const reg = new RegExp('[+-]?([0-9]*[.])?[0-9]+$');
   if (reg.test(price) && price > 0) {
@@ -15,6 +10,13 @@ const isValidAmount = (price) => {
   }
 }
 export { isValidAmount }; // Necessary for unit testing
+
+// implement in StateContext
+const isInChain = () => {
+  return false;
+}
+export { isInChain };
+
 
 export function useFetch (url, method, setHasNotified, setError) {
     const [order, setOrder] = useState('');
@@ -36,13 +38,13 @@ export function useFetch (url, method, setHasNotified, setError) {
         //   setError('e-comm is wrong');
         //   setLoaded(true);
         // }
-      } else if (false) { // if(!order.confirmed && getHash(order.hash)) (order in chain but e-comm not notified)
+      } else if (isInChain()) { // if(!order.confirmed && getHash(order.hash)) (order in chain but e-comm not notified)
         order.hash = '0x3a99c01bc896891e324a62bf687843631d17164acd3cfbb341a93198744f3801'; // GET actual hash 
         order.confirmed = true;
         setOnChain('Order on-chain & !notified');
       } else {
         order.price = order.price.toString();
-        isAuthorizedSeller(context, order.sellerAddress)
+        context._isAuthorizedSeller(order.sellerAddress)
         .then(res => {
           if (res) {
             if (isValidAmount(order.price)) {
@@ -105,7 +107,7 @@ export function useFetch (url, method, setHasNotified, setError) {
         .catch(error => {
         if(error.name === 'AbortError') {
           // ...
-          console.log('fetch aborted (catch)');
+          // console.log('fetch aborted (catch)');
         }
         else {
           setError(error.message);
