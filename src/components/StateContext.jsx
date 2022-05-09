@@ -13,12 +13,14 @@ export class StateProvider extends React.Component {
         balance: undefined,
         contractAddress: "0xF2A05049352dFAA2BdefE1357cc2beD4486E2E5e",
         listedTokensAddress: "0x5cb76c0f1deBba7E974c8e114Cd91e7A51abD938",
+        stablecoinAddress: undefined,
         ourNetwork: "rinkeby",
         rightChain: true,
         _contract: undefined,
         _provider: undefined,
         userIsSeller: false,
         orderState: ['Created', 'Shipped', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
+        amountApproved: undefined,
         networks: {
             "rinkeby": {
                 chainId: "0x4",
@@ -247,8 +249,38 @@ export class StateProvider extends React.Component {
             return ethers.utils.formatEther(balanceInWei);
         },
 
+        _approveERC20: async (tokenAddress, amount) => {
+            let erc20contract = new ethers.Contract(tokenAddress, ERC20_ABI, this.state._provider.getSigner(0));
+            console.log("AMOUNT TO APPROVE: "+amount/10**18)
+            let tx = await erc20contract.approve(this.state.contractAddress, amount);
+            tx.wait().then( () => {
+                this.setState({
+                    amountApproved: true,
+                })
+            }).catch(() => {
+                this.setState({
+                    amountApproved: false,
+                })
+            })
+        },
+
+        _ERC20isApproved: async (tokenAddress, amount) => {
+            let erc20contract = new ethers.Contract(tokenAddress, ERC20_ABI, this.state._provider.getSigner(0));
+            let allowance = await erc20contract.allowance(this.state.currentAddress, this.state.contractAddress);
+            console.log("ALLOWANCE: "+allowance)
+            console.log("AMOUNT: "+amount)
+            if (allowance >= amount) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
         _getAmountsIn: async (token, amountOut) => {
             let tokenOut = await this.state._contract.STABLECOIN();
+            this.setState({
+                stablecoinAddress: tokenOut,
+            })
             let maxAmountIn;
             amountOut = ethers.utils.parseUnits(amountOut, 18);
             if (token.address.toLowerCase() === tokenOut.toLowerCase()) {

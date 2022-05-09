@@ -265,23 +265,23 @@ body::-webkit-scrollbar-thumb {
 }
 
 .spinner {
-  margin-top: 20em;
+  margin-top: 3em;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   background-color: transparent;
 }
 
 .spinner span {
-  font-size: 2rem;
-  animation: fade 1s linear 0s infinite;
+  font-size: 1rem;
+  /* animation: fade 1s linear 0s infinite; */
   padding-right: 1rem;
 }
 
 .half-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #03fc4e;
+  width: 1.5em;
+  height: 1.5em;
+  border: 3px solid #fc0356;
   border-top: 3px solid transparent;
   border-radius: 50%;
   animation: spin 0.5s linear 0s infinite;
@@ -362,18 +362,22 @@ body::-webkit-scrollbar-thumb {
   background-color: #ffffff2b;
 }
 
-.insufficient-balance-button {
+.disabled-button {
   background-color: #ffffff0a;
   color: #ffffff2b;
 }
 
-.insufficient-balance-button:hover {
+.disabled-button:hover {
   transform: scale(1);
   cursor: unset;
 }
 
-.insufficient-balance-button:focus {
+.disabled-button:focus {
   outline: none;
+}
+
+.approved-button {
+  background-color: #ff599721;
 }
 
 .create-tx {
@@ -429,6 +433,7 @@ body::-webkit-scrollbar-thumb {
 
 .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper {
   background-color: black;
+  border-radius: 2em;
 }
 
 .cta-button span.material-icons {
@@ -650,11 +655,6 @@ p.errorP{
 .logTable td[aria-label="State"]{
   width: 18em;
 }
-
-.logTable td{
-  background-color: black;
-}
-
 
 .logTable td[aria-label="Timestamp"]{
   font-family: "DM Mono", monospace;

@@ -5,39 +5,57 @@ import avaxLogo from "../../assets/avaxLogo.png";
 import { Loading } from '../Loading';
 import { TokenDialog } from "./TokenDialog"
 
-export function OrderData ({order, confirmOrder, loadingText}) {
-    const [clickedConfirm, setClickedConfirm] = useState(false);
+export function OrderData ({order, createOrder, approve, loadingText}) {
     const context = useContext(StateContext);
-
+    
     const AVAX = {
-        "address": "NULL",
+        "address": "",
         "name": "AVAX",
         "symbol": "AVAX",
         "logoURI": avaxLogo,
         "balance": parseFloat(context.balance).toFixed(4)
     }
 
-    const buttonOK = 
+    const buttonToApprove = 
         <button onClick={ () => {
-            setClickedConfirm(true);
-            confirmOrder();
-        }}
-        className="cta-button basic-button blur-light" id="createOrder">
+                //setClickedApprove(true);
+                callApprove()
+            }}  
+            className="cta-button basic-button blur-light" id="createOrder">
+            Approve 
+        </button>;
+
+    const buttonApproved =
+        <button className="cta-button basic-button disabled-button approved-button" id="createOrder">
+            Approved
+        </button>;
+    
+    const orderButtonOK = 
+        <button onClick={ () => {
+                setClickedCreate(true);
+                createOrder(selectedValue, amountIn);
+            }}  className="cta-button basic-button blur-light" id="createOrder">
             Create transaction
         </button>;
 
-    const buttonNOK =
-        <button className="cta-button basic-button insufficient-balance-button" id="createOrder">
+    const orderButtonToApprove =
+        <button className="cta-button basic-button disabled-button" id="createOrder">
+            Create transaction
+        </button>
+
+    const orderButtonNOK =
+        <button className="cta-button basic-button disabled-button" id="createOrder">
             Insufficient Balance  
         </button>
     
-    
     const [open, setOpen] = useState(false);
+    const [clickedCreate, setClickedCreate] = useState(false);
     const [selectedValue, setSelectedValue] = useState(AVAX);
-    const [amountIn, setAmountIn] = useState();
+    const [amountIn, setAmountIn] = useState(0);
     const [displayedAmountIn, setDisplayedAmountIn] = useState("---");
     const [tokenBalance, setTokenBalance] = useState(AVAX.balance);
-    const [button, setButton] = useState(buttonOK);
+    const [orderButton, setOrderButton] = useState(orderButtonToApprove);
+    const [approveButton, setApproveButton] = useState("");
     
     const handleClickOpen = () => {
         setOpen(true);
@@ -48,21 +66,62 @@ export function OrderData ({order, confirmOrder, loadingText}) {
         setSelectedValue(value);
     };
 
+    const callApprove = async () => {
+        let approved = await approve(selectedValue, amountIn)
+        if (approved) {
+            setApproveButton(buttonApproved);
+            setOrderButton(orderButtonOK);
+        }
+    }
+
     useEffect(() => {
-        context._getAmountsIn(selectedValue, order.price).then((maxAmountIn) => {
-            setAmountIn(maxAmountIn);
-            let displayed = maxAmountIn/10**18;
-            displayed = displayed.toFixed(4);
-            displayed = parseFloat(displayed);
-            setDisplayedAmountIn(displayed);
-            setTokenBalance(selectedValue.balance);
-            if (displayed > selectedValue.balance) {
-                setButton(buttonNOK);
-            } else {
-                setButton(buttonOK);
-            }
-        })
+        if (context.amountApproved) {
+            setApproveButton(buttonApproved);
+            setOrderButton(orderButtonOK);
+        }
+    }, [context.amountApproved])
+
+    useEffect(() => {
+        setApproveButton("");
+        setOrderButton(orderButtonToApprove);
+        context._getAmountsIn(
+            selectedValue, 
+            order.price
+        ).then((maxAmountIn) => {
+            setAmountIn(maxAmountIn)
+        });
     }, [selectedValue])
+
+    useEffect(() => {
+        let displayed = amountIn/10**18;
+        displayed = displayed.toFixed(4);
+        displayed = parseFloat(displayed);
+        setDisplayedAmountIn(displayed);
+        setTokenBalance(selectedValue.balance);
+        if (displayed) {
+            if (displayed > selectedValue.balance) {
+                setApproveButton("");
+                setOrderButton(orderButtonNOK);
+            } else {
+                if (selectedValue.name !== "AVAX") {
+                    context._ERC20isApproved(selectedValue.address, amountIn).then((approved) => {
+                        if (approved) {
+                            setApproveButton(buttonApproved);
+                            setOrderButton(orderButtonOK);
+                        } else {
+                            setApproveButton(buttonToApprove);
+                            setOrderButton(orderButtonToApprove);
+                        }
+                    })
+                } else {
+                    setApproveButton("");
+                    setOrderButton(orderButtonOK);
+                }
+            }
+        }
+    }, [amountIn])
+
+    console.log(orderButton)
     
     return (<>
         <div className="container">
@@ -96,11 +155,10 @@ export function OrderData ({order, confirmOrder, loadingText}) {
                     />
                 </div>
 
-                { !clickedConfirm && button }
+                { !clickedCreate && approveButton }
+                { !clickedCreate && orderButton }
 
-                { !order.confirmed && loadingText !== '' && 
-                <Loading text={loadingText} />
-                }
+                { !order.confirmed && loadingText !== '' && <Loading text={loadingText} />}
             </div>
         </div>
     </>);

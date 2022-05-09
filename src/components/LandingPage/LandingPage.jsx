@@ -11,13 +11,22 @@ import { OrderData } from './OrderData';
 import { TxHash } from './TxHash';
 import { Notify } from './Notify';
 
-async function createOrder(context, orderAmount, sellerAddress, afterConfirm) {
+const stable = 0
+const avaxToStable = 1;
+const tokenToStable = 2;
+
+async function callCreateOrder(functionToCall, tokenAddress, context, orderAmount, maxAmountIn, sellerAddress, afterConfirm) {
   try {
-    const overrides = {
-      value: ethers.utils.parseEther(orderAmount),
+    const amountOut = ethers.utils.parseEther(orderAmount);
+    let tx;
+    if (functionToCall === stable) {
+      tx = await context._contract.createOrderWithStable(sellerAddress, amountOut);
+    } else 
+    if (functionToCall === avaxToStable) {
+      tx = await context._contract.createOrderWithAVAXToStable(sellerAddress, amountOut, { value: maxAmountIn });
+    } else {
+      tx = await context._contract.createOrderWithTokensToStable(sellerAddress, amountOut, maxAmountIn, tokenAddress);
     }
-    
-    const tx = await context._contract.createOrder(sellerAddress, overrides);
     afterConfirm();
     const receipt = await tx.wait();
     if (receipt.status) {
@@ -53,10 +62,30 @@ export function LandingPage() {
     context._setListenerMetamaksAccount();
   }, []);
 
-  const confirmOrder = () => {
+  const approve = async (token, maxAmountIn) => {
+    await context._approveERC20(token.address,maxAmountIn);
+  }
+
+  const createOrder = (token, maxAmountIn) => {
+    let functionToCall;
+    if (token.address === context.stablecoinAddress) {
+      functionToCall = stable;
+    } else 
+    if (token.name === "AVAX" && token.address === "") { 
+      functionToCall = avaxToStable;
+    } else {
+      functionToCall = tokenToStable;
+    }
     setLoadingText('Please confirm the transaction on MetaMask');
-    createOrder(context, order.price, order.sellerAddress, () => setLoadingText('Please wait for the transaction to be mined...'))
-    .then(res => {
+    callCreateOrder(
+      functionToCall, 
+      token.address, 
+      context, 
+      order.price, 
+      maxAmountIn, 
+      order.sellerAddress, 
+      () => setLoadingText('Please wait for the transaction confirmation...')
+    ).then(res => {
       setHash(res);
       // setLoadingText('Notifying e-commerce...');
       order.confirmed = true;
@@ -65,7 +94,7 @@ export function LandingPage() {
     })
     .catch(err => {
       setLoadingText('');
-      setError(err.message + ' (Code: ' + err.code + ')');
+      setError("DIOHANE" + err.message + ' (Code: ' + err.code + ')');
       // Useful for testing without accepting transaction on MetaMask, just decline transaction
       // setHash('TransactionHashString');
       // setLoadingText('Notifying e-commerce...');
@@ -134,7 +163,7 @@ export function LandingPage() {
               balance={context.balance}
       />
 
-      <OrderData order={order} confirmOrder={confirmOrder} loadingText={loadingText} />
+      <OrderData order={order} createOrder={createOrder} approve={approve} loadingText={loadingText} />
 
         { order.confirmed && <>
           <h3>Transaction completed successfully!</h3>
