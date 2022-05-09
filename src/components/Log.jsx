@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect,useState, useContext } from 'react';
+import React, { useEffect, useState, useContext }from "react";
 import { useLocation } from 'react-router-dom'
 import { StateContext } from './StateContext'
 
@@ -12,7 +11,6 @@ export function Log() {
     let orderState;
 
     function visualizeOrder(element) {
-
         switch (element[0]) {
             case 0: orderState = "Created"; break;
             case 1: orderState = "Shipped"; break;
@@ -20,6 +18,7 @@ export function Log() {
             case 3: orderState = "Deleted"; break;
             case 4: orderState = "RefundAsked"; break;
             case 5: orderState = "Refunded"; break;
+            default: orderState = "Errore"; break;
         }
 
         console.log(parseInt(element[1].toString()));
@@ -37,7 +36,7 @@ export function Log() {
     }
     
     useEffect(() => {
-        let aux = [];
+        // let aux = [];
         context._getLog(id).then((log) => {
             if (log.length) 
                 setContent(log.map((element) => (visualizeOrder(element))));
@@ -52,7 +51,6 @@ export function Log() {
                     <th>Timestamp</th>
                 </tr>
             </thead>
-
             <tbody>
                 {content}
             </tbody>

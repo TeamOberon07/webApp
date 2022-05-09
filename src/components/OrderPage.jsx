@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { Header } from './Header';
 import { StateContext } from "./StateContext";
 import { useLocation } from 'react-router-dom'
-import { Button } from "./Button";
+// import { Button } from "./Button";
 import { Log } from "./Log";
 import tokenLogo from "../assets/usdtLogo.png";
 
@@ -30,8 +30,8 @@ export function OrderPage() {
             balance={context.balance}
         />
         <div className="container">
-            <h1 class="page-title">Order page</h1>
-            <table id="order-page-container" class="blur">
+            <h1 className="page-title">Order page</h1>
+            <table id="order-page-container" className="blur">
             <tbody>
                 {(() => {
                     if (context.userIsSeller)
@@ -52,7 +52,7 @@ export function OrderPage() {
                         })()}
                     </tr>  
                     <tr>
-                        <th>Amount</th><td>${ethers.utils.formatEther(amount)}<img src={tokenLogo} id="order-page-amount-logo" className="tokenLogoMin"/></td>
+                        <th>Amount</th><td>${ethers.utils.formatEther(amount)}<img src={tokenLogo} id="order-page-amount-logo" className="tokenLogoMin" alt="Logo token"/></td>
                     </tr>  
                     <tr>
                         <th>State</th><td>{orderState}</td>
@@ -113,7 +113,7 @@ export function OrderPage() {
                             return <tr>
                                 <th>Actions</th>     
                                     <td colSpan={3}>  
-                                        <div class="actions">
+                                        <div className="actions">
                                         {(() => {
                                             if (orderState === "Created" || orderState === "Shipped" || orderState === "Confirmed") {
                                                 return <button

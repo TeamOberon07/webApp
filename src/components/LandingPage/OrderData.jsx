@@ -66,7 +66,7 @@ export function OrderData ({order, confirmOrder, loadingText}) {
     
     return (<>
         <div className="container">
-            <h1 class="page-title">Order Details</h1>
+            <h1 className="page-title">Order Details</h1>
             <div className="create-tx blur">
                 <p className="total-price">
                     <span>

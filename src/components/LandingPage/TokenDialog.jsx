@@ -40,7 +40,7 @@ export function TokenDialog(props) {
         <ul className="ul-tokens">
             <li onClick={() => handleListItemClick(AVAX)} key={AVAX.name} className="li-tokens">
               <span>
-                <img src={AVAX.logoURI} className="tokenLogoMin li-img-token"/>
+                <img src={AVAX.logoURI} className="tokenLogoMin li-img-token" alt="Logo AVAX"/>
                 {AVAX.symbol}
               </span>
               <span>
@@ -50,7 +50,7 @@ export function TokenDialog(props) {
           {TOKENS.map((token) => (
             <li onClick={() => handleListItemClick(token)} key={token.name} className="li-tokens">
               <span>
-                <img src={token.logoURI} className="tokenLogoMin li-img-token"/>
+                <img src={token.logoURI} className="tokenLogoMin li-img-token" alt="Logo token"/>
                 {token.symbol}
               </span>
               <span>

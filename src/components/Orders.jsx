@@ -6,10 +6,28 @@ import { NavLink } from "react-router-dom";
 
 export function Orders({orders, isBuyer, State}) {
 
-  let content, view, i, amount, totalHeldForSeller=0, n=6;
+  let content, view, userIndex, amount, totalHeldForSeller=0;
+  // style foreach different state
+  const Icon = ['check_circle', 'local_shipping', 'verified', 'delete', 'assignment_return', 'reply'];
+  const Color = [
+    { color: 'rgb(105 235 115)' }, // green 
+    { color: 'rgb(255 255 255)' },
+    { color: 'rgb(77 165 255)' }, // blue
+    { color: 'rgb(227 85 86)' }, // red
+    { color: 'rgb(242 245 70)' }, // yellow
+    { color: 'white' }
+  ];
   const [first, setFirst] = useState(0);
   const [filtered_orders, setFiltered_orders] = useState([]);
   const [errorFilter, setErrorFilter] = useState("");
+
+  if (isBuyer) {
+    userIndex = 2;
+    view = "Seller";
+  } else {
+    userIndex = 1;
+    view = "Buyer"
+  }
 
   function applyFilters(){
     var state = parseInt(document.getElementById("FilterState").value);
@@ -48,35 +66,16 @@ export function Orders({orders, isBuyer, State}) {
       setErrorFilter("");
   }
   
-
-  if (isBuyer) {
-    i = 2;
-    view = "Seller";
-  } else {
-    i = 1;
-    view = "Buyer"
-  }
-  // style foreach different state
-  const Icon = ['check_circle', 'local_shipping', 'verified', 'delete', 'assignment_return', 'reply'];
-  const Color = [
-    {color: 'rgb(105 235 115)'}, // green 
-    {color: 'rgb(255 255 255)'},
-    {color: 'rgb(77 165 255)'}, // blue
-    {color: 'rgb(227 85 86)'}, // red
-    {color: 'rgb(242 245 70)'}, // yellow
-    {color: 'white'}
-  ];
-
   function visualizeOrder(element) {
     const res = <tr key={element[0].toString()}>
             <td aria-label="Id">{element[0].toString()}</td>
             <td aria-label="Address">
               {
-                element[i].toString().substring(0,6)
+                element[userIndex].toString().substring(0,6)
                 +"..."+
-                element[i].toString().substring(
-                  element[i].toString().length-6,
-                  element[i].toString().length
+                element[userIndex].toString().substring(
+                  element[userIndex].toString().length-6,
+                  element[userIndex].toString().length
                 )
               }
             </td>
@@ -100,20 +99,20 @@ export function Orders({orders, isBuyer, State}) {
                 totalHeldForSeller += parseFloat(amount)
               }
             })()}
-  
           </tr>;
     return res;
   }
 
-  if(filtered_orders.length != 0){
+  if (filtered_orders.length !== 0) {
     content = filtered_orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
   }
   else if (orders.length) {
     content = orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
   }
+
   return (
     <div className="box">
-      <h1 class="page-title">Your Orders</h1>
+      <h1 className="page-title">Your Orders</h1>
       <form id="filters">
         <div id="filters-and-labels">
           <div className="button-label-select">
@@ -121,13 +120,13 @@ export function Orders({orders, isBuyer, State}) {
             <div id="buyerAddressFilter">
               <input type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
                 const address = document.getElementById("FilterAddress").value;
-                if(address === "" || ethers.utils.isAddress(address)){
+                if (address === "" || ethers.utils.isAddress(address)) {
                   setErrorFilter("");
-                }
-                else{
+                } else {
                   setErrorFilter("Inserted address is not valid");
                 }
-              }}></input>
+              }}>
+              </input>
             </div>
           </div>
           <div className="button-label-select" id="FilterStateDiv">

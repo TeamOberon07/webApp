@@ -86,7 +86,7 @@ export function LandingPage() {
   }
 
   // Just to avoid running fetch before checking for wallet, might not be necessary
-  if(fetchUrl ==='') {
+  if(fetchUrl === '') {
     setFetchUrl(parseUrl());
     setFetchMethod('GET');
   }
@@ -110,12 +110,12 @@ export function LandingPage() {
       />
       <Loading />
     </>);
-  } else if(isOnChain) {
+  } else if (isOnChain) {
     return (<>
       <Header currentAddress={context.currentAddress}
               balance={context.balance}
       />
-      <div class="tx-message">
+      <div className="tx-message">
         <p>Tx is already on-chain!</p>
       </div>
       <TxHash hash={hash} />
@@ -126,7 +126,7 @@ export function LandingPage() {
 
       { error && 
         <Error message={error} />
-        }
+      }
       </>);
   } else {
     return (<>

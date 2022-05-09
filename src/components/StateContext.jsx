@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import ERC20_ABI from "../assets/ERC20.json";
 import TJROUTER_ABI from "../assets/router.json";
 import Escrow from "../contracts/SCEscrow.json";
@@ -161,13 +161,13 @@ export class StateProvider extends React.Component {
             return false;
         },
 
-        getOrderById: async (id) => {
-            const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
-            for (var i=0; i<orders.length; i++) {
-                if (id === orders[i][0].toString())
-                    return orders[i];
-            }
-        },
+        // getOrderById: async (id) => {
+        //     const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
+        //     for (var i=0; i<orders.length; i++) {
+        //         if (id === orders[i][0].toString())
+        //             return orders[i];
+        //     }
+        // },
 
         _orderOperation: async (id, expr, orderAmount) => {
             try {
@@ -177,7 +177,8 @@ export class StateProvider extends React.Component {
                         tx = await this.state._contract.confirmOrder(id);
                         break;
                     case "SetAsShipped":
-                            tx = await this.state._contract.shipOrder(id);
+                        tx = await this.state._contract.shipOrder(id);
+                        break;
                     case "Delete":
                         tx = await this.state._contract.deleteOrder(id);
                         break;

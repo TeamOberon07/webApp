@@ -7,7 +7,7 @@ export function TxHash({ hash }) {
                 href={"https://rinkeby.etherscan.io//tx/" + hash}
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="cta-button blur"
+                className="cta-button blur"
             >
                 View on Etherscan
             </a>
