@@ -31,6 +31,8 @@ export function TokenDialog(props) {
 
     TOKENS.map(async (token) => {
       let balance = await context._getERC20Balance(token);
+      balance = parseFloat(balance).toFixed(4);
+      balance = parseFloat(balance);
       token.balance = balance;
     })
 

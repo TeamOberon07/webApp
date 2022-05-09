@@ -284,7 +284,6 @@ export class StateProvider extends React.Component {
 
         _approveERC20: async (tokenAddress, amount) => {
             let erc20contract = new ethers.Contract(tokenAddress, ERC20_ABI, this.state._provider.getSigner(0));
-            console.log("AMOUNT TO APPROVE: "+amount/10**18)
             let tx = await erc20contract.approve(this.state.contractAddress, amount);
             tx.wait().then( () => {
                 this.setState({
@@ -300,8 +299,6 @@ export class StateProvider extends React.Component {
         _ERC20isApproved: async (tokenAddress, amount) => {
             let erc20contract = new ethers.Contract(tokenAddress, ERC20_ABI, this.state._provider.getSigner(0));
             let allowance = await erc20contract.allowance(this.state.currentAddress, this.state.contractAddress);
-            console.log("ALLOWANCE: "+allowance)
-            console.log("AMOUNT: "+amount)
             if (allowance >= amount) {
                 return true;
             } else {

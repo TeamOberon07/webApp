@@ -287,6 +287,22 @@ body::-webkit-scrollbar-thumb {
   animation: spin 0.5s linear 0s infinite;
 }
 
+.spinner-in-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-in-button .spinner {
+  margin-top: 0;
+  margin-left: 0.5em;
+}
+
+.spinner-in-button .half-spinner {
+  width: 1em;
+  height: 1em;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0);

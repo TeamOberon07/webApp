@@ -16,14 +16,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
         "balance": parseFloat(context.balance).toFixed(4)
     }
 
-    const buttonToApprove = 
-        <button onClick={ () => {
-                //setClickedApprove(true);
-                callApprove()
-            }}  
-            className="cta-button basic-button blur-light" id="createOrder">
-            Approve 
-        </button>;
+    const spinner = <div className="spinner"><div className="half-spinner"></div></div>;
 
     const buttonApproved =
         <button className="cta-button basic-button disabled-button approved-button" id="createOrder">
@@ -56,6 +49,19 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     const [tokenBalance, setTokenBalance] = useState(AVAX.balance);
     const [orderButton, setOrderButton] = useState(orderButtonToApprove);
     const [approveButton, setApproveButton] = useState("");
+    const [showApproveSpinner, setShowApproveSpinner] = useState(false);
+
+    const buttonToApprove = 
+        <button onClick={ () => {
+                setShowApproveSpinner(true);
+                //callApprove()
+            }}  
+            className="cta-button basic-button blur-light" id="createOrder">
+            <div className="spinner-in-button">
+                Approve 
+                {showApproveSpinner && spinner}
+            </div>
+        </button>;
     
     const handleClickOpen = () => {
         setOpen(true);
@@ -67,15 +73,21 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     };
 
     const callApprove = async () => {
-        let approved = await approve(selectedValue, amountIn)
-        if (approved) {
-            setApproveButton(buttonApproved);
-            setOrderButton(orderButtonOK);
+        try {
+            let approved = await approve(selectedValue, amountIn)
+            if (approved) {
+                setShowApproveSpinner(false);
+                setApproveButton(buttonApproved);
+                setOrderButton(orderButtonOK);
+            }
+        } catch(err) {
+            setShowApproveSpinner(false);
         }
     }
 
     useEffect(() => {
         if (context.amountApproved) {
+            setShowApproveSpinner(false);
             setApproveButton(buttonApproved);
             setOrderButton(orderButtonOK);
         }
@@ -91,6 +103,13 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             setAmountIn(maxAmountIn)
         });
     }, [selectedValue])
+
+    useEffect(() => {
+        setApproveButton(buttonToApprove);
+        if (showApproveSpinner) {
+            callApprove()
+        }
+    }, [showApproveSpinner])
 
     useEffect(() => {
         let displayed = amountIn/10**18;
@@ -120,8 +139,6 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             }
         }
     }, [amountIn])
-
-    console.log(orderButton)
     
     return (<>
         <div className="container">
