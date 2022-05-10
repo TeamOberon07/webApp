@@ -3,7 +3,6 @@ import { ethers } from "ethers";
 import tokenLogo from "../assets/usdtLogo.png";
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
-import { id } from "ethers/lib/utils";
 
 export function Orders({orders, isBuyer, State}) {
 

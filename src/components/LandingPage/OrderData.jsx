@@ -8,8 +8,10 @@ import { TokenDialog } from "./TokenDialog"
 export function OrderData ({order, createOrder, approve, loadingText}) {
     const context = useContext(StateContext);
     
+    const avaxToStable = 1;
+
     const AVAX = {
-        "address": "",
+        "address": "NULL",
         "name": "AVAX",
         "symbol": "AVAX",
         "logoURI": avaxLogo,
@@ -26,7 +28,6 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     const orderButtonOK = 
         <button onClick={ () => {
                 setClickedCreate(true);
-                createOrder(selectedValue, amountIn);
             }}  className="cta-button basic-button blur-light" id="createOrder">
             Create transaction
         </button>;
@@ -52,10 +53,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     const [showApproveSpinner, setShowApproveSpinner] = useState(false);
 
     const buttonToApprove = 
-        <button onClick={ () => {
-                setShowApproveSpinner(true);
-                //callApprove()
-            }}  
+        <button onClick={ () => setShowApproveSpinner(true) }  
             className="cta-button basic-button blur-light" id="createOrder">
             <div className="spinner-in-button">
                 Approve 
@@ -83,6 +81,20 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
         } catch(err) {
             setShowApproveSpinner(false);
             setApproveButton(buttonToApprove);
+            console.log("SONO NELLA CATCH")
+        }
+        console.log("ESCO DALLA CATCH")
+    }
+
+    const callCreateOrder = async (selectedValue, amountIn) => {
+        try {
+            await createOrder(selectedValue, amountIn)
+        } catch(functionCalled) {
+            setClickedCreate(false);
+            if (functionCalled !== avaxToStable) {
+                setApproveButton(buttonApproved);
+            }
+            setOrderButton(orderButtonOK)
         }
     }
 
@@ -111,6 +123,12 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             callApprove()
         }
     }, [showApproveSpinner])
+
+    useEffect(() => {
+        if (clickedCreate) {
+            callCreateOrder(selectedValue, amountIn);
+        }
+    }, [clickedCreate])
 
     useEffect(() => {
         let displayed = amountIn/10**18;
@@ -146,11 +164,11 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     
     return (<>
         <div className="container">
-            <h1 className="page-title">Order Details</h1>
+            <h1 className="page-title">Payment Details</h1>
             <div className="create-tx blur">
                 <p className="total-price">
                     <span>
-                        Payment amount:
+                        Payment amount in $fUSDt:
                     </span>
                     <span>
                         ${order.price} fUSDt<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/>
@@ -160,7 +178,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
                 <div id="selectToken">
                     <p>Select the token you want to pay with:</p>
                     <div className="button-and-balance">
-                        <p className="token-balance">Amount and selected token:</p>
+                        <p className="token-balance">Paying amount and selected token:</p>
                         <button onClick={handleClickOpen} className="cta-button select-button blur-light">
                             {displayedAmountIn} &nbsp;
                             {selectedValue.symbol}

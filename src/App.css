@@ -272,7 +272,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .spinner {
-  margin-top: 3em;
+  margin-top: 4em;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -426,6 +426,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.1em;
   padding: 3em;
   border-radius: 1.5em;
+  min-height: 25.5em;
 }
 
 .create-tx button {
@@ -473,8 +474,15 @@ body::-webkit-scrollbar-thumb {
 }
 
 .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper {
-  background-color: black;
+  background-color: #181818;
   border-radius: 2em;
+}
+
+#dialog-legend {
+  padding: 0 3em;
+  padding-bottom: 0.5em;
+  display: flex;
+  justify-content: space-between;
 }
 
 .cta-button span.material-icons {

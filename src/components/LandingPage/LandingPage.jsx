@@ -43,18 +43,18 @@ export function LandingPage() {
     await context._approveERC20(token.address,maxAmountIn);
   }
 
-  const createOrder = (token, maxAmountIn) => {
+  const createOrder = async (token, maxAmountIn) => {
     let functionToCall;
     if (token.address === context.stablecoinAddress) {
       functionToCall = stable;
     } else 
-    if (token.name === "AVAX" && token.address === "") { 
+    if (token.name === "AVAX" && token.address === "NULL") { 
       functionToCall = avaxToStable;
     } else {
       functionToCall = tokenToStable;
     }
     setLoadingText('Please confirm the transaction on MetaMask');
-    context._callCreateOrder(
+    await context._callCreateOrder(
       functionToCall, 
       token.address, 
       order.price, 
@@ -70,7 +70,8 @@ export function LandingPage() {
     })
     .catch(err => {
       setLoadingText('');
-      setError("DIOHANE" + err.message + ' (Code: ' + err.code + ')');
+      throw functionToCall;
+      // setError("DIOHANE" + err.message + ' (Code: ' + err.code + ')');
       // Useful for testing without accepting transaction on MetaMask, just decline transaction
       // setHash('TransactionHashString');
       // setLoadingText('Notifying e-commerce...');
