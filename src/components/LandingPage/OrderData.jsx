@@ -82,6 +82,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             }
         } catch(err) {
             setShowApproveSpinner(false);
+            setApproveButton(buttonToApprove);
         }
     }
 
@@ -105,8 +106,8 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     }, [selectedValue])
 
     useEffect(() => {
-        setApproveButton(buttonToApprove);
         if (showApproveSpinner) {
+            setApproveButton(buttonToApprove);
             callApprove()
         }
     }, [showApproveSpinner])
@@ -137,6 +138,9 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
                     setOrderButton(orderButtonOK);
                 }
             }
+        } else {
+            setApproveButton("");
+            setOrderButton(orderButtonToApprove);
         }
     }, [amountIn])
     

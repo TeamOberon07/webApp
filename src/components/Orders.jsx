@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import tokenLogo from "../assets/usdtLogo.png";
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
+import { id } from "ethers/lib/utils";
 
 export function Orders({orders, isBuyer, State}) {
 
@@ -65,11 +66,30 @@ export function Orders({orders, isBuyer, State}) {
     else
       setErrorFilter("");
   }
+
+  function copyAddress(address, id) {
+    var copyIcon = document.getElementById(id);
+    navigator.clipboard.writeText(address);
+    copyIcon.innerHTML = "task";
+    copyIcon.classList.add("light-blue");
+    setTimeout(function () {
+      copyIcon.innerHTML = "file_copy";
+      copyIcon.classList.remove("light-blue");
+  }, 5000);
+  }
   
   function visualizeOrder(element) {
+
     const res = <tr key={element[0].toString()}>
             <td aria-label="Id">{element[0].toString()}</td>
             <td aria-label="Address">
+              <span
+                id={ "copyIcon" + element[0].toString() }
+                onClick={ () => copyAddress(element[userIndex].toString(), "copyIcon" + element[0].toString()) } 
+                className="material-icons copy"
+              >
+                file_copy
+              </span>
               {
                 element[userIndex].toString().substring(0,6)
                 +"..."+
