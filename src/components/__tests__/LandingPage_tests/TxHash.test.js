@@ -16,7 +16,7 @@ describe('TxHash', () => {
         expect(screen.getByText(regHash)).toBeInTheDocument();
     });
     
-    it('renders link to Snowtrace with same hash as passed into prop', () => {
-        expect(screen.getByRole('link')).toHaveAttribute('href', 'https://testnet.snowtrace.io/tx/' + hash);
+    it('renders link to Rinkeby with same hash as passed into prop', () => {
+        expect(screen.getByRole('link')).toHaveAttribute('href', 'https://rinkeby.etherscan.io//tx/' + hash);
     });
 });

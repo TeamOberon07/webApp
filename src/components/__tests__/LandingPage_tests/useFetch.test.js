@@ -152,7 +152,7 @@ describe('useFetch', () => {
             //await waitFor(() => expect(result.current[1]).toBe(true));
             await waitForNextUpdate();
             expect(result.current[0]).toStrictEqual(confimedOrder);
-            expect(mockedSetError).toHaveBeenLastCalledWith('Order in chain');
+            expect(mockedSetError).toHaveBeenLastCalledWith('Order on-chain');
             expect(result.current[1]).toBe(true);
         });
 

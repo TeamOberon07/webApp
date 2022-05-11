@@ -25,9 +25,11 @@ describe('LandingPage', () => {
             <StateContext.Provider value={ {currentAddress: '0x123', balance: 100,
             _isAuthorizedSeller: async() => isAuthorized,
             _createOrder: async () => '0x987', 
-            _connectWallet: () => {},
-            _setListenerMetamaksAccount: () => {}}} >
-                <LandingPage />
+            _connectWallet: async () => {},
+            _setListenerMetamaksAccount: async () => {}}} >
+
+                    <LandingPage />
+
             </StateContext.Provider>
         );
     };
@@ -202,8 +204,8 @@ describe('LandingPage', () => {
 
 describe('parseUrl', () => {
 
-    delete window.location;
-    window.location = new URL('https://www.ShopChain.com/landingpage?order=342');
+    // delete window.location;
+    window.location = new URL('https://www.ShopChain.com/landing-page?order=342');
     
     it('parses URL correctrly', () => {
         expect(parseUrl()).toBe('http://localhost:8000/orders/342');

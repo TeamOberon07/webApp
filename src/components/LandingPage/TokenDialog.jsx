@@ -38,7 +38,7 @@ export function TokenDialog(props) {
 
     return (
       <Dialog onClose={handleClose} open={open}>
-        <DialogTitle className="dialogTitle">Chose a token for the payment:</DialogTitle>
+        <DialogTitle className="dialogTitle">Choose a token for the payment:</DialogTitle>
         <p id="dialog-legend">
           <span>Token:</span>
           <span>Balance:</span>

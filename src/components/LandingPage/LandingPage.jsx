@@ -18,6 +18,7 @@ const tokenToStable = 2;
 export function parseUrl() {
   const windowUrl = window.location.search;
   const params = new URLSearchParams(windowUrl);
+  console.log("http://localhost:8000/orders/" + params.get('order'))
   return "http://localhost:8000/orders/" + params.get('order');
 }
 
