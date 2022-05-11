@@ -80,10 +80,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             }
         } catch(err) {
             setShowApproveSpinner(false);
-            setApproveButton(buttonToApprove);
-            console.log("SONO NELLA CATCH")
         }
-        console.log("ESCO DALLA CATCH")
     }
 
     const callCreateOrder = async (selectedValue, amountIn) => {
@@ -122,6 +119,9 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             setApproveButton(buttonToApprove);
             callApprove()
         }
+        if (!context.amountApproved) {
+            setApproveButton(buttonToApprove);
+        }
     }, [showApproveSpinner])
 
     useEffect(() => {
@@ -142,7 +142,8 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
                 setOrderButton(orderButtonNOK);
             } else {
                 if (selectedValue.name !== "AVAX") {
-                    context._ERC20isApproved(selectedValue.address, amountIn).then((approved) => {
+                    context._ERC20isApproved(selectedValue.address, amountIn)
+                    .then((approved) => {
                         if (approved) {
                             setApproveButton(buttonApproved);
                             setOrderButton(orderButtonOK);
