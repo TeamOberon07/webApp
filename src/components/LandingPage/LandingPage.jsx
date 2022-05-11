@@ -85,13 +85,26 @@ export function LandingPage() {
   if(window.ethereum === undefined) {
     return <NoWalletDetected/>;
   }
+
+  if(error == "GET request failed (Code 404: Not Found)") {
+    window.location.href = '/';
+  }
+  
   
   if(!context.currentAddress) {
     return (
       <ConnectWallet connectWallet={async() => {
         await context._connectWallet();
       }}/>
-    );
+      );
+    } else {
+    if (order.sellerAddress && order.buyerAddress && context.currentAddress)
+      if (
+        order.sellerAddress.toLowerCase() !== context.currentAddress.toLowerCase() &&
+        order.buyerAddress.toLowerCase() !== context.currentAddress.toLowerCase()) 
+      {
+        window.location.href = '/';
+      }
   }
 
   // Just to avoid running fetch before checking for wallet, might not be necessary
@@ -111,7 +124,6 @@ export function LandingPage() {
       setFetchMethod('PUT');
     }
   }
-
   if (!isLoaded) {
     return (<>
       <Header currentAddress={context.currentAddress}
@@ -119,45 +131,47 @@ export function LandingPage() {
       />
       <Loading />
     </>);
-  } else if (isOnChain) {
-    return (<>
-      <Header currentAddress={context.currentAddress}
-              balance={context.balance}
-      />
-      <div className="tx-message">
-        <p>Tx is already on-chain!</p>
-      </div>
-      <TxHash hash={hash} />
+  } 
+  else if (isOnChain) {
+      return (<>
+        <Header currentAddress={context.currentAddress}
+                balance={context.balance}
+        />
+        <div className="tx-message">
+          <p>Tx is already on-chain!</p>
+        </div>
+        <TxHash hash={hash} />
 
-      { !error && ecommIsNotSynched && 
-      <Notify hasNotified={hasNotified} />
-      }
-
-      { error && 
-        <Error message={error} />
-      }
-      </>);
-  } else {
-    return (<>
-      <Header currentAddress={context.currentAddress}
-              balance={context.balance}
-      />
-
-      <OrderData order={order} createOrder={createOrder} approve={approve} loadingText={loadingText} />
-
-        { order.confirmed && <>
-          <h3>Transaction completed successfully!</h3>
-          <TxHash hash={hash} />
-          </>
-        }
-        
-        {!error && order.confirmed && 
-          <Notify hasNotified={hasNotified} />
+        { !error && ecommIsNotSynched && 
+        <Notify hasNotified={hasNotified} />
         }
 
-        { error && 
+        {/* { error && 
           <Error message={error} />
-        }
-    </>);
+        } */}
+        </>);
+  } else {
+    if (!error)
+      return (<>
+        <Header currentAddress={context.currentAddress}
+                balance={context.balance}
+        />
+
+        <OrderData order={order} createOrder={createOrder} approve={approve} loadingText={loadingText} />
+
+          { order.confirmed && <>
+            <h3>Transaction completed successfully!</h3>
+            <TxHash hash={hash} />
+            </>
+          }
+          
+          {!error && order.confirmed && 
+            <Notify hasNotified={hasNotified} />
+          }
+
+          {/* { error && 
+            <Error message={error} />
+          } */}
+      </>);
   }
 }

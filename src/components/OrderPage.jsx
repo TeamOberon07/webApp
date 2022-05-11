@@ -90,6 +90,15 @@ export function OrderPage() {
                                                     onClick={() =>  context._orderOperation(id, "RefundBuyer", amount)}
                                                 >Refund Buyer</button>
                                         })()}
+
+                                        {(() => {
+                                            if (orderState !== "Created" &&
+                                                orderState !== "Shipped" &&
+                                                orderState !== "Asked Refund")
+                                                return <>
+                                                    <p id="none-action">You can't perform actions with this order.</p>
+                                                </>
+                                        })()}
                                     </div>
                                 </td>
                             </tr>
@@ -106,6 +115,10 @@ export function OrderPage() {
                                                     type="button"
                                                     onClick={() =>  context._orderOperation(id, "AskRefund")}
                                                 >Ask Refund</button>
+                                            } else {
+                                                return <>
+                                                    <p id="none-action">You can't perform actions with this order.</p>
+                                                </>
                                             }
                                         })()}
                                     </div>

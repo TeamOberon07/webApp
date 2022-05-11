@@ -708,3 +708,7 @@ p.errorP{
 .logTable td[aria-label="Timestamp"]{
   font-family: "DM Mono", monospace;
 }
+
+#none-action {
+  margin-right: auto;
+}

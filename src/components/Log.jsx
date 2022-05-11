@@ -21,7 +21,8 @@ export function Log({order}) {
         }
 
         let date = new Date(parseInt(element[1].toString())*1000).toLocaleString();
-        date = date.replace(",", "").substring(0, date.length -4);
+        let am_or_pm = date.substring(date.length-3, date.length);
+        date = date.replace(",", "").substring(0, date.length - 7) + am_or_pm;
 
         const res =
             <tr key={orderState}>
