@@ -3,10 +3,8 @@ import { ethers } from "ethers";
 import { Header } from './Header';
 import { StateContext } from "./StateContext";
 import { useLocation } from 'react-router-dom'
-// import { Button } from "./Button";
 import { Log } from "./Log";
 import tokenLogo from "../assets/usdtLogo.png";
-
 
 export function OrderPage() {
     const context = useContext(StateContext);
@@ -14,6 +12,7 @@ export function OrderPage() {
     const id = parseInt(order[0]._hex);
     const amount = order[3];
     const orderState = useLocation().state.orderState;
+
 
     useEffect(() => {
         context._connectWallet();
@@ -131,7 +130,7 @@ export function OrderPage() {
             </tbody>
             </table>
 
-            <Log></Log>
+            <Log order={order}></Log>
         </div>
     </div>
     );

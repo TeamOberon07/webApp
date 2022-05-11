@@ -81,9 +81,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
         } catch(err) {
             setShowApproveSpinner(false);
             setApproveButton(buttonToApprove);
-            console.log("SONO NELLA CATCH")
         }
-        console.log("ESCO DALLA CATCH")
     }
 
     const callCreateOrder = async (selectedValue, amountIn) => {

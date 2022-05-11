@@ -42,7 +42,7 @@ export class StateProvider extends React.Component {
         _connectWallet: async () => {
             const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
             const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+            
             this.setState({
                 _provider: provider,
             })
@@ -104,7 +104,6 @@ export class StateProvider extends React.Component {
                 await this.state._connectWallet();
             } catch (error) {
                 return error;
-                //console.log(err.message);
             }
             return undefined;
         },
