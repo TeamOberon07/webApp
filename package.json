@@ -18,6 +18,7 @@
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "crypto": "^1.0.1",
+    "enzyme": "^3.11.0",
     "ethers": "^5.5.3",
     "hardhat": "^2.8.3",
     "http": "^0.0.1-security",
@@ -60,11 +61,11 @@
     "@testing-library/react-hooks": "^8.0.0",
     "solidity-coverage": "^0.7.18"
   },
-
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!src/index.js"
+      "!src/index.js",
+      "!src/components/StateContext.jsx"
     ]
   }
 }

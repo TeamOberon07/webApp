@@ -7,7 +7,7 @@ import React from 'react';
 
 describe('Log', () => {
     it('renders Log with correct data', async () => {  
-      act(() => {  
+
         render(<StateContext.Provider  value={ {
               
               _getLog: async (id) => Promise.resolve([[0,1652118547],[1,1652118547],[2,1652118547],[3,1652118547],[4,1652118547],[5,1652118547],[6,1652118547]]) 
@@ -16,7 +16,6 @@ describe('Log', () => {
                   <Log order = {[[0,1652118547],[1,1652118547],[2,1652118547],[3,1652118547],[4,1652118547],[5,1652118547],[6,1652118547]]}></Log>
                 </BrowserRouter>
               </StateContext.Provider>)
-      });  
 
       let table = await screen.findByRole("logTable");
       expect(table.innerHTML.includes("Created"));

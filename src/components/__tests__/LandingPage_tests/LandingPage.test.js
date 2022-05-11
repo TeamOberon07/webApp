@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor, act, waitForElementToBeRemoved } fr
 import { LandingPage, parseUrl } from "../../LandingPage/LandingPage";
 import '@testing-library/jest-dom';
 import { StateContext } from '../../StateContext';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('LandingPage', () => {
 
@@ -183,7 +184,9 @@ describe('LandingPage', () => {
             });
             render(
                 <StateContext.Provider value={{ currentAddress: '0x123', balance: 100 }} >
+                    <BrowserRouter>
                     <LandingPage />
+                    </BrowserRouter>
                 </StateContext.Provider>
             );
             expect(await screen.findByText(/Tx is already in chain!/i)).toBeInTheDocument();

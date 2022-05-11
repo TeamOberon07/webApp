@@ -78,7 +78,6 @@ export function Orders({orders, isBuyer, State}) {
   }
   
   function visualizeOrder(element) {
-
     const res = <tr key={element[0].toString()}>
             <td aria-label="Id">{element[0].toString()}</td>
             <td aria-label="Address">
@@ -111,7 +110,7 @@ export function Orders({orders, isBuyer, State}) {
               to="/order-page"
               state={{ orderState: State[element[4]],
                        order: element}}
-              className = "cta-button order-button blur-light">See order</NavLink>
+              className = "cta-button order-button blur-light">See order</NavLink>   
             </td>
             {(() => {
               if(State[element[4]] === "Created") {

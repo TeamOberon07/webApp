@@ -13,7 +13,6 @@ export function OrderPage() {
     const amount = order[3];
     const orderState = useLocation().state.orderState;
 
-
     useEffect(() => {
         context._connectWallet();
         context._setListenerMetamaksAccount();
@@ -61,50 +60,36 @@ export function OrderPage() {
                             return <tr>
                                 <th>Actions</th>     
                                 <td colSpan={3}>  
-                                    <div class="actions">
+                                    <div className="actions">
                                         {(() => {
                                             if (orderState === "Created" || orderState === "Shipped")
                                                 return <button
+                                                    role="DeleteOrder"
                                                     className="cta-button basic-button blur"
                                                     type="button"
                                                     onClick={() =>  context._orderOperation(id, "Delete")}
                                                 >Delete Order</button>
-                                                /*return <Button  method = {(id) => context._orderOperation(id, "Delete")}
-                                                                id = {id}
-                                                                text = {"Delete"}
-                                                        />;*/
                                         })()}
 
                                         {(() => {
                                             if (orderState === "Created")
                                                 return <button
+                                                    role="MarkAsShipped"
                                                     className="cta-button basic-button blur"
                                                     type="button"
                                                     onClick={() =>  context._orderOperation(id, "SetAsShipped")}
                                                 >Mark as Shipped</button>
-                                                /*return <Button  method = {(id) => context._orderOperation(id, "SetAsShipped")}
-                                                                id = {id}
-                                                                text = {"Set as Shipped"}
-                                                        />;*/
                                         })()}
                                         
                                         {(() => {
                                             if (orderState === "Asked Refund")
                                                 return <button
+                                                    role="RefundBuyer"
                                                     className="cta-button basic-button blur"
                                                     type="button"
                                                     onClick={() =>  context._orderOperation(id, "RefundBuyer", amount)}
                                                 >Refund Buyer</button>
-                                                /*return <Button  method = {(id, amount) => context._orderOperation(id, "RefundBuyer", amount)}
-                                                                id = {id}
-                                                                text = {"Refund"}
-                                                                amount = {amount}
-                                                        />;*/
                                         })()}
-                                        {/*<Button method = {() =>  context._getQRCode(order)}
-                                                id = {id}
-                                                text = {"Get QRCode"}
-                                        />}*/}
                                     </div>
                                 </td>
                             </tr>
@@ -116,6 +101,7 @@ export function OrderPage() {
                                         {(() => {
                                             if (orderState === "Created" || orderState === "Shipped" || orderState === "Confirmed") {
                                                 return <button
+                                                    role="AskRefund"
                                                     className="cta-button basic-button blur"
                                                     type="button"
                                                     onClick={() =>  context._orderOperation(id, "AskRefund")}
