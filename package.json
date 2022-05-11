@@ -59,5 +59,12 @@
   "devDependencies": {
     "@testing-library/react-hooks": "^8.0.0",
     "solidity-coverage": "^0.7.18"
+  },
+
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js"
+    ]
   }
 }

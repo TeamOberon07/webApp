@@ -16,7 +16,7 @@
 // }
 
 // export function ConfirmOrder({ processOrder }) {
-//     const context = useContext(StateContext);
+//     const  = useContext(StateContext);
 //     const [order, isLoaded, error] = useFetch("http://localhost:8000/orders/"+ getOrderId());
 
 //     if (error) {

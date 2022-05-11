@@ -32,19 +32,11 @@ export class RegisterSeller extends React.Component {
       </div>
     );
   }
-
-  // EDITATA, DA TESTARE
-  async _refreshInfo(tx) {
-    const receipt = await tx.wait();
-    if (receipt.status) {
-      this.context._connectWallet();
-    }
-  }
   
   async _registerSeller() {
     try {
         const tx = await this.context._contract.registerAsSeller();
-        await this._refreshInfo(tx);
+        await tx.wait();
         window.location.href = '/';
     } catch(err) {
         <Error message={err}/>;

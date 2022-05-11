@@ -119,7 +119,6 @@ export function useFetch (url, method, setHasNotified, setError) {
         //useEffect cleanup + abort controller to avoid trying to update the state of unmounted component
         return () => {
           abortCont.abort();
-          //console.log('return useFetch');
         };
     //  }, 3000);
     }, [url, method])

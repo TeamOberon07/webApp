@@ -2,10 +2,9 @@ import React, { useEffect, useState, useContext }from "react";
 import { useLocation } from 'react-router-dom'
 import { StateContext } from './StateContext'
 
-export function Log() {
+export function Log({order}) {
 
     const context = useContext(StateContext);
-    const order = useLocation().state.order;
     const id = parseInt(order[0]._hex);
     const [content, setContent] = useState();
     let orderState;
@@ -16,12 +15,11 @@ export function Log() {
             case 1: orderState = "Shipped"; break;
             case 2: orderState = "Confirmed"; break;
             case 3: orderState = "Deleted"; break;
-            case 4: orderState = "RefundAsked"; break;
+            case 4: orderState = "Refund Asked"; break;
             case 5: orderState = "Refunded"; break;
             default: orderState = "Errore"; break;
         }
 
-        console.log(parseInt(element[1].toString()));
         let date = new Date(parseInt(element[1].toString())*1000).toLocaleString();
         date = date.replace(",", "").substring(0, date.length -4);
 
@@ -44,7 +42,7 @@ export function Log() {
     }, [])
 
     return (
-        <table className="blur logTable">
+        <table role="logTable" className="blur logTable">
             <thead>
                 <tr>
                     <th>State</th>
