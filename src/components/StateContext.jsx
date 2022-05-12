@@ -25,6 +25,7 @@ export class StateProvider extends React.Component {
         userIsSeller: false,
         orderState: ['Created', 'Shipped', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
         amountApproved: undefined,
+        orderStateChanged: false,
         networks: {
             "rinkeby": {
                 chainId: "0x4",
@@ -120,7 +121,7 @@ export class StateProvider extends React.Component {
             })
         },
     
-        _setListenerMetamaksAccount: () => {
+        _setListenerMetamaskAccount: () => {
             window.ethereum.on('accountsChanged', () => {
                 this._initialize();
             })
@@ -198,7 +199,7 @@ export class StateProvider extends React.Component {
             }
           },
 
-        _orderOperation: async (id, expr, orderAmount, order) => {
+        _orderOperation: async (id, expr, orderAmount) => {
             try {
                 var tx, error = undefined;
                 switch(expr) {
@@ -224,9 +225,13 @@ export class StateProvider extends React.Component {
                         error = "Errore, non è prevista un'operazione " + expr;
                         break;
                 }
+                await tx.wait()
+                await this.state._connectWallet();
+                this.state._setListenerMetamaskAccount();
+                this.setState({ orderStateChanged: true });
                 return [tx, error];
             } catch(err) {
-                return [tx, err];
+                throw err;
             }
         },
 
@@ -307,6 +312,12 @@ export class StateProvider extends React.Component {
             } else {
                 return false;
             }
+        },
+
+        _setOrderStateChangedFalse: () => {
+            this.setState({
+                orderStateChanged: false,
+            })
         },
 
         _getAmountsIn: async (token, amountOut) => {

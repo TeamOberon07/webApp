@@ -28,7 +28,7 @@ export class DApp extends React.Component {
 
     async componentDidMount() {
         await this._initialize();
-        this._setListenerMetamaksAccount();
+        this._setListenerMetamaskAccount();
         this._setListenerNetworkChanged();
     }
 
@@ -63,7 +63,7 @@ export class DApp extends React.Component {
             </div>);
     };
 
-    async _setListenerMetamaksAccount() {
+    async _setListenerMetamaskAccount() {
         window.ethereum.on('accountsChanged', async () => {
             this._initialize();
         })
