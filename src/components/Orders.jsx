@@ -1,7 +1,7 @@
 import React from "react";
 import { ethers } from "ethers";
 import tokenLogo from "../assets/usdtLogo.png";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 
 export function Orders({orders, isBuyer, State}) {
@@ -21,6 +21,11 @@ export function Orders({orders, isBuyer, State}) {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [errorFilter, setErrorFilter] = useState("");
 
+  useEffect(() => {
+    
+  }, [filteredOrders]);
+
+
   if (isBuyer) {
     userIndex = 2;
     view = "Seller";
@@ -29,7 +34,8 @@ export function Orders({orders, isBuyer, State}) {
     view = "Buyer"
   }
 
-  function applyFilters(){
+  function applyFilters(e){
+    e.preventDefault();
     var state = parseInt(document.getElementById("FilterState").value);
     if(errorFilter !== "Inserted address is not valid" && document.getElementById("FilterAddress").value !== ""){
       var res = filterOrdersByAddress(document.getElementById("FilterAddress").value);
@@ -153,17 +159,18 @@ export function Orders({orders, isBuyer, State}) {
               <select name="FilterState" id="FilterState">
                 <option value="-1" key="-1">Any</option>
                 <option value="0" key="0">Created</option>
-                <option value="1" key="1">Confirmed</option>
-                <option value="2" key="2">Deleted</option>
-                <option value="3" key="3">Refund Asked</option>
-                <option value="4" key="4">Refunded</option>
+                <option value="1" key="1">Shipped</option>
+                <option value="2" key="2">Confirmed</option>
+                <option value="3" key="3">Deleted</option>
+                <option value="4" key="4">Refund Asked</option>
+                <option value="5" key="5">Refunded</option>
               </select>
             </div>
           </div>
         </div>
         <div id="filterButtons">
-          <button className="cta-button basic-button blur" onClick = {() => applyFilters()}>Apply Filters</button>
-          <button className="cta-button basic-button blur" onClick = {() => setFilteredOrders([])}>Reset Filters</button>
+          <button className="cta-button basic-button blur" onClick = {(e) => applyFilters(e)}><span className="material-icons">filter_alt</span></button>
+          <button className="cta-button basic-button blur" onClick = {() => setFilteredOrders([])}><span className="material-icons">filter_alt_off</span></button>
         </div>
       </form> 
       <p className="errorP">{errorFilter}</p>
