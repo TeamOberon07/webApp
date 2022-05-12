@@ -18,7 +18,7 @@ export function Orders({orders, isBuyer, State}) {
     { color: 'white' }
   ];
   const [first, setFirst] = useState(0);
-  const [filtered_orders, setFiltered_orders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [errorFilter, setErrorFilter] = useState("");
 
   if (isBuyer) {
@@ -48,7 +48,7 @@ export function Orders({orders, isBuyer, State}) {
         res.push(element);
       }
     });
-    setFiltered_orders(res);
+    setFilteredOrders(res);
     return res;
   }
 
@@ -59,7 +59,7 @@ export function Orders({orders, isBuyer, State}) {
         res.push(element);
       }
     });
-    setFiltered_orders(res);
+    setFilteredOrders(res);
     if(res.length === 0)
       setErrorFilter("No order found for specified filters");
     else
@@ -77,43 +77,43 @@ export function Orders({orders, isBuyer, State}) {
   }, 5000);
   }
   
-  function visualizeOrder(element) {
-    const res = <tr key={element[0].toString()}>
-            <td aria-label="Id">{element[0].toString()}</td>
+  function visualizeOrder(order) {
+    const res = <tr key={order[0].toString()}>
+            <td aria-label="Id">{order[0].toString()}</td>
             <td aria-label="Address">
               <span
-                id={ "copyIcon" + element[0].toString() }
-                onClick={ () => copyAddress(element[userIndex].toString(), "copyIcon" + element[0].toString()) } 
+                id={ "copyIcon" + order[0].toString() }
+                onClick={ () => copyAddress(order[userIndex].toString(), "copyIcon" + order[0].toString()) } 
                 className="material-icons copy"
               >
                 file_copy
               </span>
               {
-                element[userIndex].toString().substring(0,6)
+                order[userIndex].toString().substring(0,6)
                 +"..."+
-                element[userIndex].toString().substring(
-                  element[userIndex].toString().length-6,
-                  element[userIndex].toString().length
+                order[userIndex].toString().substring(
+                  order[userIndex].toString().length-6,
+                  order[userIndex].toString().length
                 )
               }
             </td>
             {(() => {
-              amount = ethers.utils.formatEther(element[3].toString());
+              amount = ethers.utils.formatEther(order[3].toString());
             })()}
             <td aria-label="Amount">${amount}</td>
             <td aria-label="Icon">
-              {State[element[4]]}
-              <span className="material-icons" style={Color[element[4]]}>{Icon[element[4]]}</span>
+              {State[order[4]]}
+              <span className="material-icons" style={Color[order[4]]}>{Icon[order[4]]}</span>
             </td>
             <td className = "order-button-cell">
               <NavLink 
               to="/order-page"
-              state={{ orderState: State[element[4]],
-                       order: element}}
+              state={{ orderState: State[order[4]],
+                       order: order}}
               className = "cta-button order-button blur-light">See order</NavLink>   
             </td>
             {(() => {
-              if(State[element[4]] === "Created") {
+              if(State[order[4]] === "Created") {
                 totalHeldForSeller += parseFloat(amount)
               }
             })()}
@@ -121,8 +121,8 @@ export function Orders({orders, isBuyer, State}) {
     return res;
   }
 
-  if (filtered_orders.length !== 0) {
-    content = filtered_orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
+  if (filteredOrders.length !== 0) {
+    content = filteredOrders.slice(first, first+20).map((element) => (visualizeOrder(element)));
   }
   else if (orders.length) {
     content = orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
@@ -163,7 +163,7 @@ export function Orders({orders, isBuyer, State}) {
         </div>
         <div id="filterButtons">
           <button className="cta-button basic-button blur" onClick = {() => applyFilters()}>Apply Filters</button>
-          <button className="cta-button basic-button blur" onClick = {() => setFiltered_orders([])}>Reset Filters</button>
+          <button className="cta-button basic-button blur" onClick = {() => setFilteredOrders([])}>Reset Filters</button>
         </div>
       </form> 
       <p className="errorP">{errorFilter}</p>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { ethers } from "ethers";
-import { Header } from './Header';
+import { Header } from "./Header";
 import { StateContext } from "./StateContext";
-import { useLocation } from 'react-router-dom'
 import { Log } from "./Log";
 import tokenLogo from "../assets/usdtLogo.png";
 

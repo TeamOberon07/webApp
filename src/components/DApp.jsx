@@ -20,7 +20,6 @@ export class DApp extends React.Component {
             sellerAddress: undefined,
             contractBalance: undefined,
             orders: undefined,
-            totalOrders: undefined,
         };
         this.state = this.initialState;
     }
@@ -55,12 +54,13 @@ export class DApp extends React.Component {
             return <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>;
         }
 
-        return <div>
-            <Header currentAddress={this.context.currentAddress} balance={this.context.balance} />
-            <div className='container'>
-                <Orders orders={this.state.orders} isBuyer={!this.context.userIsSeller} State={this.context.orderState}/>
-            </div>
-        </div>
+        return(
+            <div>
+                <Header currentAddress={this.context.currentAddress} balance={this.context.balance}/>
+                <div className='container'>
+                    <Orders orders={this.state.orders} isBuyer={!this.context.userIsSeller} State={this.context.orderState}/>
+                </div>
+            </div>);
     };
 
     async _setListenerMetamaksAccount() {
@@ -93,13 +93,9 @@ export class DApp extends React.Component {
 
     async _loadBlockchainData() {
         this._getContractBalance();
-        this._getTotalOrders();
         this._initializeOrders();
-        if(this.context.userIsSeller) {
-            this._removeQRCode();
-        }
     }
-    // Spostato _getSellers, _userIsBuyer, _getQRCode in StateContext
+
     async _refreshInfo(tx) {
         const receipt = await tx.wait();
         if (receipt.status) {
@@ -118,7 +114,6 @@ export class DApp extends React.Component {
         this.setState({ orders });
     }
 
-    //Funzioni confirmOrder, deleteOrder, askRefund e refundBuyer spostate in StateContext
     async _orderOperation(id, expr, orderAmount=0) {
         const res = await this.context._orderOperation(id, expr, orderAmount);
         if (res[0])
@@ -126,25 +121,11 @@ export class DApp extends React.Component {
         else if (res[1])
             return <Error message={res[1]}/>;
     }
-    
-    async _getTotalOrders() {
-        var totalOrders = await this.context._contract.getTotalOrders();
-        totalOrders = totalOrders.toNumber();
-        this.setState({ totalOrders });
-    }
 
     async _getContractBalance() {
         var contractBalance = await this.context._contract.getBalance();
         const contractBalanceInAvax = ethers.utils.formatEther(contractBalance);
         contractBalance = contractBalanceInAvax.toString()+" AVAX";
         this.setState({ contractBalance });
-    }
-
-    async _removeQRCode() {
-        let qrcode = document.getElementById('qrcode');
-        if (qrcode) {
-            var context = qrcode.getContext('2d');
-            context.clearRect(0, 0, qrcode.width, qrcode.height);
-        }
     }
 }
