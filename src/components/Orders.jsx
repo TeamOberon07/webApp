@@ -87,7 +87,7 @@ export function Orders({orders, isBuyer, State}) {
     const res = <tr key={order[0].toString()}>
             <td aria-label="Id">{order[0].toString()}</td>
             <td aria-label="Address">
-              <span
+              <span data-testid="copyIcon"
                 id={ "copyIcon" + order[0].toString() }
                 onClick={ () => copyAddress(order[userIndex].toString(), "copyIcon" + order[0].toString()) } 
                 className="material-icons copy"
@@ -142,7 +142,7 @@ export function Orders({orders, isBuyer, State}) {
           <div className="button-label-select">
             <label className="FilterLabel" id="FilterAddressLabel">Address:</label>
             <div id="buyerAddressFilter">
-              <input type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
+              <input role="FilterAddress" type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
                 const address = document.getElementById("FilterAddress").value;
                 if (address === "" || ethers.utils.isAddress(address)) {
                   setErrorFilter("");
@@ -156,7 +156,7 @@ export function Orders({orders, isBuyer, State}) {
           <div className="button-label-select" id="FilterStateDiv">
             <label className="FilterLabel" id="FilterStateLabel">State:</label>
             <div id="stateFilter">
-              <select name="FilterState" id="FilterState">
+              <select role ="FilterState" name="FilterState" id="FilterState">
                 <option value="-1" key="-1">Any</option>
                 <option value="0" key="0">Created</option>
                 <option value="1" key="1">Shipped</option>
@@ -169,8 +169,8 @@ export function Orders({orders, isBuyer, State}) {
           </div>
         </div>
         <div id="filterButtons">
-          <button className="cta-button basic-button blur" onClick = {(e) => applyFilters(e)}><span className="material-icons">filter_alt</span></button>
-          <button className="cta-button basic-button blur" onClick = {() => setFilteredOrders([])}><span className="material-icons">filter_alt_off</span></button>
+          <button role="ApplyFilters" className="cta-button basic-button blur" onClick = {(e) => applyFilters(e)}><span className="material-icons">filter_alt</span></button>
+          <button role="ResetFilters" className="cta-button basic-button blur" onClick = {() => setFilteredOrders([])}><span className="material-icons">filter_alt_off</span></button>
         </div>
       </form> 
       <p className="errorP">{errorFilter}</p>
@@ -192,8 +192,8 @@ export function Orders({orders, isBuyer, State}) {
         </tbody>
       </table>
       <div id="paginator-buttons">
-        {first > 0 && <button className="cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
-        {first + 20 < orders.length && < button className="cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}     
+        {first > 0 && <button role="Previous" className="cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
+        {first + 20 < orders.length && < button role="Next"className="cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}     
       </div>
     </div>
   );
