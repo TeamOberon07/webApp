@@ -1,7 +1,7 @@
 import React from "react";
 import { ethers } from "ethers";
 import tokenLogo from "../assets/usdtLogo.png";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 
 export function Orders({orders, isBuyer, State}) {
@@ -18,8 +18,13 @@ export function Orders({orders, isBuyer, State}) {
     { color: 'white' }
   ];
   const [first, setFirst] = useState(0);
-  const [filtered_orders, setFiltered_orders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [errorFilter, setErrorFilter] = useState("");
+
+  useEffect(() => {
+    
+  }, [filteredOrders]);
+
 
   if (isBuyer) {
     userIndex = 2;
@@ -29,7 +34,8 @@ export function Orders({orders, isBuyer, State}) {
     view = "Buyer"
   }
 
-  function applyFilters(){
+  function applyFilters(e){
+    e.preventDefault();
     var state = parseInt(document.getElementById("FilterState").value);
     if(errorFilter !== "Inserted address is not valid" && document.getElementById("FilterAddress").value !== ""){
       var res = filterOrdersByAddress(document.getElementById("FilterAddress").value);
@@ -48,7 +54,7 @@ export function Orders({orders, isBuyer, State}) {
         res.push(element);
       }
     });
-    setFiltered_orders(res);
+    setFilteredOrders(res);
     return res;
   }
 
@@ -59,7 +65,7 @@ export function Orders({orders, isBuyer, State}) {
         res.push(element);
       }
     });
-    setFiltered_orders(res);
+    setFilteredOrders(res);
     if(res.length === 0)
       setErrorFilter("No order found for specified filters");
     else
@@ -77,43 +83,42 @@ export function Orders({orders, isBuyer, State}) {
   }, 5000);
   }
   
-  function visualizeOrder(element) {
-    const res = <tr key={element[0].toString()}>
-            <td aria-label="Id">{element[0].toString()}</td>
+  function visualizeOrder(order) {
+    const res = <tr key={order[0].toString()}>
+            <td aria-label="Id">{order[0].toString()}</td>
             <td aria-label="Address">
-              <span
-                id={ "copyIcon" + element[0].toString() }
-                onClick={ () => copyAddress(element[userIndex].toString(), "copyIcon" + element[0].toString()) } 
+              <span data-testid="copyIcon"
+                id={ "copyIcon" + order[0].toString() }
+                onClick={ () => copyAddress(order[userIndex].toString(), "copyIcon" + order[0].toString()) } 
                 className="material-icons copy"
               >
                 file_copy
               </span>
               {
-                element[userIndex].toString().substring(0,6)
+                order[userIndex].toString().substring(0,6)
                 +"..."+
-                element[userIndex].toString().substring(
-                  element[userIndex].toString().length-6,
-                  element[userIndex].toString().length
+                order[userIndex].toString().substring(
+                  order[userIndex].toString().length-6,
+                  order[userIndex].toString().length
                 )
               }
             </td>
             {(() => {
-              amount = ethers.utils.formatEther(element[3].toString());
+              amount = ethers.utils.formatEther(order[3].toString());
             })()}
             <td aria-label="Amount">${amount}</td>
             <td aria-label="Icon">
-              {State[element[4]]}
-              <span className="material-icons" style={Color[element[4]]}>{Icon[element[4]]}</span>
+              {State[order[4]]}
+              <span className="material-icons" style={Color[order[4]]}>{Icon[order[4]]}</span>
             </td>
             <td className = "order-button-cell">
               <NavLink 
               to="/order-page"
-              state={{ orderState: State[element[4]],
-                       order: element}}
+              state={{ id: order[0].toNumber()}}
               className = "cta-button order-button blur-light">See order</NavLink>   
             </td>
             {(() => {
-              if(State[element[4]] === "Created") {
+              if(State[order[4]] === "Created") {
                 totalHeldForSeller += parseFloat(amount)
               }
             })()}
@@ -121,8 +126,8 @@ export function Orders({orders, isBuyer, State}) {
     return res;
   }
 
-  if (filtered_orders.length !== 0) {
-    content = filtered_orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
+  if (filteredOrders.length !== 0) {
+    content = filteredOrders.slice(first, first+20).map((element) => (visualizeOrder(element)));
   }
   else if (orders.length) {
     content = orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
@@ -136,7 +141,7 @@ export function Orders({orders, isBuyer, State}) {
           <div className="button-label-select">
             <label className="FilterLabel" id="FilterAddressLabel">Address:</label>
             <div id="buyerAddressFilter">
-              <input type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
+              <input role="FilterAddress" type="text" name="FilterAddress" id="FilterAddress" onBlur={() => {
                 const address = document.getElementById("FilterAddress").value;
                 if (address === "" || ethers.utils.isAddress(address)) {
                   setErrorFilter("");
@@ -150,20 +155,21 @@ export function Orders({orders, isBuyer, State}) {
           <div className="button-label-select" id="FilterStateDiv">
             <label className="FilterLabel" id="FilterStateLabel">State:</label>
             <div id="stateFilter">
-              <select name="FilterState" id="FilterState">
+              <select role ="FilterState" name="FilterState" id="FilterState">
                 <option value="-1" key="-1">Any</option>
                 <option value="0" key="0">Created</option>
-                <option value="1" key="1">Confirmed</option>
-                <option value="2" key="2">Deleted</option>
-                <option value="3" key="3">Refund Asked</option>
-                <option value="4" key="4">Refunded</option>
+                <option value="1" key="1">Shipped</option>
+                <option value="2" key="2">Confirmed</option>
+                <option value="3" key="3">Deleted</option>
+                <option value="4" key="4">Refund Asked</option>
+                <option value="5" key="5">Refunded</option>
               </select>
             </div>
           </div>
         </div>
         <div id="filterButtons">
-          <button className="cta-button basic-button blur" onClick = {() => applyFilters()}>Apply Filters</button>
-          <button className="cta-button basic-button blur" onClick = {() => setFiltered_orders([])}>Reset Filters</button>
+          <button role="ApplyFilters" className="cta-button basic-button blur" onClick = {(e) => applyFilters(e)}><span className="material-icons">filter_alt</span></button>
+          <button role="ResetFilters" className="cta-button basic-button blur" onClick = {() => setFilteredOrders([])}><span className="material-icons">filter_alt_off</span></button>
         </div>
       </form> 
       <p className="errorP">{errorFilter}</p>
@@ -185,8 +191,8 @@ export function Orders({orders, isBuyer, State}) {
         </tbody>
       </table>
       <div id="paginator-buttons">
-        {first > 0 && <button className="cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
-        {first + 20 < orders.length && < button className="cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}     
+        {first > 0 && <button role="Previous" className="cta-button basic-button blur" onClick = {() => setFirst(first-20)}>&lt;Prev</button>}
+        {first + 20 < orders.length && < button role="Next"className="cta-button basic-button blur" onClick = {() => setFirst(first + 20)}>Next&gt;</button>}     
       </div>
     </div>
   );

@@ -65,7 +65,8 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!src/index.js",
-      "!src/components/StateContext.jsx"
+      "!src/components/StateContext.jsx",
+      "!src/components/DApp.jsx"
     ]
   }
 }
