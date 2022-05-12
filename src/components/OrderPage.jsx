@@ -8,10 +8,10 @@ import tokenLogo from "../assets/usdtLogo.png";
 
 export function OrderPage() {
     const context = useContext(StateContext);
-    const order = useLocation().state.order;
+    var order = useLocation().state.order;
     const id = parseInt(order[0]._hex);
     const amount = order[3];
-    const orderState = useLocation().state.orderState;
+    var orderState = useLocation().state.orderState;
 
     useEffect(() => {
         context._connectWallet();
@@ -19,9 +19,14 @@ export function OrderPage() {
     }, []);
 
     useEffect(() => {
-        if(context.userIsSeller)
-            context._getQRCode(order);
+
     }, [order]);
+
+    useEffect(() => {
+        if(context.userIsSeller){
+            context._getQRCode(order);
+        }
+    }, [context.userIsSeller]);
 
     return (<div className="orderPage">
         <Header currentAddress={context.currentAddress}
@@ -77,7 +82,7 @@ export function OrderPage() {
                                                     role="MarkAsShipped"
                                                     className="cta-button basic-button blur"
                                                     type="button"
-                                                    onClick={() =>  context._orderOperation(id, "SetAsShipped")}
+                                                    onClick={() => { context._orderOperation(id, "SetAsShipped"); }}
                                                 >Mark as Shipped</button>
                                         })()}
                                         

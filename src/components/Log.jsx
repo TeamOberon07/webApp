@@ -35,12 +35,11 @@ export function Log({order}) {
     }
     
     useEffect(() => {
-        // let aux = [];
         context._getLog(id).then((log) => {
             if (log.length) 
                 setContent(log.map((element) => (visualizeOrder(element))));
         });
-    }, [])
+    }, [context._contract])
 
     return (
         <table role="logTable" className="blur logTable">

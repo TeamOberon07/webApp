@@ -166,13 +166,13 @@ export class StateProvider extends React.Component {
             return false;
         },
 
-        // getOrderById: async (id) => {
-        //     const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
-        //     for (var i=0; i<orders.length; i++) {
-        //         if (id === orders[i][0].toString())
-        //             return orders[i];
-        //     }
-        // },
+        _getOrderById: async (id, order) => {
+            if(this.state._contract){
+                const order = await this.state._contract.getOrder(id);
+                return order
+            }
+            return order;
+        },
 
         _callCreateOrder: async (functionToCall, tokenAddress, orderAmount, maxAmountIn, sellerAddress, afterConfirm) => {
             try {
@@ -198,7 +198,7 @@ export class StateProvider extends React.Component {
             }
           },
 
-        _orderOperation: async (id, expr, orderAmount) => {
+        _orderOperation: async (id, expr, orderAmount, order) => {
             try {
                 var tx, error = undefined;
                 switch(expr) {
@@ -248,7 +248,7 @@ export class StateProvider extends React.Component {
         _isAuthorizedSeller: async (sellerAddress) => {
             const sellers = await this.state._getSellers();
             return sellers.includes(sellerAddress);
-          },
+        },
 
         _getQRCode: (order) => {
             const buyer_address = order[1];
@@ -272,7 +272,11 @@ export class StateProvider extends React.Component {
         },
 
         _getLog: async (id) =>  {
-            return await this.state._contract.getLogsOfOrder(id);
+            if(this.state._contract){
+                const logs =  await this.state._contract.getLogsOfOrder(id);
+                return logs;
+            }
+            return [];
         },
 
         _getERC20Balance: async (token) => {
