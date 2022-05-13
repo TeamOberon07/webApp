@@ -30,11 +30,23 @@ export function OrderPage() {
     const [showApproveSpinner, setShowApproveSpinner] = useState(false);
     const [stableAddress, setStableAddress] = useState("");
     const [stepActive, setStepActive] = useState(0);
+    const [refundClicked, setRefundClicked] = useState(false);
 
     const steps = [
         'Approve',
         'Refund',
     ];
+
+    const stepper =
+        <Box sx={{ width: '100%' }}>
+            <Stepper activeStep={stepActive} alternativeLabel>
+                {steps.map((label) => (
+                <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                </Step>
+                ))}
+            </Stepper>
+        </Box>
 
     useEffect(async () => {
         await context._connectWallet();
@@ -62,7 +74,7 @@ export function OrderPage() {
 
     const buttonToApprove = 
         <button onClick={ () => setShowApproveSpinner(true) }  
-            className="cta-button basic-button blur-light" id="createOrder">
+            className="cta-button basic-button blur-light" id="approve-button">
             <div className="spinner-in-button">
                 Approve 
                 {showApproveSpinner && spinner}
@@ -70,39 +82,51 @@ export function OrderPage() {
         </button>;
 
     const buttonApproved =
-        <button className="cta-button basic-button disabled-button approved-button" id="createOrder">
+        <button className="cta-button basic-button disabled-button approved-button" id="approve-button">
             Approved
         </button>;
     
     const refundButtonOK = 
         <button
         role={operations[2]}
-        className="cta-button basic-button blur"
+        className="cta-button basic-button blur-light"
         type="button"
-        onClick={() => { callOrderOperation(operations[2], amount) }}
+        onClick={() => { setTxWaiting({ [operations[2]]: true }); setRefundClicked(true); }}
         ><div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div></button>
 
     const refundButtonToApprove =
-        <button className="cta-button basic-button disabled-button" id="createOrder">
+        <button className="cta-button basic-button disabled-button" id="refund-button">
             Refund Buyer
         </button>
 
     const refundButtonNOK =
-        <button className="cta-button basic-button disabled-button" id="createOrder">
+        <button className="cta-button basic-button disabled-button" id="refund-button">
             Insufficient Balance  
         </button>
 
     const [approveButton, setApproveButton] = useState("");
     const [refundButton, setRefundButton] = useState(refundButtonToApprove);
 
-    async function callOrderOperation(type, amount) {
-        setTxWaiting({ [type]: true });
+    useEffect(async () => {
+        if (refundClicked) {
+            await callOrderOperation(operations[2], amount)
+        }
+    }, [refundClicked])
+    
+    async function callOrderOperation(type, _amount) {
+        // setTxWaiting({ [type]: true });
+        // setRefundButton(refundButtonOK);
         try {
-            await context._orderOperation(id, type, amount);
+            await context._orderOperation(id, type, _amount);
         } catch(err) {
             setTxWaiting({ [type]: false });
         }
+        setRefundClicked(false)
     }
+
+    useEffect(async () => {
+        setRefundButton(refundButtonOK);
+    }, [txWaiting[operations[2]]])
 
     const callApprove = async () => {
         try {
@@ -214,9 +238,9 @@ export function OrderPage() {
                                                 if (orderState === "Created" || orderState === "Shipped")
                                                     return <button
                                                         role={operations[0]}
-                                                        className="cta-button basic-button blur"
+                                                        className="cta-button basic-button blur-light"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation(operations[0]) }}
+                                                        onClick={() => { setTxWaiting({ [operations[0]]: true }); callOrderOperation(operations[0]) }}
                                                         ><div className="spinner-in-button">Delete Order {txWaiting[operations[0]] && spinner}</div></button>
                                             })()}
 
@@ -224,9 +248,9 @@ export function OrderPage() {
                                                 if (orderState === "Created")
                                                     return <button
                                                         role={operations[1]}
-                                                        className="cta-button basic-button blur"
+                                                        className="cta-button basic-button blur-light"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation(operations[1]) }}
+                                                        onClick={() => { setTxWaiting({ [operations[1]]: true }); callOrderOperation(operations[1]) }}
                                                     ><div className="spinner-in-button">Mark as Shipped {txWaiting[operations[1]] && spinner}</div></button>
                                             })()}
                                             
@@ -235,19 +259,7 @@ export function OrderPage() {
                                                     return <>
                                                         { approveButton }
                                                         { refundButton }
-                                                        { () => {
-                                                            if (approveButton && refundButton)
-                                                                return
-                                                                <Box sx={{ width: '100%' }}>
-                                                                    <Stepper activeStep={stepActive} alternativeLabel>
-                                                                        {steps.map((label) => (
-                                                                        <Step key={label}>
-                                                                            <StepLabel>{label}</StepLabel>
-                                                                        </Step>
-                                                                        ))}
-                                                                    </Stepper>
-                                                                </Box>
-                                                        }}
+                                                        { approveButton && refundButton && stepper }
                                                     </>
                                                 }
                                             })()}
@@ -272,9 +284,9 @@ export function OrderPage() {
                                                 if (orderState === "Created" || orderState === "Shipped" || orderState === "Confirmed") {
                                                     return <button
                                                         role={operations[3]}
-                                                        className="cta-button basic-button blur"
+                                                        className="cta-button basic-button blur-light"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation(operations[3]) }}
+                                                        onClick={() => { setTxWaiting({ [operations[3]]: true }); callOrderOperation(operations[3]) }}
                                                     ><div className="spinner-in-button">Ask Refund {txWaiting[operations[3]] && spinner}</div></button>
                                                 } else {
                                                     return <>

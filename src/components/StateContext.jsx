@@ -168,9 +168,6 @@ export class StateProvider extends React.Component {
                         tx = await this.state._contract.shipOrder(id);
                         break;
                     case "RefundBuyer":
-                        console.log("CI SONO")
-                        console.log(id)
-                        console.log(orderAmount)
                         tx = await this.state._contract.refundBuyer(id, orderAmount);
                         break;
                     case "AskRefund":
