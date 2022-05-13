@@ -4,11 +4,20 @@ import tokenLogo from "../../assets/usdtLogo.png";
 import avaxLogo from "../../assets/avaxLogo.png";
 import { Loading } from '../Loading';
 import { TokenDialog } from "./TokenDialog"
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 
 export function OrderData ({order, createOrder, approve, loadingText}) {
     const context = useContext(StateContext);
     
     const avaxToStable = 1;
+
+    const steps = [
+        'Approve',
+        'CreateOrder',
+    ];
 
     const AVAX = {
         "address": "NULL",
@@ -51,6 +60,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     const [orderButton, setOrderButton] = useState(orderButtonToApprove);
     const [approveButton, setApproveButton] = useState("");
     const [showApproveSpinner, setShowApproveSpinner] = useState(false);
+    const [stepActive, setStepActive] = useState(0);
 
     const buttonToApprove = 
         <button onClick={ () => setShowApproveSpinner(true) }  
@@ -60,6 +70,17 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
                 {showApproveSpinner && spinner}
             </div>
         </button>;
+
+    const stepper =
+        <Box sx={{ width: '100%' }}>
+            <Stepper activeStep={stepActive} alternativeLabel>
+                {steps.map((label) => (
+                <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                </Step>
+                ))}
+            </Stepper>
+        </Box>
     
     const handleClickOpen = () => {
         setOpen(true);
@@ -75,6 +96,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
             let approved = await approve(selectedValue, amountIn)
             if (approved) {
                 setShowApproveSpinner(false);
+                setStepActive(1);
                 setApproveButton(buttonApproved);
                 setOrderButton(orderButtonOK);
             }
@@ -99,6 +121,7 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
         if (context.amountApproved) {
             setShowApproveSpinner(false);
             setApproveButton(buttonApproved);
+            setStepActive(1);
             setOrderButton(orderButtonOK);
         }
     }, [context.amountApproved])
@@ -117,10 +140,12 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
     useEffect(() => {
         if (showApproveSpinner) {
             setApproveButton(buttonToApprove);
+            setStepActive(0);
             callApprove()
         }
         if (!context.amountApproved) {
             setApproveButton(buttonToApprove);
+            setStepActive(0);
         }
     }, [showApproveSpinner])
 
@@ -146,9 +171,11 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
                     .then((approved) => {
                         if (approved) {
                             setApproveButton(buttonApproved);
+                            setStepActive(1);
                             setOrderButton(orderButtonOK);
                         } else {
                             setApproveButton(buttonToApprove);
+                            setStepActive(0);
                             setOrderButton(orderButtonToApprove);
                         }
                     })
@@ -195,8 +222,11 @@ export function OrderData ({order, createOrder, approve, loadingText}) {
                     />
                 </div>
 
-                { !clickedCreate && approveButton }
-                { !clickedCreate && orderButton }
+                <div id="landingButtons">
+                    { !clickedCreate && approveButton }
+                    { !clickedCreate && orderButton }
+                    { !clickedCreate && approveButton && orderButton && stepper}
+                </div>
 
                 { !order.confirmed && loadingText !== '' && <Loading text={loadingText} />}
             </div>

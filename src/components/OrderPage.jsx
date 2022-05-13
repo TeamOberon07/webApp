@@ -7,6 +7,11 @@ import { Log } from "./Log";
 import { Loading } from "./Loading";
 import tokenLogo from "../assets/usdtLogo.png";
 
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+
 export function OrderPage() {
     const context = useContext(StateContext);
 
@@ -24,6 +29,12 @@ export function OrderPage() {
     const [amount, setAmount] = useState(0);
     const [showApproveSpinner, setShowApproveSpinner] = useState(false);
     const [stableAddress, setStableAddress] = useState("");
+    const [stepActive, setStepActive] = useState(0);
+
+    const steps = [
+        'Approve',
+        'Refund',
+    ];
 
     useEffect(async () => {
         await context._connectWallet();
@@ -99,6 +110,7 @@ export function OrderPage() {
             if (approved) {
                 setShowApproveSpinner(false);
                 setApproveButton(buttonApproved);
+                setStepActive(1);
                 setRefundButton(refundButtonOK);
             }
         } catch(err) {
@@ -110,6 +122,7 @@ export function OrderPage() {
         if (context.amountApproved) {
             setShowApproveSpinner(false);
             setApproveButton(buttonApproved);
+            setStepActive(1);
             setRefundButton(refundButtonOK);
         }
     }, [context.amountApproved])
@@ -117,10 +130,12 @@ export function OrderPage() {
     useEffect(() => {
         if (showApproveSpinner) {
             setApproveButton(buttonToApprove);
+            setStepActive(0);
             callApprove()
         }
         if (!context.amountApproved) {
             setApproveButton(buttonToApprove);
+            setStepActive(0);
         }
     }, [showApproveSpinner])
 
@@ -139,9 +154,11 @@ export function OrderPage() {
                     .then((approved) => {
                         if (approved) {
                             setApproveButton(buttonApproved);
+                            setStepActive(1);
                             setRefundButton(refundButtonOK);
                         } else {
                             setApproveButton(buttonToApprove);
+                            setStepActive(0);
                             setRefundButton(refundButtonToApprove);
                         }
                     })
@@ -218,6 +235,19 @@ export function OrderPage() {
                                                     return <>
                                                         { approveButton }
                                                         { refundButton }
+                                                        { () => {
+                                                            if (approveButton && refundButton)
+                                                                return
+                                                                <Box sx={{ width: '100%' }}>
+                                                                    <Stepper activeStep={stepActive} alternativeLabel>
+                                                                        {steps.map((label) => (
+                                                                        <Step key={label}>
+                                                                            <StepLabel>{label}</StepLabel>
+                                                                        </Step>
+                                                                        ))}
+                                                                    </Stepper>
+                                                                </Box>
+                                                        }}
                                                     </>
                                                 }
                                             })()}

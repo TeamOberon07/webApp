@@ -36,7 +36,7 @@ export function LandingPage() {
 
   useEffect(async () => {
     await context._connectWallet();
-    await context._setListenerMetamaksAccount();
+    await context._setListenerMetamaskAccount();
   }, []);
 
   const approve = async (token, maxAmountIn) => {

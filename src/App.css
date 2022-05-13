@@ -389,6 +389,11 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.5em;
 }
 
+#landingButtons {
+  width: fit-content;
+  margin: auto;
+}
+
 .total-price {
   display: flex;
   justify-content: space-between;
@@ -727,4 +732,20 @@ p.errorP{
 
 #none-action {
   margin-right: auto;
+}
+
+.css-8atqhb {
+  margin-top: 0.5em;
+}
+
+.css-qivjh0-MuiStepLabel-label.MuiStepLabel-alternativeLabel {
+  display: none;
+}
+
+.css-117w1su-MuiStepIcon-text {
+  fill: black !important;
+}
+
+.Mui-completed {
+  fill: #ff599721 !important;
 }
