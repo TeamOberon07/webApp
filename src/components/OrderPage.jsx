@@ -11,7 +11,7 @@ export function OrderPage() {
     const context = useContext(StateContext);
 
     const id = useLocation().state.id;
-    var amount, orderState;
+    var orderState;
     const operations = context.orderOperations;
     var txWaitingInit = {
         [operations[0]]: false,
@@ -21,12 +21,16 @@ export function OrderPage() {
     }
     const [txWaiting, setTxWaiting] = useState(txWaitingInit);
     const [order, setOrder] = useState();
+    const [amount, setAmount] = useState(0);
+    const [showApproveSpinner, setShowApproveSpinner] = useState(false);
+    const [stableAddress, setStableAddress] = useState("");
 
     useEffect(async () => {
         await context._connectWallet();
         context._setListenerMetamaskAccount();
         let order = await context._getOrderById(id);
-        setOrder(order)
+        setOrder(order);
+        setAmount(order[3]);
     }, []);
 
     useEffect(() => {
@@ -45,6 +49,41 @@ export function OrderPage() {
 
     const spinner = <div className="spinner"><div className="half-spinner"></div></div>;
 
+    const buttonToApprove = 
+        <button onClick={ () => setShowApproveSpinner(true) }  
+            className="cta-button basic-button blur-light" id="createOrder">
+            <div className="spinner-in-button">
+                Approve 
+                {showApproveSpinner && spinner}
+            </div>
+        </button>;
+
+    const buttonApproved =
+        <button className="cta-button basic-button disabled-button approved-button" id="createOrder">
+            Approved
+        </button>;
+    
+    const refundButtonOK = 
+        <button
+        role={operations[2]}
+        className="cta-button basic-button blur"
+        type="button"
+        onClick={() => { callOrderOperation(operations[2], amount) }}
+        ><div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div></button>
+
+    const refundButtonToApprove =
+        <button className="cta-button basic-button disabled-button" id="createOrder">
+            Refund Buyer
+        </button>
+
+    const refundButtonNOK =
+        <button className="cta-button basic-button disabled-button" id="createOrder">
+            Insufficient Balance  
+        </button>
+
+    const [approveButton, setApproveButton] = useState("");
+    const [refundButton, setRefundButton] = useState(refundButtonToApprove);
+
     async function callOrderOperation(type, amount) {
         setTxWaiting({ [type]: true });
         try {
@@ -54,8 +93,67 @@ export function OrderPage() {
         }
     }
 
+    const callApprove = async () => {
+        try {
+            let approved = await context._approveERC20(stableAddress, amount)
+            if (approved) {
+                setShowApproveSpinner(false);
+                setApproveButton(buttonApproved);
+                setRefundButton(refundButtonOK);
+            }
+        } catch(err) {
+            setShowApproveSpinner(false);
+        }
+    }
+
+    useEffect(() => {
+        if (context.amountApproved) {
+            setShowApproveSpinner(false);
+            setApproveButton(buttonApproved);
+            setRefundButton(refundButtonOK);
+        }
+    }, [context.amountApproved])
+
+    useEffect(() => {
+        if (showApproveSpinner) {
+            setApproveButton(buttonToApprove);
+            callApprove()
+        }
+        if (!context.amountApproved) {
+            setApproveButton(buttonToApprove);
+        }
+    }, [showApproveSpinner])
+
+    useEffect(async () => {
+        if (context.userIsSeller){
+            if (amount) {
+                let stableAddress = await context._contract.STABLECOIN();
+                setStableAddress(stableAddress);
+                let stableBalance = await context._getERC20Balance(stableAddress);
+                let amountDecimal = amount/10**18
+                if (amountDecimal > stableBalance) {
+                    setApproveButton("");
+                    setRefundButton(refundButtonNOK);
+                } else {
+                    context._ERC20isApproved(stableAddress, amount)
+                    .then((approved) => {
+                        if (approved) {
+                            setApproveButton(buttonApproved);
+                            setRefundButton(refundButtonOK);
+                        } else {
+                            setApproveButton(buttonToApprove);
+                            setRefundButton(refundButtonToApprove);
+                        }
+                    })
+                }
+            } else {
+                setApproveButton("");
+                setRefundButton(refundButtonToApprove);
+            }
+        }
+    }, [amount])
+
     if (order) {
-        amount = order[3];
         orderState = context.orderState[order[4]];
         return (<div className="orderPage">
             <Header currentAddress={context.currentAddress}
@@ -116,13 +214,12 @@ export function OrderPage() {
                                             })()}
                                             
                                             {(() => {
-                                                if (orderState === "Asked Refund")
-                                                    return <button
-                                                        role={operations[2]}
-                                                        className="cta-button basic-button blur"
-                                                        type="button"
-                                                        onClick={() => { callOrderOperation(operations[2], amount) }}
-                                                    ><div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div></button>
+                                                if (orderState === "Asked Refund") {
+                                                    return <>
+                                                        { approveButton }
+                                                        { refundButton }
+                                                    </>
+                                                }
                                             })()}
 
                                             {(() => {

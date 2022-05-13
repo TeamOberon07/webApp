@@ -66,31 +66,6 @@ export class StateProvider extends React.Component {
             this.state._updateBalance();
             this.state._userIsSeller();
         },
-
-        // _initialize: (userAddress) => {
-        //     this.state._initializeEthers();
-        //     this.setState({
-        //         currentAddress: userAddress,
-        //     });
-        //     this.state._updateBalance();
-        // },
-
-        // _initializeEthers: async () => {
-        //     this.state._provider = new ethers.providers.Web3Provider(window.ethereum);
-
-        //     if (this.state._provider.getSigner(0)) {
-        //         this.state._contract = new ethers.Contract(
-        //             this.state.contractAddress,
-        //             Escrow.abi,
-        //             this.state._provider.getSigner(0)
-        //         );
-        //     }
-        // },
-
-        // _setAddress: async () => {
-        //     const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        //     this.state._initialize(currentAddress);
-        // },
     
         _changeNetwork: async (networkName) => {
             try {
@@ -136,24 +111,6 @@ export class StateProvider extends React.Component {
                     this._wrongChain();
             });
         },
-    
-        // _connectWallet: async () => {
-        //     // window.ethereum.on('chainChanged', async (chainId) => {
-        //     //     if (chainId !== this.state.networks[this.state.ourNetwork].chainId) {
-        //     //         await this.state._changeNetwork(this.state.ourNetwork);
-        //     //     } else {
-        //     //         await this.state._setAddress();
-        //     //     }
-        //     // });
-        //     // if (window.ethereum.chainId !== this.state.ourNetwork) {
-        //     //     await this.state._changeNetwork(this.state.ourNetwork);
-        //     // } else {
-        //     //     window.ethereum.on('accountsChanged', function (accounts) {
-        //     //         this.state._getAccount();
-        //     //     })
-        //     // }
-        //     await this.state._setAddress();
-        // },
     
         _updateBalance: async () => {
             const balanceInWei = await this.state._provider.getBalance(this.state.currentAddress, "latest");
@@ -211,10 +168,10 @@ export class StateProvider extends React.Component {
                         tx = await this.state._contract.shipOrder(id);
                         break;
                     case "RefundBuyer":
-                        const overrides = {
-                            value: orderAmount,
-                        }
-                        tx = await this.state._contract.refundBuyer(id, overrides);
+                        console.log("CI SONO")
+                        console.log(id)
+                        console.log(orderAmount)
+                        tx = await this.state._contract.refundBuyer(id, orderAmount);
                         break;
                     case "AskRefund":
                         tx = await this.state._contract.askRefund(id);
@@ -282,8 +239,8 @@ export class StateProvider extends React.Component {
             return [];
         },
 
-        _getERC20Balance: async (token) => {
-            let erc20contract = new ethers.Contract(token.address, ERC20_ABI, this.state._provider.getSigner(0));
+        _getERC20Balance: async (tokenAddress) => {
+            let erc20contract = new ethers.Contract(tokenAddress, ERC20_ABI, this.state._provider.getSigner(0));
             const balanceInWei = await erc20contract.balanceOf(this.state.currentAddress);
             return ethers.utils.formatEther(balanceInWei);
         },
