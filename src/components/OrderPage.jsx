@@ -12,8 +12,15 @@ export function OrderPage() {
 
     const id = useLocation().state.id;
     var amount, orderState;
+    const operations = context.orderOperations;
+    var txWaitingInit = {
+        [operations[0]]: false,
+        [operations[1]]: false,
+        [operations[2]]: false,
+        [operations[3]]: false
+    }
+    const [txWaiting, setTxWaiting] = useState(txWaitingInit);
     const [order, setOrder] = useState();
-    const [txWaiting, setTxWaiting] = useState(false);
 
     useEffect(async () => {
         await context._connectWallet();
@@ -30,7 +37,7 @@ export function OrderPage() {
 
     useEffect(() => {
         if (context.orderStateChanged){
-            setTxWaiting(false);
+            setTxWaiting(txWaitingInit);
             context._setOrderStateChangedFalse();
             window.location.reload();
         }
@@ -39,11 +46,11 @@ export function OrderPage() {
     const spinner = <div className="spinner"><div className="half-spinner"></div></div>;
 
     async function callOrderOperation(type, amount) {
-        setTxWaiting(true); 
+        setTxWaiting({ [type]: true });
         try {
             await context._orderOperation(id, type, amount);
         } catch(err) {
-            setTxWaiting(false);
+            setTxWaiting({ [type]: false });
         }
     }
 
@@ -91,31 +98,31 @@ export function OrderPage() {
                                             {(() => {
                                                 if (orderState === "Created" || orderState === "Shipped")
                                                     return <button
-                                                        role="DeleteOrder"
+                                                        role={operations[0]}
                                                         className="cta-button basic-button blur"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation("Delete") }}
-                                                        ><div className="spinner-in-button">Delete Order {txWaiting && spinner}</div></button>
+                                                        onClick={() => { callOrderOperation(operations[0]) }}
+                                                        ><div className="spinner-in-button">Delete Order {txWaiting[operations[0]] && spinner}</div></button>
                                             })()}
 
                                             {(() => {
                                                 if (orderState === "Created")
                                                     return <button
-                                                        role="MarkAsShipped"
+                                                        role={operations[1]}
                                                         className="cta-button basic-button blur"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation("SetAsShipped") }}
-                                                    >Mark as Shipped</button>
+                                                        onClick={() => { callOrderOperation(operations[1]) }}
+                                                    ><div className="spinner-in-button">Mark as Shipped {txWaiting[operations[1]] && spinner}</div></button>
                                             })()}
                                             
                                             {(() => {
                                                 if (orderState === "Asked Refund")
                                                     return <button
-                                                        role="RefundBuyer"
+                                                        role={operations[2]}
                                                         className="cta-button basic-button blur"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation("RefundBuyer") }}
-                                                    >Refund Buyer</button>
+                                                        onClick={() => { callOrderOperation(operations[2], amount) }}
+                                                    ><div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div></button>
                                             })()}
 
                                             {(() => {
@@ -137,11 +144,11 @@ export function OrderPage() {
                                             {(() => {
                                                 if (orderState === "Created" || orderState === "Shipped" || orderState === "Confirmed") {
                                                     return <button
-                                                        role="AskRefund"
+                                                        role={operations[3]}
                                                         className="cta-button basic-button blur"
                                                         type="button"
-                                                        onClick={() => { callOrderOperation("AskRefund") }}
-                                                    >Ask Refund</button>
+                                                        onClick={() => { callOrderOperation(operations[3]) }}
+                                                    ><div className="spinner-in-button">Ask Refund {txWaiting[operations[3]] && spinner}</div></button>
                                                 } else {
                                                     return <>
                                                         <p id="none-action">You can't perform actions with this order.</p>

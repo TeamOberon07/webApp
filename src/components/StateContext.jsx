@@ -24,6 +24,7 @@ export class StateProvider extends React.Component {
         _provider: undefined,
         userIsSeller: false,
         orderState: ['Created', 'Shipped', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
+        orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
         amountApproved: undefined,
         orderStateChanged: false,
         networks: {
@@ -203,23 +204,20 @@ export class StateProvider extends React.Component {
             try {
                 var tx, error = undefined;
                 switch(expr) {
-                    case "Confirm":
-                        tx = await this.state._contract.confirmOrder(id);
-                        break;
-                    case "SetAsShipped":
-                        tx = await this.state._contract.shipOrder(id);
-                        break;
                     case "Delete":
                         tx = await this.state._contract.deleteOrder(id);
                         break;
-                    case "AskRefund":
-                        tx = await this.state._contract.askRefund(id);
+                    case "SetAsShipped":
+                        tx = await this.state._contract.shipOrder(id);
                         break;
                     case "RefundBuyer":
                         const overrides = {
                             value: orderAmount,
                         }
                         tx = await this.state._contract.refundBuyer(id, overrides);
+                        break;
+                    case "AskRefund":
+                        tx = await this.state._contract.askRefund(id);
                         break;
                     default:
                         error = "Errore, non è prevista un'operazione " + expr;
