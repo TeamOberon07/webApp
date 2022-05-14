@@ -1,8 +1,5 @@
-import { useState } from "react";
 import { useContext } from "react";
-import tokenLogo from "../../assets/usdcLogoMin.png";
 import avaxLogo from "../../assets/avaxLogo.png";
-import { Loading } from '../Loading';
 import TOKENS from "./tokenlist.js";
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';

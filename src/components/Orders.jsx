@@ -25,7 +25,6 @@ export function Orders({orders, isBuyer, State}) {
     
   }, [filteredOrders]);
 
-
   if (isBuyer) {
     userIndex = 2;
     view = "Seller";
@@ -80,7 +79,7 @@ export function Orders({orders, isBuyer, State}) {
     setTimeout(function () {
       copyIcon.innerHTML = "file_copy";
       copyIcon.classList.remove("light-blue");
-  }, 5000);
+    }, 5000);
   }
   
   function visualizeOrder(order) {
@@ -126,12 +125,10 @@ export function Orders({orders, isBuyer, State}) {
     return res;
   }
 
-  if (filteredOrders.length !== 0) {
+  if (filteredOrders.length !== 0)
     content = filteredOrders.slice(first, first+20).map((element) => (visualizeOrder(element)));
-  }
-  else if (orders.length) {
+  else if (orders.length)
     content = orders.slice(first, first+20).map((element) => (visualizeOrder(element)));
-  }
 
   return (
     <div className="box">
@@ -161,7 +158,7 @@ export function Orders({orders, isBuyer, State}) {
                 <option value="1" key="1">Shipped</option>
                 <option value="2" key="2">Confirmed</option>
                 <option value="3" key="3">Deleted</option>
-                <option value="4" key="4">Refund Asked</option>
+                <option value="4" key="4">Asked Refund</option>
                 <option value="5" key="5">Refunded</option>
               </select>
             </div>

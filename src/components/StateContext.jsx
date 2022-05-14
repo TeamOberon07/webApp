@@ -5,18 +5,12 @@ import TJROUTER_ABI from "../assets/router.json";
 import Escrow from "../contracts/SCEscrow.json";
 
 export const StateContext = createContext();
-
-const stable = 0
-const avaxToStable = 1;
-const tokenToStable = 2;
-
 export class StateProvider extends React.Component {
 
     state = {
         currentAddress: undefined,
         balance: undefined,
         contractAddress: "0xF2A05049352dFAA2BdefE1357cc2beD4486E2E5e",
-        listedTokensAddress: "0x5cb76c0f1deBba7E974c8e114Cd91e7A51abD938",
         stablecoinAddress: undefined,
         ourNetwork: "rinkeby",
         rightChain: true,
@@ -119,21 +113,17 @@ export class StateProvider extends React.Component {
             this.setState({ balance });
         },
 
-        _isHisOrder: async (id) => {
-            const orders = await this.state._contract.getOrdersOfUser(this.state.currentAddress);
-            orders.forEach(order => {console.log(order[0].toString());/*if(order[0]==id){ return true;}*/});
-            return false;
-        },
-
-        _getOrderById: async (id, order) => {
+        _getOrderById: async (id) => {
             if(this.state._contract){
                 const order = await this.state._contract.getOrder(id);
                 return order
             }
-            return order;
+            return [];
         },
 
         _callCreateOrder: async (functionToCall, tokenAddress, orderAmount, maxAmountIn, sellerAddress, afterConfirm) => {
+            const stable = 0
+            const avaxToStable = 1;
             try {
               const amountOut = ethers.utils.parseEther(orderAmount);
               let tx;

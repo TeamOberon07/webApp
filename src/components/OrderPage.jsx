@@ -46,7 +46,7 @@ export function OrderPage() {
                 </Step>
                 ))}
             </Stepper>
-        </Box>
+        </Box>;
 
     useEffect(async () => {
         await context._connectWallet();
@@ -306,7 +306,6 @@ export function OrderPage() {
             </div>
         </div>
         );
-    } 
-    else
+    } else
         return <Loading/>;
 }

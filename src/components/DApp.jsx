@@ -1,7 +1,5 @@
 import '../App.css';
 import React from "react";
-
-import { ethers } from "ethers";
 import { Header } from './Header';
 import { NoWalletDetected } from "./NoWalletDetected";
 import { ConnectWallet } from "./ConnectWallet";
@@ -18,7 +16,6 @@ export class DApp extends React.Component {
         
         this.initialState = {
             sellerAddress: undefined,
-            contractBalance: undefined,
             orders: undefined,
         };
         this.state = this.initialState;
@@ -80,20 +77,15 @@ export class DApp extends React.Component {
 
     async _initialize() {
         await this.context._connectWallet();
-        this._loadBlockchainData();
+        this._initializeOrders();
     }
 
     async _changeNetwork() {
         let error = await this.context._changeNetwork(this.context.ourNetwork);
         if (!error)
-            this._loadBlockchainData();
+            this._initializeOrders();
         else 
             return <Error message={error}/>;
-    }
-
-    async _loadBlockchainData() {
-        this._getContractBalance();
-        this._initializeOrders();
     }
 
     async _refreshInfo(tx) {
@@ -120,12 +112,5 @@ export class DApp extends React.Component {
             this._refreshInfo(res[0]);
         else if (res[1])
             return <Error message={res[1]}/>;
-    }
-
-    async _getContractBalance() {
-        var contractBalance = await this.context._contract.getBalance();
-        const contractBalanceInAvax = ethers.utils.formatEther(contractBalance);
-        contractBalance = contractBalanceInAvax.toString()+" AVAX";
-        this.setState({ contractBalance });
     }
 }

@@ -3,8 +3,6 @@ import { StateContext } from "../StateContext";
 import { NoWalletDetected } from "../NoWalletDetected";
 import { ConnectWallet } from "../ConnectWallet";
 import { Loading } from '../Loading';
-import { Error } from '../Error';
-import { ethers } from "ethers";
 import { useFetch } from "./useFetch";
 import { Header } from "../Header";
 import { OrderData } from './OrderData';
@@ -85,10 +83,9 @@ export function LandingPage() {
     return <NoWalletDetected/>;
   }
 
-  if(error == "GET request failed (Code 404: Not Found)") {
+  if(error === "GET request failed (Code 404: Not Found)") {
     window.location.href = '/';
   }
-  
   
   if(!context.currentAddress) {
     return (
