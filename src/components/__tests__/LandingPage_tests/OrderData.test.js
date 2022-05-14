@@ -108,16 +108,6 @@ describe('OrderData', () => {
             expect(await screen.findByText(/Payment amount in \$fUSDt:/i)).toBeInTheDocument();
             expect(await screen.findByText(expected)).toBeInTheDocument();
         });
-
-        it('render RIGHT ASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', async () => {
-            // mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
-            // await renderWithContext();
-            // console.log(clickButton(ButtonTypes.tokenButton));
-            // clickToken(TokenItems.fUSDT);
-            // await waitForElementToBeRemoved(() => screen.getByText(/Choose a token for the payment/i))
-            // console.log(clickButton(ButtonTypes.approveButton));
-            // mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
-        })
     });
 
     describe('Test button to change token', () => {
@@ -155,60 +145,34 @@ describe('OrderData', () => {
             clickButton(ButtonTypes.tokenButton);
             await clickToken(TokenItems.fUSDT);
 
-            const approveBtn = await screen.findByText(/Approve/i);
+            const approveBtn = await screen.findByRole('button', { name: /Approve/i});
             expect(approveBtn).toBeInTheDocument();
             expect(approveBtn).not.toHaveClass('disabled-button');
 
             const createBtn = await screen.findByText(/Create transaction/i);
             expect(createBtn).toBeInTheDocument();
             expect(createBtn).toHaveClass('disabled-button');
+
             mocked_ERC20isApproved.mockReturnValue(Promise.resolve(true));
             approve.mockReturnValueOnce(Promise.resolve(true))
-
             clickButton(ButtonTypes.approveButton);
 
-            expect(approveBtn).toHaveClass('spinner-in-button');
-            await waitFor(() => expect(createBtn).not.toHaveClass('disabled-button'))
-        });
-
-        it('Create transaction becomes enabled after approving transaction', async () => {
-            // mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
-            // await renderWithContext();
-            // clickButton(ButtonTypes.tokenButton);
-            // await clickToken(TokenItems.fUSDT);
-            // mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
-
-            // const approveBtn = await screen.findByText(/Approve/i);
-            // expect(approveBtn).toBeInTheDocument();
-            // expect(approveBtn).not.toHaveClass('disabled-button');
-
-            // const createBtn = await screen.findByText(/Create transaction/i);
-            // expect(createBtn).toBeInTheDocument();
-            // expect(createBtn).toHaveClass('disabled-button');
-            // mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
-
-            // clickButton(ButtonTypes.approveButton);
-
-            // expect(approveBtn).toBeInTheDocument();
-            // expect(approveBtn).not.toHaveClass('disabled-button');
-
-            // expect(createBtn).toBeInTheDocument();
-            // expect(createBtn).toHaveClass('disabled-button');
-            // mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
+            await waitFor(() => expect(approveBtn).toHaveTextContent(/Approved/i));
+            await waitFor(() => expect(createBtn).not.toHaveClass('disabled-button'));
         });
 
     });
     
     describe('Test button to confirm Tx', () => {
 
-        it('Create transaction button is enabled when balance > price', async () => {
+        it('checks that transaction button is enabled when balance > price', async () => {
             await renderWithContext();
             const createButton = screen.getByText('Create transaction');
             expect(createButton).toBeInTheDocument();
             expect(createButton).toBeEnabled();
         });
         
-        it('Create transaction button is NOT enabled when balance < price', async () => {
+        it('checks that transaction button is NOT enabled when balance < price', async () => {
             const oldTokenBalance = tokenBalance;
             tokenBalance = 1;
             await renderWithContext();
@@ -237,9 +201,10 @@ describe('OrderData', () => {
             
         // });
     
-        it('removes button to confirm Tx after it has been clicked', () => {
-            // const confirmButton = clickConfirm();
-            // expect(confirmButton).not.toBeVisible();
+        it('removes button to confirm Tx after it has been clicked', async () => {
+            await renderWithContext();
+            const confirmButton = clickButton(ButtonTypes.createButton);
+            expect(confirmButton).not.toBeVisible();
         });
     });
     
