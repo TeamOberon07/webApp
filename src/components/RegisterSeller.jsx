@@ -14,7 +14,7 @@ export class RegisterSeller extends React.Component {
   
   componentDidMount() {
     this.context._connectWallet();
-    this.context._setListenerMetamaksAccount();
+    this.context._setListenerMetamaskAccount();
   }
 
   render() {

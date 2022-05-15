@@ -597,10 +597,15 @@ body::-webkit-scrollbar-thumb {
 #order-page-container .actions button{
   font-size: 1.25em;
   margin: 0 0.25em;
+  margin-top: 0.25em;
   padding: 0.45em;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#order-page-container .actions :first-child{
+  margin-top: 0;
 }
 
 #order-page-container .actions button .spinner{
