@@ -50,7 +50,7 @@ test("TUx visualizzazione pagina registrazione seller", ()=>{
         balance:"3",
         _contract: {registerAsSeller: () =>{ return mockTx}},
     _connectWallet: () =>{},
-    _setListenerMetamaksAccount: () =>{}
+    _setListenerMetamaskAccount: () =>{}
     }} >
              <BrowserRouter>
             <RegisterSeller></RegisterSeller>

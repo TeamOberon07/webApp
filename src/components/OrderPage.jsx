@@ -95,12 +95,12 @@ export function OrderPage() {
         ><div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div></button>
 
     const refundButtonToApprove =
-        <button className="cta-button basic-button disabled-button" id="refund-button">
+        <button role={operations[2]} className="cta-button basic-button disabled-button" id="refund-button">
             Refund Buyer
         </button>
 
     const refundButtonNOK =
-        <button className="cta-button basic-button disabled-button" id="refund-button">
+        <button role={operations[2]} className="cta-button basic-button disabled-button" id="refund-button">
             Insufficient Balance  
         </button>
 
