@@ -119,6 +119,14 @@ contract SCEscrow {
 		_;
 	}
 
+    modifier buyerIsNotSeller {
+		require(
+            !sellers[msg.sender],
+            "ERROR: You are registered as a seller. Please use another address."
+        );
+		_;
+	}
+
     modifier peggedStablecoin {
         require(
             this.stablecoinIsPegged(), 
@@ -172,7 +180,12 @@ contract SCEscrow {
 	function createOrderWithStable(
 		address payable seller, 
 		uint256 amount
-	) external payable sellerExists(seller) {
+	) 
+        external 
+        payable 
+        sellerExists(seller) 
+        buyerIsNotSeller
+    {
 		require(
 			msg.value == 0, 
 			"ERROR: You're trying to spend AVAX."
@@ -196,7 +209,8 @@ contract SCEscrow {
 		payable 
 		sellerExists(seller)
 		peggedStablecoin
-		returns (uint256[] memory amounts) 
+        buyerIsNotSeller
+		returns (uint256[] memory amounts)
 	{
 		require(
 			amount > 0 && msg.value > 0, 
@@ -222,6 +236,7 @@ contract SCEscrow {
 		payable 
 		sellerExists(seller)
 		peggedStablecoin
+        buyerIsNotSeller
 		returns (uint256[] memory amounts) 
 	{
 		require(
@@ -400,6 +415,10 @@ contract SCEscrow {
 			!sellers[msg.sender],
 			"ERROR: You are already a seller."
 		);
+        require(
+            !buyers[msg.sender],
+            "ERROR: You are a buyer, please use another address."
+        );
 		sellers[msg.sender] = true;
 		sellersIterable[totalSellers.current()] = msg.sender;
 		totalSellers.increment();
