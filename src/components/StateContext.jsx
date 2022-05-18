@@ -13,7 +13,7 @@ export class StateProvider extends React.Component {
         contractAddress: "0xCB99efB19481eF91F3296a6E6a61caA7F02Af65D",
         stablecoinAddress: undefined,
         ourNetwork: "rinkeby",
-        rightChain: true,
+        rightChain: false,
         _contract: undefined,
         _provider: undefined,
         userIsSeller: false,
@@ -63,20 +63,24 @@ export class StateProvider extends React.Component {
     
         _changeNetwork: async (networkName) => {
             try {
-                if (!window.ethereum) throw new Error("No crypto wallet found");
                 await window.ethereum.request({
+                  method: 'wallet_switchEthereumChain',
+                  params: [{ chainId: this.state.networks[networkName].chainId }]
+                });
+            } catch (err) {
+                // This error code indicates that the chain has not been added to MetaMask
+                if (err.code === 4902) {
+                  await window.ethereum.request({
                     method: "wallet_addEthereumChain",
                     params: [
                         {
                             ...this.state.networks[networkName]
                         }
                     ]
-                });
-                await this.state._connectWallet();
-            } catch (error) {
-                return error;
+                  });
+                }
             }
-            return undefined;
+            window.location.reload()
         },
 
         _wrongChain: () => {
@@ -99,10 +103,10 @@ export class StateProvider extends React.Component {
     
         _setListenerNetworkChanged: () => {
             window.ethereum.on('chainChanged', () => {
-                if (window.ethereum.chainId === this.state.networks[this.context.ourNetwork].chainId)
-                    this._rightChain();
+                if (window.ethereum.chainId === this.state.networks[this.state.ourNetwork].chainId)
+                    this.state._rightChain();
                 else
-                    this._wrongChain();
+                    this.state._wrongChain();
             });
         },
     

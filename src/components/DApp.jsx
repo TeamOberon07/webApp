@@ -43,12 +43,12 @@ export class DApp extends React.Component {
             return <ConnectWallet connectWallet={() => this._initialize()}/>;
         }
 
-        if (!this.state.orders || !this.context.balance) {
-            return <Loading/>;
-        }
-        
         if (window.ethereum.chainId !== this.context.networks[this.context.ourNetwork].chainId || !this.context.rightChain) {
             return <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>;
+        }
+
+        if (!this.state.orders || !this.context.balance) {
+            return <Loading/>;
         }
 
         return(
@@ -57,7 +57,8 @@ export class DApp extends React.Component {
                 <div className='container'>
                     <Orders orders={this.state.orders} isBuyer={!this.context.userIsSeller} State={this.context.orderState}/>
                 </div>
-            </div>);
+            </div>
+        );
     };
 
     async _setListenerMetamaskAccount() {

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StateContext } from "../StateContext";
 import { NoWalletDetected } from "../NoWalletDetected";
 import { ConnectWallet } from "../ConnectWallet";
+import { SwitchNetwork } from "../SwitchNetwork";
 import { Loading } from '../Loading';
 import { useFetch } from "./useFetch";
 import { Header } from "../Header";
@@ -34,7 +35,8 @@ export function LandingPage() {
 
   useEffect(async () => {
     await context._connectWallet();
-    await context._setListenerMetamaskAccount();
+    context._setListenerMetamaskAccount();
+    context._setListenerNetworkChanged();
   }, []);
 
   const approve = async (token, maxAmountIn) => {
@@ -86,22 +88,24 @@ export function LandingPage() {
   if(error === "GET request failed (Code 404: Not Found)") {
     window.location.href = '/';
   }
-  
+
   if(!context.currentAddress) {
     return (
       <ConnectWallet connectWallet={async() => {
         await context._connectWallet();
       }}/>
       );
-    } else {
-    if (order.sellerAddress && order.buyerAddress && context.currentAddress)
-      if (
-        order.sellerAddress.toLowerCase() !== context.currentAddress.toLowerCase() &&
-        order.buyerAddress.toLowerCase() !== context.currentAddress.toLowerCase()) 
-      {
-        window.location.href = '/';
-      }
   }
+
+  if (window.ethereum.chainId !== context.networks[context.ourNetwork].chainId || !context.rightChain) {
+      return <SwitchNetwork switchNetwork={async () => await context._changeNetwork(context.ourNetwork)}/>;
+  }
+
+  if (order.buyerAddress && context.currentAddress)
+    if (order.buyerAddress.toLowerCase() !== context.currentAddress.toLowerCase()) {
+      window.location.href = '/';
+    }
+
 
   // Just to avoid running fetch before checking for wallet, might not be necessary
   if(fetchUrl === '') {

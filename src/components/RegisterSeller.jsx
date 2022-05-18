@@ -4,6 +4,9 @@ import { Header } from './Header';
 import { Error } from "./Error";
 import { StateContext } from './StateContext';
 import { Loading } from "./Loading";
+import { NoWalletDetected } from "./NoWalletDetected";
+import { ConnectWallet } from "./ConnectWallet";
+import { SwitchNetwork } from "./SwitchNetwork";
 
 export function RegisterSeller() {
 
@@ -12,17 +15,29 @@ export function RegisterSeller() {
     useEffect(() => {
         context._connectWallet();
         context._setListenerMetamaskAccount();
+        context._setListenerNetworkChanged();
     }, []);
 
     const _registerSeller = async () => {
         try {
-            console.log("CI SONO")
             const tx = await context._contract.registerAsSeller();
             await tx.wait();
             window.location.href = '/';
         } catch(err) {
             <Error message={err}/>;
         }
+    }
+
+    if (window.ethereum === undefined) {
+        return <NoWalletDetected/>;
+    }
+    
+    if (!context.currentAddress) {
+        return <ConnectWallet connectWallet={async () => await context._connectWallet()}/>;
+    }
+
+    if (window.ethereum.chainId !== context.networks[context.ourNetwork].chainId || !context.rightChain) {
+        return <SwitchNetwork switchNetwork={async () => await context._changeNetwork(context.ourNetwork)}/>;
     }
 
     if(context.currentAddress) {

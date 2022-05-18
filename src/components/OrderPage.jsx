@@ -5,6 +5,9 @@ import { Header } from "./Header";
 import { StateContext } from "./StateContext";
 import { Log } from "./Log";
 import { Loading } from "./Loading";
+import { NoWalletDetected } from "./NoWalletDetected";
+import { ConnectWallet } from "./ConnectWallet";
+import { SwitchNetwork } from "./SwitchNetwork";
 import tokenLogo from "../assets/usdtLogo.png";
 
 import Box from '@mui/material/Box';
@@ -51,7 +54,9 @@ export function OrderPage() {
     useEffect(async () => {
         await context._connectWallet();
         context._setListenerMetamaskAccount();
+        context._setListenerNetworkChanged();
         let order = await context._getOrderById(id);
+        // if (context.currentAddress != order.buyer)
         setOrder(order);
         setAmount(order[3]);
     }, []);
@@ -194,8 +199,31 @@ export function OrderPage() {
         }
     }, [amount])
 
+    if (window.ethereum === undefined) {
+        return <NoWalletDetected/>;
+    }
+    
+    if (!context.currentAddress) {
+        return <ConnectWallet connectWallet={async () => await context._connectWallet()}/>;
+    }
+
+    if (window.ethereum.chainId !== context.networks[context.ourNetwork].chainId || !context.rightChain) {
+        return <SwitchNetwork switchNetwork={async () => await context._changeNetwork(context.ourNetwork)}/>;
+    }
+
     if (order) {
+        
         orderState = context.orderState[order[4]];
+        let buyerAddress = order[1].toLowerCase();
+        let sellerAddress = order[2].toLowerCase();
+        let currentAddress = context.currentAddress.toLowerCase();
+
+        if (buyerAddress && sellerAddress && currentAddress) {
+            if (currentAddress != buyerAddress && currentAddress != sellerAddress) {
+                window.location.href = '/';
+            }
+        }
+
         return (<div className="orderPage">
             <Header/>
             <div className="container">
@@ -204,9 +232,9 @@ export function OrderPage() {
                 <tbody>
                     {(() => {
                         if (context.userIsSeller)
-                            return <tr><th id="orderPageAddress">Buyer Address</th><td colSpan={2} className="address">{order[1]}</td></tr>
+                            return <tr><th id="orderPageAddress">Buyer Address</th><td colSpan={2} className="address">{buyerAddress}</td></tr>
                         else
-                            return <tr><th id="orderPageAddress">Seller Address</th><td className="address">{order[2]}</td></tr>
+                            return <tr><th id="orderPageAddress">Seller Address</th><td className="address">{sellerAddress}</td></tr>
                     })()}
                         <tr>
                             <th>ID</th><td>{id}</td>
