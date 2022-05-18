@@ -53,7 +53,7 @@ export class DApp extends React.Component {
 
         return(
             <div>
-                <Header currentAddress={this.context.currentAddress} balance={this.context.balance}/>
+                <Header/>
                 <div className='container'>
                     <Orders orders={this.state.orders} isBuyer={!this.context.userIsSeller} State={this.context.orderState}/>
                 </div>

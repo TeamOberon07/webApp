@@ -122,17 +122,13 @@ export function LandingPage() {
   }
   if (!isLoaded) {
     return (<>
-      <Header currentAddress={context.currentAddress}
-              balance={context.balance}
-      />
+      <Header/>
       <Loading />
     </>);
   } 
   else if (isOnChain) {
       return (<>
-        <Header currentAddress={context.currentAddress}
-                balance={context.balance}
-        />
+        <Header/>
         <div className="tx-message">
           <p>Tx is already on-chain!</p>
         </div>
@@ -149,9 +145,7 @@ export function LandingPage() {
   } else {
     if (!error)
       return (<>
-        <Header currentAddress={context.currentAddress}
-                balance={context.balance}
-        />
+        <Header/>
 
         <OrderData order={order} createOrder={createOrder} approve={approve} loadingText={loadingText} />
 

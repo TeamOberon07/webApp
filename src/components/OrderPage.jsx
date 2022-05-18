@@ -197,9 +197,7 @@ export function OrderPage() {
     if (order) {
         orderState = context.orderState[order[4]];
         return (<div className="orderPage">
-            <Header currentAddress={context.currentAddress}
-                balance={context.balance}
-            />
+            <Header/>
             <div className="container">
                 <h1 className="page-title">Order page</h1>
                 <table id="order-page-container" className="blur">

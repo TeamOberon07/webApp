@@ -101,6 +101,14 @@ p {
   margin: 0;
 }
 
+a {
+  color: #ff1a69;
+}
+
+a:hover {
+  color: #bf0042;
+}
+
 .page-title {
   font-size: 3em;
   margin: 1em 0;
@@ -112,6 +120,18 @@ button:focus {
 
 abbr[title] {
   text-decoration: none;
+}
+
+header ul {
+  margin: 0;
+  padding: 0;
+  min-width: 18em;
+}
+
+header li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .box.top {
@@ -153,7 +173,7 @@ nav.navbar.navbar-dark {
 
 .navbar-dark .navbar-brand {
   color: var(--text);
-  font-size: 1.5em;
+  font-size: 1.8em;
   padding-right: 1em;;
   margin-right: 0;
   font-weight: bold;

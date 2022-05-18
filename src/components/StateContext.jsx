@@ -10,7 +10,7 @@ export class StateProvider extends React.Component {
     state = {
         currentAddress: undefined,
         balance: undefined,
-        contractAddress: "0xF2A05049352dFAA2BdefE1357cc2beD4486E2E5e",
+        contractAddress: "0xCB99efB19481eF91F3296a6E6a61caA7F02Af65D",
         stablecoinAddress: undefined,
         ourNetwork: "rinkeby",
         rightChain: true,
@@ -31,7 +31,7 @@ export class StateProvider extends React.Component {
                     decimals: 18
                 },
                 rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
-                blockExplorerUrls: ["https://rinkey.etherscan.io"]
+                blockExplorerUrls: ["https://rinkeby.etherscan.io"]
             }
         },
 
@@ -92,8 +92,8 @@ export class StateProvider extends React.Component {
         },
     
         _setListenerMetamaskAccount: () => {
-            window.ethereum.on('accountsChanged', () => {
-                this._initialize();
+            window.ethereum.on('accountsChanged', async     () => {
+                await this.state._connectWallet();
             })
         },
     
@@ -292,6 +292,10 @@ export class StateProvider extends React.Component {
                 }
                 return maxAmountIn[0];
             }
+        },
+
+        _cutAddress: (address) => {
+            return address.substring(0,6)+ "..." +address.substring(address.length-6, address.length);
         },
     };
 

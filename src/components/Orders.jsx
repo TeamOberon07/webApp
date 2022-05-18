@@ -171,7 +171,7 @@ export function Orders({orders, isBuyer, State}) {
       </form> 
       <p className="errorP">{errorFilter}</p>
       <div className="tableLabel">
-        <p className="TVL">Your TVL: ${parseFloat(totalHeldForSeller.toFixed(4))}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
+        <p className="TVL">Your&nbsp;<abbr title = "Total Value Locked">TVL</abbr>: ${parseFloat(totalHeldForSeller.toFixed(4))}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
       </div>
       <table className="orderTable blur">
         <thead>
