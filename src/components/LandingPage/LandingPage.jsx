@@ -10,7 +10,7 @@ import { OrderData } from './OrderData';
 import { TxHash } from './TxHash';
 import { Notify } from './Notify';
 
-const stable = 0
+const stable = 0;
 const avaxToStable = 1;
 const tokenToStable = 2;
 
@@ -40,7 +40,7 @@ export function LandingPage() {
   }, []);
 
   const approve = async (token, maxAmountIn) => {
-    await context._approveERC20(token.address,maxAmountIn);
+    await context._approveERC20(token.address, maxAmountIn);
   }
 
   const createOrder = async (token, maxAmountIn) => {
@@ -148,24 +148,46 @@ export function LandingPage() {
         </>);
   } else {
     if (!error)
-      return (<>
+      return (
+      <>
         <Header/>
 
-        <OrderData order={order} createOrder={createOrder} approve={approve} loadingText={loadingText} />
+        <div className='container'>
 
-          { order.confirmed && <>
-            <h3>Transaction completed successfully!</h3>
-            <TxHash hash={hash} />
-            </>
+          {
+            !order.confirmed &&
+            <OrderData order={order} createOrder={createOrder} approve={approve} loadingText={loadingText} />
+          }
+
+          { 
+            order.confirmed && 
+            <div className="container text-center">
+              <h3 id="transaction-ok">Transaction completed successfully! Your order has been created.</h3>
+              <TxHash hash={hash} />
+            </div>
           }
           
-          {!error && order.confirmed && 
+          {
+            !error && order.confirmed &&
             <Notify hasNotified={hasNotified} />
+          }
+
+          {
+            order.confirmed &&
+            <button 
+              onClick={() => window.location.reload()}
+              className="cta-button blur"
+            >
+              Go to Your Orders
+            </button>
           }
 
           {/* { error && 
             <Error message={error} />
           } */}
-      </>);
+
+        </div>
+      </>
+    );
   }
 }

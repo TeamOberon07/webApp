@@ -24,12 +24,13 @@ export function Log({order}) {
         let am_or_pm = date.substring(date.length-3, date.length);
         date = date.replace(",", "").substring(0, date.length - 7) + am_or_pm;
 
+        // let txhash = "0xahsid998u20d2j802jh80"
+
         const res =
             <tr key={orderState}>
                 <td aria-label="State">{orderState}</td>
-                <td aria-label="Timestamp">
-                    {date}
-                </td>
+                <td aria-label="Timestamp">{date}</td>
+                {/* <td aria-label="Txhash">{txhash}</td> */}
             </tr>;
         return res;
     }
@@ -47,6 +48,7 @@ export function Log({order}) {
                 <tr>
                     <th>State</th>
                     <th>Timestamp</th>
+                    {/* <th>Tx Hash</th> */}
                 </tr>
             </thead>
             <tbody>

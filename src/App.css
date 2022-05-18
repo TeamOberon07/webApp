@@ -404,6 +404,14 @@ body::-webkit-scrollbar-thumb {
   grid-template-columns: auto auto;
 }
 
+.text-center {
+  text-align: center;
+}
+
+#transaction-ok {
+  margin-top: 5em;
+}
+
 .user-data-landing {
   text-align: center;
   font-size: 1.5em;

@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 export function Orders({orders, isBuyer, State}) {
 
-  let content, view, userIndex, amount, totalHeldForSeller=0;
+  let content, view, userIndex, amount, tvl=0;
   // style foreach different state
   const Icon = ['check_circle', 'local_shipping', 'verified', 'delete', 'assignment_return', 'reply'];
   const Color = [
@@ -117,8 +117,9 @@ export function Orders({orders, isBuyer, State}) {
               className = "cta-button order-button blur-light">See order</NavLink>   
             </td>
             {(() => {
-              if(State[order[4]] === "Created") {
-                totalHeldForSeller += parseFloat(amount)
+              let state = State[order[4]];
+              if(state === "Created" || state === "Shipped") {
+                tvl += parseFloat(amount)
               }
             })()}
           </tr>;
@@ -171,7 +172,7 @@ export function Orders({orders, isBuyer, State}) {
       </form> 
       <p className="errorP">{errorFilter}</p>
       <div className="tableLabel">
-        <p className="TVL">Your&nbsp;<abbr title = "Total Value Locked">TVL</abbr>: ${parseFloat(totalHeldForSeller.toFixed(4))}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
+        <p className="TVL">Your&nbsp;<abbr title = "Total Value Locked">TVL</abbr>: ${parseFloat(tvl.toFixed(4))}<img src={tokenLogo} className="tokenLogoMin" alt="token logo"/></p>
       </div>
       <table className="orderTable blur">
         <thead>

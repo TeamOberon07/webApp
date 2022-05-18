@@ -4,7 +4,7 @@ export function TxHash({ hash }) {
         <div className="transaction-hash">
             <p>Transaction hash: {hash}</p>
             <a 
-                href={"https://rinkeby.etherscan.io//tx/" + hash}
+                href={"https://rinkeby.etherscan.io/tx/" + hash}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="cta-button blur"
