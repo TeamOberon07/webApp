@@ -161,25 +161,16 @@ export function LandingPage() {
 
           { 
             order.confirmed && 
-            <div className="container text-center">
+            <div className="text-center">
               <h3 id="transaction-ok">Transaction completed successfully! Your order has been created.</h3>
               <TxHash hash={hash} />
+              
             </div>
           }
           
           {
             !error && order.confirmed &&
             <Notify hasNotified={hasNotified} />
-          }
-
-          {
-            order.confirmed &&
-            <button 
-              onClick={() => window.location.reload()}
-              className="cta-button blur"
-            >
-              Go to Your Orders
-            </button>
           }
 
           {/* { error && 

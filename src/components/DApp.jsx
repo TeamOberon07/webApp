@@ -98,9 +98,12 @@ export class DApp extends React.Component {
     }
 
     async _initializeOrders() {
-        let orders = [];
+        let ordersToSort = [];
+        let orders;
         try {
-            orders = await this.context._contract.getOrdersOfUser(this.context.currentAddress);
+            ordersToSort = await this.context._contract.getOrdersOfUser(this.context.currentAddress);
+            orders = [...ordersToSort];
+            orders.reverse();
         } catch (error) {
             return <Error message={error}/>;
         }

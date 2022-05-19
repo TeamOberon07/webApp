@@ -65,10 +65,14 @@ export function Orders({orders, isBuyer, State}) {
       }
     });
     setFilteredOrders(res);
-    if(res.length === 0)
+    if(res.length === 0){
       setErrorFilter("No order found for specified filters");
-    else
+      document.getElementById("filters").style.marginBottom = "0";
+    }
+    else{
       setErrorFilter("");
+      document.getElementById("filters").style.marginBottom = "1.5em";
+    }
   }
 
   function copyAddress(address, id) {
