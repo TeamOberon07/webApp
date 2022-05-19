@@ -31,7 +31,6 @@ export function OrderPage() {
     const [order, setOrder] = useState();
     const [amount, setAmount] = useState(0);
     const [showApproveSpinner, setShowApproveSpinner] = useState(false);
-    const [stableAddress, setStableAddress] = useState("");
     const [stepActive, setStepActive] = useState(0);
     const [refundClicked, setRefundClicked] = useState(false);
 
@@ -56,7 +55,6 @@ export function OrderPage() {
         context._setListenerMetamaskAccount();
         context._setListenerNetworkChanged();
         let order = await context._getOrderById(id);
-        // if (context.currentAddress != order.buyer)
         setOrder(order);
         setAmount(order[3]);
     }, []);
@@ -119,8 +117,6 @@ export function OrderPage() {
     }, [refundClicked])
     
     async function callOrderOperation(type, _amount) {
-        // setTxWaiting({ [type]: true });
-        // setRefundButton(refundButtonOK);
         try {
             await context._orderOperation(id, type, _amount);
         } catch(err) {
@@ -130,12 +126,13 @@ export function OrderPage() {
     }
 
     useEffect(async () => {
-        setRefundButton(refundButtonOK);
+        if(txWaiting[operations[2]])
+            setRefundButton(refundButtonOK);
     }, [txWaiting[operations[2]]])
 
     const callApprove = async () => {
         try {
-            let approved = await context._approveERC20(stableAddress, amount)
+            let approved = await context._approveERC20(context.stablecoinAddress, amount)
             if (approved) {
                 setShowApproveSpinner(false);
                 setApproveButton(buttonApproved);
@@ -171,15 +168,13 @@ export function OrderPage() {
     useEffect(async () => {
         if (context.userIsSeller){
             if (amount) {
-                let stableAddress = await context._contract.STABLECOIN();
-                setStableAddress(stableAddress);
-                let stableBalance = await context._getERC20Balance(stableAddress);
+                let stableBalance = await context._getERC20Balance(context.stablecoinAddress);
                 let amountDecimal = amount/10**18
                 if (amountDecimal > stableBalance) {
                     setApproveButton("");
                     setRefundButton(refundButtonNOK);
                 } else {
-                    context._ERC20isApproved(stableAddress, amount)
+                    context._ERC20isApproved(context.stablecoinAddress, amount)
                     .then((approved) => {
                         if (approved) {
                             setApproveButton(buttonApproved);
@@ -307,7 +302,7 @@ export function OrderPage() {
                                         <td colSpan={3}>  
                                             <div className="actions">
                                             {(() => {
-                                                if (orderState === "Created" || orderState === "Shipped" || orderState === "Confirmed") {
+                                                if (orderState === "Created" || orderState === "Confirmed") {
                                                     return <button
                                                         role={operations[3]}
                                                         className="cta-button basic-button blur-light"

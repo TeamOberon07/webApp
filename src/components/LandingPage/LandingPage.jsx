@@ -21,13 +21,13 @@ export function parseUrl() {
 }
 
 export function LandingPage() {
+  const context = useContext(StateContext);
   const [loadingText, setLoadingText] = useState('');
   const [hash, setHash] = useState('');
   const [hasNotified, setHasNotified] = useState(false);
   const [error, setError] = useState('');
   const [isOnChain, setIsOnChain] = useState(false);
   const [ecommIsNotSynched, setEcommIsNotSynched] = useState(false);
-  const context = useContext(StateContext);
 
   const [fetchUrl, setFetchUrl] = useState('');
   const [fetchMethod, setFetchMethod] = useState('');
@@ -97,8 +97,8 @@ export function LandingPage() {
       );
   }
 
-  if (window.ethereum.chainId !== context.networks[context.ourNetwork].chainId || !context.rightChain) {
-      return <SwitchNetwork switchNetwork={async () => await context._changeNetwork(context.ourNetwork)}/>;
+  if (!context.rightChain && window.ethereum.chainId !== context.networks[context.ourNetwork].chainId) {
+    return <SwitchNetwork switchNetwork={async () => await context._changeNetwork(context.ourNetwork)}/>;
   }
 
   if (order.buyerAddress && context.currentAddress)

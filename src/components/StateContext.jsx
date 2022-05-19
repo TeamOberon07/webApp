@@ -13,7 +13,7 @@ export class StateProvider extends React.Component {
         contractAddress: "0xCB99efB19481eF91F3296a6E6a61caA7F02Af65D",
         stablecoinAddress: undefined,
         ourNetwork: "rinkeby",
-        rightChain: false,
+        rightChain: true,
         _contract: undefined,
         _provider: undefined,
         userIsSeller: false,
@@ -36,29 +36,35 @@ export class StateProvider extends React.Component {
         },
 
         _connectWallet: async () => {
-            const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            
-            this.setState({
-                _provider: provider,
-            })
+            try {
+                const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                
+                this.setState({
+                    _provider: provider,
+                })
+    
+                if (this.state._provider.getSigner(0)) {
+                    this.state._contract = new ethers.Contract(
+                        this.state.contractAddress,
+                        Escrow.abi,
+                        this.state._provider.getSigner(0)
+                    );
+                }
 
-            if (this.state._provider.getSigner(0)) {
-                this.state._contract = new ethers.Contract(
-                    this.state.contractAddress,
-                    Escrow.abi,
-                    this.state._provider.getSigner(0)
-                );
+                this.setState({
+                    currentAddress: currentAddress,
+                });
+                this.setState({
+                    rightChain: window.ethereum.chainId === this.state.networks[this.state.ourNetwork].chainId,
+                })
+
+                this.state._setStablecoinAddress(); 
+                this.state._updateBalance();
+                this.state._userIsSeller();
+            } catch(err) {
+                return err;
             }
-
-            this.setState({
-                currentAddress: currentAddress,
-            });
-            this.setState({
-                rightChain: window.ethereum.chainId === this.state.networks[this.state.ourNetwork].chainId,
-            })
-            this.state._updateBalance();
-            this.state._userIsSeller();
         },
     
         _changeNetwork: async (networkName) => {
@@ -267,12 +273,10 @@ export class StateProvider extends React.Component {
         },
 
         _getAmountsIn: async (token, amountOut) => {
-            let tokenOut = await this.state._contract.STABLECOIN();
-            this.setState({
-                stablecoinAddress: tokenOut,
-            })
+            let tokenOut = this.state.stablecoinAddress;
             let maxAmountIn;
             amountOut = ethers.utils.parseUnits(amountOut, 18);
+            console.log(tokenOut);
             if (token.address.toLowerCase() === tokenOut.toLowerCase()) {
                 return amountOut;
             } else {
@@ -300,6 +304,11 @@ export class StateProvider extends React.Component {
 
         _cutAddress: (address) => {
             return address.substring(0,6)+ "..." +address.substring(address.length-6, address.length);
+        },
+
+        _setStablecoinAddress: async () => {
+            let stablecoinAddress = await this.state._contract.STABLECOIN();
+            this.setState({ stablecoinAddress });
         },
     };
 
