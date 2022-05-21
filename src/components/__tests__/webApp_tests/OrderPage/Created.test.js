@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, findByTestId } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { OrderPage } from '../../../OrderPage';
 import { BrowserRouter} from "react-router-dom";
@@ -32,9 +32,9 @@ describe('OrderPage', () => {
 
     it('renders OrderPage with correct data', async () => {
         
-        global.window.ethereum ={chainId: "0x4"};
+        global.window.ethereum = {chainId: "0x4"};
 
-        render(<StateContext.Provider value={ {
+        render(<StateContext.Provider value = { {
             orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
             userIsSeller:true,
             orderState:["Created","Shipped","Confirmed","Deleted","Asked Refund","Refunded"],
@@ -47,11 +47,11 @@ describe('OrderPage', () => {
                 STABLECOIN:() => jest.fn()
             },
 
-            _cutAddress:() =>{ return "0xe5B1...797482"},
-            _getERC20Balance:(stableAddress) =>{},
+            _cutAddress:() => { return "0xe5B1...797482"},
+            _getERC20Balance:(stableAddress) => {},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-            _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+            _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById: async (id) => Promise.resolve([
                 {
@@ -77,7 +77,7 @@ describe('OrderPage', () => {
 
     it('renders OrderPage with correct data', async () => {
         
-        global.window.ethereum ={chainId: "0x4"};
+        global.window.ethereum = {chainId: "0x4"};
 
         render(<StateContext.Provider value={ {
             orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
@@ -92,11 +92,11 @@ describe('OrderPage', () => {
                 STABLECOIN:() => jest.fn()
             },
 
-            _cutAddress:() =>{ return "0xe5B1...797482"},
-            _getERC20Balance:(stableAddress) =>{},
+            _cutAddress:() => { return "0xe5B1...797482"},
+            _getERC20Balance:(stableAddress) => {},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-            _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+            _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById: async (id) => Promise.resolve([
                 {
@@ -120,7 +120,7 @@ describe('OrderPage', () => {
 
     it('renders OrderPage No Metamask', async () => {
         
-        global.window.ethereum ="";
+        global.window.ethereum = "";
 
         render(<StateContext.Provider value={ {
             orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
@@ -135,11 +135,11 @@ describe('OrderPage', () => {
                 STABLECOIN:() => jest.fn()
             },
 
-            _cutAddress:() =>{ return "0xe5B1...797482"},
-            _getERC20Balance:(stableAddress) =>{},
+            _cutAddress:() => { return "0xe5B1...797482"},
+            _getERC20Balance:(stableAddress) => {},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-            _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+            _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById: async (id) => Promise.resolve([
                 {
@@ -163,9 +163,9 @@ describe('OrderPage', () => {
 
     it('renders OrderPage No Wallet', async () => {
         
-        global.window.ethereum ="";
+        global.window.ethereum = "";
 
-        render(<StateContext.Provider value={ {
+        render(<StateContext.Provider value = { {
             orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
             userIsSeller:false,
             orderState:["Created","Shipped","Confirmed","Deleted","Asked Refund","Refunded"],
@@ -178,11 +178,11 @@ describe('OrderPage', () => {
                 STABLECOIN:() => jest.fn()
             },
 
-            _cutAddress:() =>{ return "0xe5B1...797482"},
-            _getERC20Balance:(stableAddress) =>{},
+            _cutAddress:() => { return "0xe5B1...797482"},
+            _getERC20Balance:(stableAddress) => {},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-            _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+            _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById: async (id) => Promise.resolve([
                 {
@@ -207,7 +207,7 @@ describe('OrderPage', () => {
 
     it('renders OrderPage Switch Network', async () => {
         
-        global.window.ethereum ={chainId:"0x2"};
+        global.window.ethereum = {chainId:"0x2"};
 
         render(<StateContext.Provider value={ {
             orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
@@ -222,11 +222,11 @@ describe('OrderPage', () => {
                 STABLECOIN:() => jest.fn()
             },
 
-            _cutAddress:() =>{ return "0xe5B1...797482"},
+            _cutAddress:() => { return "0xe5B1...797482"},
             _getERC20Balance:(stableAddress) =>{},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-            _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+            _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById: async (id) => Promise.resolve([
                 {

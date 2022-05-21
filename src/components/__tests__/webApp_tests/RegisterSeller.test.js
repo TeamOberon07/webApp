@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { StateContext } from '../../StateContext';
 import { BrowserRouter } from "react-router-dom";
 
-test("RegisterSeller standard behaviour", ()=>{
+test("TU16 RegisterSeller standard behaviour", () => {
 
     let mockTx = {
         "hash": "0xf6eb19bdc142f351d281d024fb82f30dbc3d24e719dcc44c561f16a0ac6f59fc",
@@ -46,7 +46,6 @@ test("RegisterSeller standard behaviour", ()=>{
     };
 
     global.window.ethereum ={chainId: "0x4"};
-    // global.window.ethereum.chainId="0x4";
 
     render(<StateContext.Provider value={ {
         currentAddress:"0xe5B197D91ad002a18917aB4fdc6b6E0126797482", 
@@ -112,7 +111,6 @@ test("RegisterSeller Switch Network", ()=>{
     };
 
     global.window.ethereum ={chainId: null};
-    // global.window.ethereum.chainId="0x4";
 
     render(<StateContext.Provider value={ {
         currentAddress:{}, 
@@ -176,7 +174,6 @@ test("RegisterSeller No Metamask",async ()=>{
     };
 
     global.window.ethereum = undefined;
-    // global.window.ethereum.chainId="0x4";
 
     render(<StateContext.Provider value={ {
         currentAddress:{}, 

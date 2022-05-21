@@ -1,4 +1,4 @@
-import { render, fireEvent, screen, waitFor} from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { OrderPage } from '../../../OrderPage';
 import { BrowserRouter} from "react-router-dom";
@@ -29,7 +29,7 @@ jest.mock("react-router-dom", () => ({
 describe('OrderPage', () => {
     it('renders OrderPage with correct data', async () => {
 
-        global.window.ethereum ={chainId: "0x4"};
+        global.window.ethereum = {chainId: "0x4"};
         
          render(<StateContext.Provider value={ {
             ourNetwork: "rinkeby",
@@ -43,11 +43,11 @@ describe('OrderPage', () => {
             _contract:{
                 STABLECOIN:() => jest.fn()
             },
-            _cutAddress:() =>{ return "0xe5B1...797482"},
-            _getERC20Balance:(stableAddress) =>{},
+            _cutAddress:() => { return "0xe5B1...797482"},
+            _getERC20Balance:(stableAddress) => {},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-             _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+             _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById:(id) =>Promise.resolve(
                 [
@@ -71,13 +71,12 @@ describe('OrderPage', () => {
         </StateContext.Provider>)
 
         fireEvent.click(await screen.findByRole('button',{name:"Approve"}));
-        // await waitFor(()=>{expect(screen.findByRole('button',{name:"Refund Buyer"}).not.toHaveClass('disabled-button'))});
         fireEvent.click(await screen.findByRole('button',{name:"Refund Buyer"}));
     });
 
     it('renders OrderPage with correct data', async () => {
 
-        global.window.ethereum ={chainId: "0x4"};
+        global.window.ethereum = {chainId: "0x4"};
         
          render(<StateContext.Provider value={ {
             ourNetwork: "rinkeby",
@@ -91,11 +90,11 @@ describe('OrderPage', () => {
             _contract:{
                 STABLECOIN:() => jest.fn()
             },
-            _cutAddress:() =>{ return "0xe5B1...797482"},
-            _getERC20Balance:(stableAddress) =>{},
+            _cutAddress:() => { return "0xe5B1...797482"},
+            _getERC20Balance:(stableAddress) => {},
             _ERC20isApproved:(stableAddress,amount) => Promise.resolve(),
-             _connectWallet:() =>{},
-            _setListenerMetamaskAccount:() =>{},
+             _connectWallet:() => {},
+            _setListenerMetamaskAccount:() => {},
             _setListenerNetworkChanged:() => {},
             _getOrderById:(id) =>Promise.resolve(
                 [

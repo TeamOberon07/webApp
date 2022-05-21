@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, act, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StateContext } from '../../StateContext';
 import { Log } from '../../Log';
@@ -30,4 +30,3 @@ describe('Log', () => {
 
     });
 });
-
