@@ -36,7 +36,7 @@ export function RegisterSeller() {
         return <ConnectWallet connectWallet={async () => await context._connectWallet()}/>;
     }
 
-    if (window.ethereum.chainId !== context.networks[context.ourNetwork].chainId || !context.rightChain) {
+    if (!context.rightChain ||   window.ethereum.chainId !== context.networks[context.ourNetwork].chainId) {
         return <SwitchNetwork switchNetwork={async () => await context._changeNetwork(context.ourNetwork)}/>;
     }
 
