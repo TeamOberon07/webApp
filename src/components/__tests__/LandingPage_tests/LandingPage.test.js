@@ -61,9 +61,9 @@ describe('LandingPage', () => {
     };
 
     const checkOrderRes = async () => {
-        expect(await screen.findByText(/Transaction hash: 0x987/i)).toBeInTheDocument();
+        // expect(await screen.findByText(/Transaction completed successfully!/i)).toBeInTheDocument();
+        //expect(screen.getByText(/View on Etherscan/i).closest('button')).toHaveAttribute('href', 'https://rinkeby.etherscan.io/tx/0x987');
         expect(screen.getByText(/View on Etherscan/i)).toBeInTheDocument();
-        expect(screen.getByText(/View on Etherscan/i).closest('a')).toHaveAttribute('href', 'https://rinkeby.etherscan.io//tx/0x987');
     }
 
     // beforeEach(() => {
