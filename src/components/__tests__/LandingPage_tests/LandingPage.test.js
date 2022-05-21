@@ -30,9 +30,26 @@ describe('LandingPage', () => {
                 _createOrder: async () => '0x987',
                 _connectWallet: async () => { },
                 _setListenerMetamaskAccount: async () => { },
+                _setListenerNetworkChanged: async () => { },
                 _getAmountsIn: async () => amountIn * 10 ** 18,
                 _getERC20Balance: async () => balance,
-                _callCreateOrder: async () => '0x987'
+                _callCreateOrder: async () => '0x987',
+                _cutAddress: () => "",
+                rightChain: true,
+                ourNetwork: "rinkeby",
+                networks: {
+                    "rinkeby": {
+                        chainId: "0x4",
+                        chainName: "Ethereum Rinkeby Testnet",
+                        nativeCurrency: {
+                            name: "AVAX",
+                            symbol: "AVAX",
+                            decimals: 18
+                        },
+                        rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                        blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+                    }
+                },
             }} >
                 <BrowserRouter>
                     <LandingPage />
@@ -44,9 +61,9 @@ describe('LandingPage', () => {
     };
 
     const checkOrderRes = async () => {
-        expect(await screen.findByText(/Transaction hash: 0x987/i)).toBeInTheDocument();
+        // expect(await screen.findByText(/Transaction completed successfully!/i)).toBeInTheDocument();
+        //expect(screen.getByText(/View on Etherscan/i).closest('button')).toHaveAttribute('href', 'https://rinkeby.etherscan.io/tx/0x987');
         expect(screen.getByText(/View on Etherscan/i)).toBeInTheDocument();
-        expect(screen.getByText(/View on Etherscan/i).closest('a')).toHaveAttribute('href', 'https://rinkeby.etherscan.io//tx/0x987');
     }
 
     // beforeEach(() => {
@@ -59,6 +76,23 @@ describe('LandingPage', () => {
             <StateContext.Provider value={{
                 _connectWallet: async () => { },
                 _setListenerMetamaskAccount: async () => { },
+                _setListenerNetworkChanged: async () => { },
+                _cutAddress: () => "",
+                rightChain: true,
+                ourNetwork: "rinkeby",
+                networks: {
+                    "rinkeby": {
+                        chainId: "0x4",
+                        chainName: "Ethereum Rinkeby Testnet",
+                        nativeCurrency: {
+                            name: "AVAX",
+                            symbol: "AVAX",
+                            decimals: 18
+                        },
+                        rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                        blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+                    }
+                },
             }} >
                 <BrowserRouter>
                     <LandingPage />
@@ -77,7 +111,24 @@ describe('LandingPage', () => {
         render(
             <StateContext.Provider value={{
                 _connectWallet: mockedConnectWallet,
-                _setListenerMetamaskAccount: async () => { }
+                _setListenerMetamaskAccount: async () => { },
+                _setListenerNetworkChanged: async () => { },
+                _cutAddress: () => "",
+                rightChain: true,
+                ourNetwork: "rinkeby",
+                networks: {
+                    "rinkeby": {
+                        chainId: "0x4",
+                        chainName: "Ethereum Rinkeby Testnet",
+                        nativeCurrency: {
+                            name: "AVAX",
+                            symbol: "AVAX",
+                            decimals: 18
+                        },
+                        rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                        blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+                    }
+                },
             }} >
                 <LandingPage />
             </StateContext.Provider>
@@ -124,13 +175,30 @@ describe('LandingPage', () => {
                         _getAmountsIn: async () => amountIn * 10 ** 18,
                         _connectWallet: async () => { },
                         _setListenerMetamaskAccount: async () => { },
+                        _setListenerNetworkChanged: async () => { },
                         _getERC20Balance: async () => balance,
                         _callCreateOrder: async (x1, x2, x3, x4, x5, afterConfirm) => {
                             await wait();
                             afterConfirm();
                             await wait();
                             return '0x987';
-                        }
+                        },
+                        _cutAddress: () => "",
+                        rightChain: true,
+                        ourNetwork: "rinkeby",
+                        networks: {
+                            "rinkeby": {
+                                chainId: "0x4",
+                                chainName: "Ethereum Rinkeby Testnet",
+                                nativeCurrency: {
+                                    name: "AVAX",
+                                    symbol: "AVAX",
+                                    decimals: 18
+                                },
+                                rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                                blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+                            }
+                        },
                     }} >
                         <BrowserRouter>
                             <LandingPage />
@@ -170,13 +238,30 @@ describe('LandingPage', () => {
                     _getAmountsIn: async () => amountIn * 10 ** 18,
                     _getERC20Balance: async () => balance,
                     _setListenerMetamaskAccount: async () => { },
+                    _setListenerNetworkChanged: async () => { },
                     _connectWallet: async () => { },
                     _callCreateOrder: async () => {
                         let err = new Error();
                         err.message = 'Cannot create order';
                         err.code = '123';
                         throw err;
-                    }
+                    },
+                    _cutAddress: () => "",
+                    rightChain: true,
+                    ourNetwork: "rinkeby",
+                    networks: {
+                        "rinkeby": {
+                            chainId: "0x4",
+                            chainName: "Ethereum Rinkeby Testnet",
+                            nativeCurrency: {
+                                name: "AVAX",
+                                symbol: "AVAX",
+                                decimals: 18
+                            },
+                            rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                            blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+                        }
+                    },
                 }} >
                     <BrowserRouter>
                         <LandingPage />
@@ -206,9 +291,26 @@ describe('LandingPage', () => {
                         _createOrder: async () => '0x987',
                         _connectWallet: async () => { },
                         _setListenerMetamaskAccount: async () => { },
+                        _setListenerNetworkChanged: async () => { },
                         _getAmountsIn: async () => amountIn * 10 ** 18,
                         _getERC20Balance: async () => balance,
-                        _callCreateOrder: async () => '0x987'
+                        _callCreateOrder: async () => '0x987',
+                        _cutAddress: () => "",
+                        rightChain: true,
+                        ourNetwork: "rinkeby",
+                        networks: {
+                            "rinkeby": {
+                                chainId: "0x4",
+                                chainName: "Ethereum Rinkeby Testnet",
+                                nativeCurrency: {
+                                    name: "AVAX",
+                                    symbol: "AVAX",
+                                    decimals: 18
+                                },
+                                rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+                                blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+                            }
+                        },
                     }} >
                         <BrowserRouter>
                             <LandingPage />
