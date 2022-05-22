@@ -7,11 +7,18 @@ import shopChainLogo from "../assets/logoShopChain.png";
 export function Header() {
   const context = useContext(StateContext);
 
+  //address connesso via MetaMask
   let currentAddress = context.currentAddress;
+
+  //address di deploy dello smart contract
   let contractAddress = context.contractAddress;
+
+  //bilancio dell'utente loggato
   let balance = context.balance;
+
   let blockExplorerLink = context.networks[context.ourNetwork].blockExplorerUrls[0];
 
+  //rappresentazione più semplice degli address esadecimali
   let currentAddressCut = context._cutAddress(currentAddress);
   let contractAddressCut = context._cutAddress(contractAddress);
 
@@ -20,9 +27,7 @@ export function Header() {
       <div className="navigation">
         <nav className="navbar navbar-expand navbar-dark blur">
             <img id="imgLogo" src={shopChainLogo} alt="Logo ShopChain"/>
-            <NavLink className="navbar-brand" to="/">
-              ShopChain
-            </NavLink>
+            <NavLink className="navbar-brand" to="/">ShopChain</NavLink>
             <div className="user-data nav-item">
               <ul>
                 <li>

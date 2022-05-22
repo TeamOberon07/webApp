@@ -15,6 +15,8 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
+//pagina nella quale è possibile vedere i dettagli dell'ordine selezionato dalla homepage 
+//ed effettuare alcune azioni che ne cambiano lo stato
 export function OrderPage() {
     const context = useContext(StateContext);
 
@@ -34,10 +36,7 @@ export function OrderPage() {
     const [stepActive, setStepActive] = useState(0);
     const [refundClicked, setRefundClicked] = useState(false);
 
-    const steps = [
-        'Approve',
-        'Refund',
-    ];
+    const steps = ['Approve', 'Refund',];
 
     const stepper =
         <Box sx={{ width: '100%' }}>
@@ -54,6 +53,8 @@ export function OrderPage() {
         await context._connectWallet();
         context._setListenerMetamaskAccount();
         context._setListenerNetworkChanged();
+
+        //richiesta allo smart contract dell'ordine conoscendone l'id
         let order = await context._getOrderById(id);
         setOrder(order);
         setAmount(order[3]);
@@ -61,12 +62,15 @@ export function OrderPage() {
 
     useEffect(() => {
         if (context.userIsSeller && order){
+            //l'utente è il seller dell'ordine e perciò può visualizzarne il QR Code
             context._getQRCode(order);
         }
     }, [context.userIsSeller, order]);
 
     useEffect(() => {
         if (context.orderStateChanged){
+            //nel caso di transazione appena completata su questa pagina, lo stato è cambiato
+            //quindi la finestra viene aggiornata per riflettere il cambiamento sui dati
             setTxWaiting(txWaitingInit);
             context._setOrderStateChangedFalse();
             window.location.reload();
@@ -79,8 +83,7 @@ export function OrderPage() {
         <button onClick={ () => setShowApproveSpinner(true) }  
             className="cta-button basic-button blur-light" id="approve-button">
             <div className="spinner-in-button">
-                Approve 
-                {showApproveSpinner && spinner}
+                Approve {showApproveSpinner && spinner}
             </div>
         </button>;
 
@@ -90,12 +93,10 @@ export function OrderPage() {
         </button>;
     
     const refundButtonOK = 
-        <button
-        role={operations[2]}
-        className="cta-button basic-button blur-light"
-        type="button"
-        onClick={() => { setTxWaiting({ [operations[2]]: true }); setRefundClicked(true); }}
-        ><div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div></button>
+        <button role={operations[2]} className="cta-button basic-button blur-light" type="button"
+            onClick={() => { setTxWaiting({ [operations[2]]: true }); setRefundClicked(true); }}>
+            <div className="spinner-in-button">Refund Buyer {txWaiting[operations[2]] && spinner}</div>
+        </button>
 
     const refundButtonToApprove =
         <button role={operations[2]} className="cta-button basic-button disabled-button" id="refund-button">
@@ -112,10 +113,12 @@ export function OrderPage() {
 
     useEffect(async () => {
         if (refundClicked) {
+            //viene iniziata un'operazione di RefundBuyer sull'ordine
             await callOrderOperation(operations[2], amount)
         }
     }, [refundClicked])
     
+    //funzione che chiama _orderOperation() dello stateContext permettendole di creare la transazione che cambierà lo stato dell'ordine
     async function callOrderOperation(type, _amount) {
         try {
             await context._orderOperation(id, type, _amount);
@@ -194,9 +197,7 @@ export function OrderPage() {
         }
     }, [amount])
 
-    if (window.ethereum === undefined) {
-        return <NoWalletDetected/>;
-    }
+    if (window.ethereum === undefined) { return <NoWalletDetected/>; }
     
     if (!context.currentAddress) {
         return <ConnectWallet connectWallet={async () => await context._connectWallet()}/>;
@@ -207,7 +208,6 @@ export function OrderPage() {
     }
 
     if (order) {
-        
         orderState = context.orderState[order[4]];
         let buyerAddress = order[1].toLowerCase();
         let sellerAddress = order[2].toLowerCase();
@@ -215,6 +215,7 @@ export function OrderPage() {
 
         if (buyerAddress && sellerAddress && currentAddress) {
             if (currentAddress != buyerAddress && currentAddress != sellerAddress) {
+                //l'utente del wallet non è né Seller né buyer dell'ordine e quindi viene riportato alla homepage
                 window.location.href = '/';
             }
         }
@@ -226,6 +227,7 @@ export function OrderPage() {
                 <table id="order-page-container" className="blur">
                 <tbody>
                     {(() => {
+                        //in base al ruolo dell'utente nell'ordine viene mostrata quella dell'altro
                         if (context.userIsSeller)
                             return <tr><th id="orderPageAddress">Buyer Address</th><td colSpan={2} className="address">{buyerAddress}</td></tr>
                         else
@@ -250,33 +252,37 @@ export function OrderPage() {
                             <th>State</th><td>{orderState}</td>
                         </tr>
                         {(() => {
-                            if (context.userIsSeller) {     //vista Seller
+                            if (context.userIsSeller) {     
+                                //vista Seller (le azioni possibili sono diverse da quelle del Buyer)
                                 return <tr>
                                     <th>Actions</th>     
                                     <td colSpan={3}>  
                                         <div className="actions">
                                             {(() => {
-                                                if (orderState === "Created" || orderState === "Shipped")
-                                                    return <button
-                                                        role={operations[0]}
+                                                if (orderState === "Created" || orderState === "Shipped"){
+                                                    //l'ordine può essere annullato prevedendo un rimborso del Buyer
+                                                    return <button role={operations[0]}
                                                         className="cta-button basic-button blur-light"
                                                         type="button"
                                                         onClick={() => { setTxWaiting({ [operations[0]]: true }); callOrderOperation(operations[0]) }}
                                                         ><div className="spinner-in-button">Delete Order {txWaiting[operations[0]] && spinner}</div></button>
+                                                }
                                             })()}
 
                                             {(() => {
-                                                if (orderState === "Created")
-                                                    return <button
-                                                        role={operations[1]}
+                                                if (orderState === "Created"){
+                                                    //il Seller può far passare allo stato "Shipped" un ordine "Created"
+                                                    return <button role={operations[1]}
                                                         className="cta-button basic-button blur-light"
                                                         type="button"
                                                         onClick={() => { setTxWaiting({ [operations[1]]: true }); callOrderOperation(operations[1]) }}
                                                     ><div className="spinner-in-button">Mark as Shipped {txWaiting[operations[1]] && spinner}</div></button>
+                                                }
                                             })()}
                                             
                                             {(() => {
                                                 if (orderState === "Asked Refund") {
+                                                    //se il Buyer ha richiesto il reso, in questa pagina è possibile fornirlo
                                                     return <>
                                                         { approveButton }
                                                         { refundButton }
@@ -286,9 +292,7 @@ export function OrderPage() {
                                             })()}
 
                                             {(() => {
-                                                if (orderState !== "Created" &&
-                                                    orderState !== "Shipped" &&
-                                                    orderState !== "Asked Refund")
+                                                if (orderState !== "Created" && orderState !== "Shipped" && orderState !== "Asked Refund")
                                                     return <>
                                                         <p id="none-action">You can't perform actions with this order.</p>
                                                     </>
@@ -296,16 +300,16 @@ export function OrderPage() {
                                         </div>
                                     </td>
                                 </tr>
-                            } else {        //vista Buyer
+                            } else {        
+                                //vista Buyer
                                 return <tr>
                                     <th>Actions</th>     
                                         <td colSpan={3}>  
                                             <div className="actions">
                                             {(() => {
                                                 if (orderState === "Created" || orderState === "Confirmed") {
-                                                    return <button
-                                                        role={operations[3]}
-                                                        className="cta-button basic-button blur-light"
+                                                    //in alcuni stati il Buyer può richiedere il rimborso
+                                                    return <button role={operations[3]} className="cta-button basic-button blur-light"
                                                         type="button"
                                                         onClick={() => { setTxWaiting({ [operations[3]]: true }); callOrderOperation(operations[3]) }}
                                                     ><div className="spinner-in-button">Ask Refund {txWaiting[operations[3]] && spinner}</div></button>
@@ -322,7 +326,7 @@ export function OrderPage() {
                         })()}
                 </tbody>
                 </table>
-
+                {/*sezione dedicata ai log dell'ordine in visualizzazione*/}
                 <Log order={order}></Log>
             </div>
         </div>

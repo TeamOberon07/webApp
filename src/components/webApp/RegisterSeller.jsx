@@ -8,6 +8,7 @@ import { NoWalletDetected } from "./NoWalletDetected";
 import { ConnectWallet } from "./ConnectWallet";
 import { SwitchNetwork } from "./SwitchNetwork";
 
+//pagina nella quale è possibile registrarsi come Seller sulla piattaforma ShopChain
 export function RegisterSeller() {
 
     const context = useContext(StateContext);
@@ -18,6 +19,7 @@ export function RegisterSeller() {
         context._setListenerNetworkChanged();
     }, []);
 
+    //lambda che chiama la funzione di costruzione transazione e in caso di successo riporta alla homepage
     const _registerSeller = async () => {
         try {
             const tx = await context._contract.registerAsSeller();
@@ -28,9 +30,7 @@ export function RegisterSeller() {
         }
     }
 
-    if (window.ethereum === undefined) {
-        return <NoWalletDetected/>;
-    }
+    if (window.ethereum === undefined) { return <NoWalletDetected/>; }
     
     if (!context.currentAddress) {
         return <ConnectWallet connectWallet={async () => await context._connectWallet()}/>;

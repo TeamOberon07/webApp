@@ -36,21 +36,27 @@ export class DApp extends React.Component {
 
     render() {
         if (window.ethereum === undefined) {
+            //MetaMask non è stato rilevato
             return <NoWalletDetected/>;
         }
         
         if (!this.context.currentAddress) {
+            //non è stato effettuato l'accesso ad un wallet via MetaMask
             return <ConnectWallet connectWallet={() => this._initialize()}/>;
         }
 
         if (window.ethereum.chainId !== this.context.networks[this.context.ourNetwork].chainId || !this.context.rightChain) {
+            //il network al quale è connesso l'utente non è quello di deploy del contract
             return <SwitchNetwork switchNetwork={async () => await this._changeNetwork()}/>;
         }
 
         if (!this.state.orders || !this.context.balance) {
+            //gli ordini o il bilancio non sono pronti e quindi la webApp si trova in stato di attesa
             return <Loading/>;
         }
 
+        //la connessione al wallet è avvenuta correttamente ed i dati utente sono pronti ad essere mostrati
+        //la pagina è pronta per essere renderizzata
         return(
             <div>
                 <Header/>
@@ -61,12 +67,14 @@ export class DApp extends React.Component {
         );
     };
 
+    //listener del cambio account MetaMask per aggiornare i dati visualizzati
     async _setListenerMetamaskAccount() {
         window.ethereum.on('accountsChanged', async () => {
             this._initialize();
         })
     }
 
+    //listener del cambio network su MetaMask per aggiornare la vista
     async _setListenerNetworkChanged() {
         window.ethereum.on('chainChanged', async () => {
             if (window.ethereum.chainId === this.context.networks[this.context.ourNetwork].chainId)
@@ -76,11 +84,15 @@ export class DApp extends React.Component {
         });
     }
 
+    //funzione di costruzione del componente
     async _initialize() {
+        //connessione al wallet
         await this.context._connectWallet();
+        //chiamata allo smart contract che ottiene gli ordini utente
         this._initializeOrders();
     }
 
+    //funzione chiamata dal bottone "Change Network" che richiede lo switch alla rete corretta
     async _changeNetwork() {
         let error = await this.context._changeNetwork(this.context.ourNetwork);
         if (!error)
@@ -89,32 +101,19 @@ export class DApp extends React.Component {
             return <Error message={error}/>;
     }
 
-    async _refreshInfo(tx) {
-        const receipt = await tx.wait();
-        if (receipt.status) {
-            this._initializeOrders();
-            this.context._updateBalance();
-        }
-    }
-
+    //funzione che interroga lo smart contract per ottenere gli ordini legati all'utente
     async _initializeOrders() {
         let ordersToSort = [];
         let orders;
         try {
+            //gli ordini vengono ordinati cronologicamente dal più recente (id decrescente)
             ordersToSort = await this.context._contract.getOrdersOfUser(this.context.currentAddress);
             orders = [...ordersToSort];
             orders.reverse();
         } catch (error) {
             return <Error message={error}/>;
         }
+        //gli ordini vengono salvati nello state
         this.setState({ orders });
-    }
-
-    async _orderOperation(id, expr, orderAmount=0) {
-        const res = await this.context._orderOperation(id, expr, orderAmount);
-        if (res[0])
-            this._refreshInfo(res[0]);
-        else if (res[1])
-            return <Error message={res[1]}/>;
     }
 }

@@ -1,24 +1,17 @@
 import React, { useEffect, useState, useContext }from "react";
-import { useLocation } from 'react-router-dom'
 import { StateContext } from './StateContext'
 
 export function Log({order}) {
+    //componente che renderizza la visualizzazione dei log di un ordine
 
     const context = useContext(StateContext);
     const id = parseInt(order[0]._hex);
     const [content, setContent] = useState();
     let orderState;
 
-    function visualizeOrder(element) {
-        switch (element[0]) {
-            case 0: orderState = "Created"; break;
-            case 1: orderState = "Shipped"; break;
-            case 2: orderState = "Confirmed"; break;
-            case 3: orderState = "Deleted"; break;
-            case 4: orderState = "Refund Asked"; break;
-            case 5: orderState = "Refunded"; break;
-            default: orderState = "Errore"; break;
-        }
+    function visualizeLog(element) {
+        //conversione dello stato dell'ordine da intero a stringa
+        orderState = context.orderState[element[0]];
 
         let date = new Date(parseInt(element[1].toString())*1000).toLocaleString();
         let am_or_pm = date.substring(date.length-3, date.length);
@@ -35,10 +28,11 @@ export function Log({order}) {
         return res;
     }
     
+    //chiamata alla funzione dello smart contract che recupera i log dell'ordine indicato quando esso è pronto
     useEffect(() => {
         context._getLog(id).then((log) => {
             if (log.length) 
-                setContent(log.map((element) => (visualizeOrder(element))));
+                setContent(log.map((element) => (visualizeLog(element))));
         });
     }, [context._contract])
 
@@ -51,9 +45,7 @@ export function Log({order}) {
                     {/* <th>Tx Hash</th> */}
                 </tr>
             </thead>
-            <tbody>
-                {content}
-            </tbody>
+            <tbody>{content}</tbody>
         </table>
     );
 }

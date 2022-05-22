@@ -4,6 +4,8 @@ import ERC20_ABI from "../assets/ERC20.json";
 import TJROUTER_ABI from "../assets/router.json";
 import Escrow from "../contracts/SCEscrow.json";
 
+//componente di tipo provider che fornisce diverse variabili utilizzate dalle varie pagine
+//ed offre funzioni che si interfacciano con lo smart contract
 export const StateContext = createContext();
 export class StateProvider extends React.Component {
 
@@ -35,6 +37,7 @@ export class StateProvider extends React.Component {
             }
         },
 
+        //funzione di connessione al wallet
         _connectWallet: async () => {
             try {
                 const [currentAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -53,9 +56,11 @@ export class StateProvider extends React.Component {
                 }
 
                 this.setState({
+                    //l'address con la quale è stato effettuato l'accesso viene salvata nello stato
                     currentAddress: currentAddress,
                 });
                 this.setState({
+                    //un booleano che indica la presenza sul giusto network
                     rightChain: window.ethereum.chainId === this.state.networks[this.state.ourNetwork].chainId,
                 })
 
@@ -67,6 +72,7 @@ export class StateProvider extends React.Component {
             }
         },
     
+        //richiesta di cambio network inoltrata a MetaMask
         _changeNetwork: async (networkName) => {
             try {
                 await window.ethereum.request({
@@ -123,6 +129,7 @@ export class StateProvider extends React.Component {
             this.setState({ balance });
         },
 
+        //richiesta di un ordine allo smart contract dato il suo id
         _getOrderById: async (id) => {
             if(this.state._contract){
                 const order = await this.state._contract.getOrder(id);
@@ -131,6 +138,7 @@ export class StateProvider extends React.Component {
             return [];
         },
 
+        //funzione di creazione dell'ordine sulla blockchain
         _callCreateOrder: async (functionToCall, tokenAddress, orderAmount, maxAmountIn, sellerAddress, afterConfirm) => {
             const stable = 0
             const avaxToStable = 1;
@@ -138,11 +146,14 @@ export class StateProvider extends React.Component {
               const amountOut = ethers.utils.parseEther(orderAmount);
               let tx;
               if (functionToCall === stable) {
+                //l'utente ha pagato in stable coin
                 tx = await this.state._contract.createOrderWithStable(sellerAddress, amountOut);
               } else 
               if (functionToCall === avaxToStable) {
+                //l'utente ha pagato in AVAX o altra coin della chain
                 tx = await this.state._contract.createOrderWithAVAXToStable(sellerAddress, amountOut, { value: maxAmountIn });
               } else {
+                //l'utente ha pagato con altro token
                 tx = await this.state._contract.createOrderWithTokensToStable(sellerAddress, amountOut, maxAmountIn, tokenAddress);
               }
               afterConfirm();
@@ -157,6 +168,7 @@ export class StateProvider extends React.Component {
             }
           },
 
+        //chiamata alla funzione del contract corrispondente alla richiesta
         _orderOperation: async (id, expr, orderAmount) => {
             try {
                 var tx, error = undefined;
@@ -180,6 +192,8 @@ export class StateProvider extends React.Component {
                 await tx.wait()
                 await this.state._connectWallet();
                 this.state._setListenerMetamaskAccount();
+
+                //impostando orderStateChanged a true si permette il refresh e l'aggiornamento dei dati
                 this.setState({ orderStateChanged: true });
                 return [tx, error];
             } catch(err) {
@@ -187,11 +201,13 @@ export class StateProvider extends React.Component {
             }
         },
 
+        //funzione che ottiene la lista di Seller registati sulla piattaforma
         _getSellers: async () => {
             const sellerAddresses = await this.state._contract.getSellers();
             return sellerAddresses;
         },
         
+        //check e set del ruolo dell'utente (Seller o Buyer)
         _userIsSeller: async () => {
             const sellerAddresses = await this.state._getSellers();
             var userIsSeller = false;
@@ -202,14 +218,16 @@ export class StateProvider extends React.Component {
             this.setState({ userIsSeller });
         },
 
+        //check del ruolo dell'utente (Seller o Buyer)
         _isAuthorizedSeller: async (sellerAddress) => {
             const sellers = await this.state._getSellers();
             return sellers.includes(sellerAddress);
         },
 
+        //costruzione del QR contenente "{buyer_address}:{ID_ordine}"
         _getQRCode: (order) => {
             const buyer_address = order[1];
-            const orderQRCode = buyer_address + ":"+parseInt(order[0]._hex);
+            const orderQRCode = buyer_address + ":" + parseInt(order[0]._hex);
             var QRCode = require('qrcode');
             var opts = {
                 margin: 1,
@@ -228,6 +246,7 @@ export class StateProvider extends React.Component {
             return null;
         },
 
+        //richiesta dei log di un ordine allo smart contract
         _getLog: async (id) =>  {
             if(this.state._contract){
                 const logs =  await this.state._contract.getLogsOfOrder(id);
@@ -266,6 +285,7 @@ export class StateProvider extends React.Component {
             }
         },
 
+        //la pagina è stata aggiornata e orderState è uguale a quello sul contract
         _setOrderStateChangedFalse: () => {
             this.setState({
                 orderStateChanged: false,
@@ -302,10 +322,12 @@ export class StateProvider extends React.Component {
             }
         },
 
+        //rappresentatore degli address in forma accorciata
         _cutAddress: (address) => {
             return address.substring(0,6)+ "..." +address.substring(address.length-6, address.length);
         },
 
+        //funzione che chiede l'address della stable coin direttamente allo smart contract per poi settarla nello stato
         _setStablecoinAddress: async () => {
             let stablecoinAddress = await this.state._contract.STABLECOIN();
             this.setState({ stablecoinAddress });
