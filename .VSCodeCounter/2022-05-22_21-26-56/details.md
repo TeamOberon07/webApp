@@ -1,10 +1,10 @@
 # Details
 
-Date : 2022-05-22 19:10:16
+Date : 2022-05-22 21:26:56
 
 Directory c:\Users\danil\Desktop\webApp
 
-Total : 64 files,  111613 codes, 298 comments, 757 blanks, all 112668 lines
+Total : 63 files,  111555 codes, 355 comments, 754 blanks, all 112664 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
@@ -57,19 +57,18 @@ Total : 64 files,  111613 codes, 298 comments, 757 blanks, all 112668 lines
 | [src/components/__tests__/webApp_tests/Orders.test.js](/src/components/__tests__/webApp_tests/Orders.test.js) | JavaScript | 305 | 0 | 32 | 337 |
 | [src/components/__tests__/webApp_tests/RegisterSeller.test.js](/src/components/__tests__/webApp_tests/RegisterSeller.test.js) | JavaScript | 238 | 0 | 20 | 258 |
 | [src/components/__tests__/webApp_tests/SwitchNetwork.test.js](/src/components/__tests__/webApp_tests/SwitchNetwork.test.js) | JavaScript | 7 | 0 | 2 | 9 |
-| [src/components/webApp/ConfirmOrder.jsx](/src/components/webApp/ConfirmOrder.jsx) | JavaScript React | 0 | 30 | 5 | 35 |
-| [src/components/webApp/ConnectWallet.jsx](/src/components/webApp/ConnectWallet.jsx) | JavaScript React | 15 | 0 | 1 | 16 |
-| [src/components/webApp/DApp.jsx](/src/components/webApp/DApp.jsx) | JavaScript React | 98 | 4 | 18 | 120 |
-| [src/components/webApp/Error.jsx](/src/components/webApp/Error.jsx) | JavaScript React | 5 | 0 | 1 | 6 |
-| [src/components/webApp/Header.jsx](/src/components/webApp/Header.jsx) | JavaScript React | 42 | 0 | 4 | 46 |
-| [src/components/webApp/Loading.jsx](/src/components/webApp/Loading.jsx) | JavaScript React | 11 | 0 | 1 | 12 |
-| [src/components/webApp/Log.jsx](/src/components/webApp/Log.jsx) | JavaScript React | 48 | 3 | 8 | 59 |
-| [src/components/webApp/NoWalletDetected.jsx](/src/components/webApp/NoWalletDetected.jsx) | JavaScript React | 23 | 0 | 1 | 24 |
-| [src/components/webApp/OrderPage.jsx](/src/components/webApp/OrderPage.jsx) | JavaScript React | 299 | 0 | 33 | 332 |
-| [src/components/webApp/Orders.jsx](/src/components/webApp/Orders.jsx) | JavaScript React | 188 | 1 | 13 | 202 |
-| [src/components/webApp/RegisterSeller.jsx](/src/components/webApp/RegisterSeller.jsx) | JavaScript React | 48 | 0 | 11 | 59 |
-| [src/components/webApp/StateContext.jsx](/src/components/webApp/StateContext.jsx) | JavaScript React | 291 | 2 | 29 | 322 |
-| [src/components/webApp/SwitchNetwork.jsx](/src/components/webApp/SwitchNetwork.jsx) | JavaScript React | 15 | 0 | 1 | 16 |
+| [src/components/webApp/ConnectWallet.jsx](/src/components/webApp/ConnectWallet.jsx) | JavaScript React | 12 | 0 | 1 | 13 |
+| [src/components/webApp/DApp.jsx](/src/components/webApp/DApp.jsx) | JavaScript React | 84 | 19 | 16 | 119 |
+| [src/components/webApp/Error.jsx](/src/components/webApp/Error.jsx) | JavaScript React | 3 | 1 | 0 | 4 |
+| [src/components/webApp/Header.jsx](/src/components/webApp/Header.jsx) | JavaScript React | 40 | 4 | 7 | 51 |
+| [src/components/webApp/Loading.jsx](/src/components/webApp/Loading.jsx) | JavaScript React | 11 | 1 | 1 | 13 |
+| [src/components/webApp/Log.jsx](/src/components/webApp/Log.jsx) | JavaScript React | 37 | 6 | 8 | 51 |
+| [src/components/webApp/NoWalletDetected.jsx](/src/components/webApp/NoWalletDetected.jsx) | JavaScript React | 18 | 2 | 1 | 21 |
+| [src/components/webApp/OrderPage.jsx](/src/components/webApp/OrderPage.jsx) | JavaScript React | 287 | 17 | 32 | 336 |
+| [src/components/webApp/Orders.jsx](/src/components/webApp/Orders.jsx) | JavaScript React | 185 | 21 | 15 | 221 |
+| [src/components/webApp/RegisterSeller.jsx](/src/components/webApp/RegisterSeller.jsx) | JavaScript React | 46 | 2 | 11 | 59 |
+| [src/components/webApp/StateContext.jsx](/src/components/webApp/StateContext.jsx) | JavaScript React | 291 | 23 | 30 | 344 |
+| [src/components/webApp/SwitchNetwork.jsx](/src/components/webApp/SwitchNetwork.jsx) | JavaScript React | 11 | 1 | 1 | 13 |
 | [src/contracts/SCEscrow.json](/src/contracts/SCEscrow.json) | JSON | 862 | 0 | 1 | 863 |
 | [src/contracts/SCEscrow.sol](/src/contracts/SCEscrow.sol) | Solidity | 433 | 60 | 54 | 547 |
 | [src/index.css](/src/index.css) | CSS | 17 | 3 | 3 | 23 |

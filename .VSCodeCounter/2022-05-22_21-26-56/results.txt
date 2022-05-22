@@ -1,6 +1,6 @@
-Date : 2022-05-22 19:10:16
+Date : 2022-05-22 21:26:56
 Directory : c:\Users\danil\Desktop\webApp
-Total : 64 files,  111613 codes, 298 comments, 757 blanks, all 112668 lines
+Total : 63 files,  111555 codes, 355 comments, 754 blanks, all 112664 lines
 
 Languages
 +------------------+------------+------------+------------+------------+------------+
@@ -8,7 +8,7 @@ Languages
 +------------------+------------+------------+------------+------------+------------+
 | JSON             |         15 |    106,403 |          0 |         11 |    106,414 |
 | JavaScript       |         23 |      2,021 |        102 |        306 |      2,429 |
-| JavaScript React |         20 |      1,640 |         71 |        199 |      1,910 |
+| JavaScript React |         19 |      1,582 |        128 |        196 |      1,906 |
 | Solidity         |          2 |        848 |        120 |        107 |      1,075 |
 | CSS              |          2 |        668 |          5 |        132 |        805 |
 | HTML             |          1 |         23 |          0 |          1 |         24 |
@@ -19,7 +19,7 @@ Directories
 +------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                                                                 | files      | code       | comment    | blank      | total      |
 +------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                                                    |         64 |    111,613 |        298 |        757 |    112,668 |
+| .                                                                                                    |         63 |    111,555 |        355 |        754 |    112,664 |
 | artifacts                                                                                            |          5 |     19,801 |          0 |          5 |     19,806 |
 | artifacts\@openzeppelin                                                                              |          2 |         14 |          0 |          2 |         16 |
 | artifacts\@openzeppelin\contracts                                                                    |          2 |         14 |          0 |          2 |         16 |
@@ -35,15 +35,15 @@ Directories
 | contracts                                                                                            |          1 |        415 |         60 |         53 |        528 |
 | public                                                                                               |          2 |         48 |          0 |          2 |         50 |
 | scripts                                                                                              |          1 |         13 |         14 |          6 |         33 |
-| src                                                                                                  |         46 |      5,612 |        197 |        630 |      6,439 |
+| src                                                                                                  |         45 |      5,554 |        254 |        627 |      6,435 |
 | src\assets                                                                                           |          2 |        223 |          0 |          1 |        224 |
-| src\components                                                                                       |         39 |      3,404 |        132 |        439 |      3,975 |
+| src\components                                                                                       |         38 |      3,346 |        189 |        436 |      3,971 |
 | src\components\LandingPage                                                                           |          8 |        584 |         32 |         74 |        690 |
 | src\components\__tests__                                                                             |         18 |      1,737 |         60 |        239 |      2,036 |
 | src\components\__tests__\LandingPage_tests                                                           |          7 |        763 |         60 |        137 |        960 |
 | src\components\__tests__\webApp_tests                                                                |         11 |        974 |          0 |        102 |      1,076 |
 | src\components\__tests__\webApp_tests\OrderPage                                                      |          2 |        339 |          0 |         31 |        370 |
-| src\components\webApp                                                                                |         13 |      1,083 |         40 |        126 |      1,249 |
+| src\components\webApp                                                                                |         12 |      1,025 |         97 |        123 |      1,245 |
 | src\contracts                                                                                        |          2 |      1,295 |         60 |         55 |      1,410 |
 | test                                                                                                 |          1 |        200 |         20 |         51 |        271 |
 +------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
@@ -98,23 +98,22 @@ Files
 | c:\Users\danil\Desktop\webApp\src\components\__tests__\webApp_tests\Orders.test.js                   | JavaScript       |        305 |          0 |         32 |        337 |
 | c:\Users\danil\Desktop\webApp\src\components\__tests__\webApp_tests\RegisterSeller.test.js           | JavaScript       |        238 |          0 |         20 |        258 |
 | c:\Users\danil\Desktop\webApp\src\components\__tests__\webApp_tests\SwitchNetwork.test.js            | JavaScript       |          7 |          0 |          2 |          9 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\ConfirmOrder.jsx                                 | JavaScript React |          0 |         30 |          5 |         35 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\ConnectWallet.jsx                                | JavaScript React |         15 |          0 |          1 |         16 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\DApp.jsx                                         | JavaScript React |         98 |          4 |         18 |        120 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\Error.jsx                                        | JavaScript React |          5 |          0 |          1 |          6 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\Header.jsx                                       | JavaScript React |         42 |          0 |          4 |         46 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\Loading.jsx                                      | JavaScript React |         11 |          0 |          1 |         12 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\Log.jsx                                          | JavaScript React |         48 |          3 |          8 |         59 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\NoWalletDetected.jsx                             | JavaScript React |         23 |          0 |          1 |         24 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\OrderPage.jsx                                    | JavaScript React |        299 |          0 |         33 |        332 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\Orders.jsx                                       | JavaScript React |        188 |          1 |         13 |        202 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\RegisterSeller.jsx                               | JavaScript React |         48 |          0 |         11 |         59 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\StateContext.jsx                                 | JavaScript React |        291 |          2 |         29 |        322 |
-| c:\Users\danil\Desktop\webApp\src\components\webApp\SwitchNetwork.jsx                                | JavaScript React |         15 |          0 |          1 |         16 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\ConnectWallet.jsx                                | JavaScript React |         12 |          0 |          1 |         13 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\DApp.jsx                                         | JavaScript React |         84 |         19 |         16 |        119 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\Error.jsx                                        | JavaScript React |          3 |          1 |          0 |          4 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\Header.jsx                                       | JavaScript React |         40 |          4 |          7 |         51 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\Loading.jsx                                      | JavaScript React |         11 |          1 |          1 |         13 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\Log.jsx                                          | JavaScript React |         37 |          6 |          8 |         51 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\NoWalletDetected.jsx                             | JavaScript React |         18 |          2 |          1 |         21 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\OrderPage.jsx                                    | JavaScript React |        287 |         17 |         32 |        336 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\Orders.jsx                                       | JavaScript React |        185 |         21 |         15 |        221 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\RegisterSeller.jsx                               | JavaScript React |         46 |          2 |         11 |         59 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\StateContext.jsx                                 | JavaScript React |        291 |         23 |         30 |        344 |
+| c:\Users\danil\Desktop\webApp\src\components\webApp\SwitchNetwork.jsx                                | JavaScript React |         11 |          1 |          1 |         13 |
 | c:\Users\danil\Desktop\webApp\src\contracts\SCEscrow.json                                            | JSON             |        862 |          0 |          1 |        863 |
 | c:\Users\danil\Desktop\webApp\src\contracts\SCEscrow.sol                                             | Solidity         |        433 |         60 |         54 |        547 |
 | c:\Users\danil\Desktop\webApp\src\index.css                                                          | CSS              |         17 |          3 |          3 |         23 |
 | c:\Users\danil\Desktop\webApp\src\index.js                                                           | JavaScript       |         22 |          0 |          3 |         25 |
 | c:\Users\danil\Desktop\webApp\test\Escrow.js                                                         | JavaScript       |        200 |         20 |         51 |        271 |
-| Total                                                                                                |                  |    111,613 |        298 |        757 |    112,668 |
+| Total                                                                                                |                  |    111,555 |        355 |        754 |    112,664 |
 +------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
