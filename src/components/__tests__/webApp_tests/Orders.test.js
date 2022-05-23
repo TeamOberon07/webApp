@@ -10,7 +10,7 @@ window.__defineGetter__('navigator', function() {
     }
 })
 describe('Orders', () => {
-    test("TU08 visualizzazione delle transazioni (isBuyer = true)", async () => {
+    test("TU07 visualizzazione delle transazioni (isBuyer = true)", async () => {
 
         let localState = ["Created", "Confirmed", "Deleted", "Asked Refund", "Refunded"];
         let mock = [
@@ -42,7 +42,7 @@ describe('Orders', () => {
         expect(amount.innerHTML === "Created");
     })
 
-    test("TU09 visualizzazione delle transazioni (isBuyer = false)", async () => {
+    test("TU08 visualizzazione delle transazioni (isBuyer = false)", async () => {
 
         let localState = ["Created", "Confirmed", "Deleted", "Asked Refund", "Refunded"];
         let mock = [

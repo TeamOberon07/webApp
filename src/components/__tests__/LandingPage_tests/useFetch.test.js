@@ -51,14 +51,14 @@ describe('useFetch', () => {
             });
         });
 
-        it('calls fetch with correct GET options', async () => {
+        test('TU37 calls fetch with correct GET options', async () => {
             method = 'GET';
             const { waitForNextUpdate } = renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError));
             await waitForNextUpdate();
             expect(mockedFetch).toHaveBeenLastCalledWith(url, getOptions);
         });
 
-        it('calls fetch with correct PUT options', async () => {
+        test('TU38 calls fetch with correct PUT options', async () => {
             method = 'PUT';
             const { waitForNextUpdate } = renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError));
             await waitForNextUpdate();
@@ -106,19 +106,19 @@ describe('useFetch', () => {
                 </StateContext.Provider>
             );
 
-            it('calls setOrder and setIsloaded when GET request OK and order is valid', async () => {
+            test('TU39 calls setOrder and setIsloaded when GET request OK and order is valid', async () => {
                 const { result } = renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError), { wrapper: isAuthorizedWrapper });
                 await waitFor(() => expect(result.current[1]).toBe(true));
                 expect(result.current[0]).toStrictEqual(unconfirmedOrder);
             });
 
-            it('calls setError when GET request OK but seller is not authorized', async () => {
+            test('TU40 calls setError when GET request OK but seller is not authorized', async () => {
                 const { result } = renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError), { wrapper: isNotAuthorizedWrapper });
                 await waitFor(() => expect(result.current[1]).toBe(true));
                 expect(mockedSetError).toHaveBeenLastCalledWith('Seller Address not recognized (Address: ' + unconfirmedOrder.sellerAddress + ')');
             });
 
-            it('calls setError when GET request OK but price is invalid', async () => {
+            test('TU41 calls setError when GET request OK but price is invalid', async () => {
                 mockedFetch.mockImplementation(() => {
                     return Promise.resolve({ ok: true, json: () => Promise.resolve({price: 'price', sellerAddress: '0x123', hash: '', confirmed: false}) });
                 });
@@ -127,14 +127,14 @@ describe('useFetch', () => {
                 expect(mockedSetError).toHaveBeenLastCalledWith('Invalid price format (price: price)');
             });
 
-            it('calls setError when GET request OK but isAuthorizedSeller throws an error', async () => {
+            test('TU42 calls setError when GET request OK but isAuthorizedSeller throws an error', async () => {
                 const { result } = renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError), { wrapper: isAuthorizedErrorWrapper });
                 await waitFor(() => expect(result.current[1]).toBe(true));
                 expect(mockedSetError).toHaveBeenLastCalledWith("Error: can't connect");
             });
         });
    
-        it('recieves !ok response from fetch and calls setError with code and statusText as recieved', async () => {
+        test('TU43 recieves !ok response from fetch and calls setError with code and statusText as recieved', async () => {
             mockedFetch.mockImplementation(() => {
                 return Promise.resolve({ ok: false, status:404, statusText: 'Not Found',  json: () => Promise.resolve({}) });
             });
@@ -143,8 +143,7 @@ describe('useFetch', () => {
             expect(mockedSetError).toHaveBeenLastCalledWith(`${method} request failed (Code 404: Not Found)`);
         });
 
-        // Devide in 3 different unit tests?
-        it('realizes that order is alrady in chain and calls setOrder, setError, setIsLoaded', async () => {
+        test('TU44 realizes that order is alrady in chain and calls setOrder, setError, setIsLoaded', async () => {
             mockedFetch.mockImplementation(() => {
                 return Promise.resolve({ ok: true, json: () => Promise.resolve(confimedOrder) });
             });
@@ -156,9 +155,9 @@ describe('useFetch', () => {
             expect(result.current[1]).toBe(true);
         });
 
-        it('realizes that order is alrady in chain but E-comm has not been notified, calls setOrder, setError ( with "Order in chain & !notified"), setIsLoaded', async () => {
+        // it('realizes that order is alrady in chain but E-comm has not been notified, calls setOrder, setError ( with "Order in chain & !notified"), setIsLoaded', async () => {
 
-        });
+        // });
     });
 
     describe('Test "PUT" method', () => {
@@ -177,7 +176,7 @@ describe('useFetch', () => {
             });
         });
 
-        it('calls setHashNotified when PUT request OK', async () => {
+        test('TU45 calls setHashNotified when PUT request OK', async () => {
             renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError));
             await waitFor(() => expect(mockedSetHasNotified).toHaveBeenCalled());
         });
@@ -200,7 +199,7 @@ describe('useFetch', () => {
             mockedFetch.mockRestore();
         });
 
-        it('identifies AbortError and does not call setError', () => {
+        test('TU46 identifies AbortError and does not call setError', () => {
             const { unmount } = renderHook(() => useFetch(url, method, mockedSetHasNotified, mockedSetError));
             unmount();
             expect(mockedSetError).not.toHaveBeenCalled();
@@ -212,24 +211,15 @@ describe('useFetch', () => {
 
 describe('isValidAmount', () => {
 
-    it('is a valid amount', () => {
+    test('TU36 isValidAmount behaviour', () => {
         expect(isValidAmount(1.5)).toStrictEqual(true);
-    });
-
-    it('is not a valid amount, not a number', () => {
         expect(isValidAmount('no')).toStrictEqual(false);
-    });
-
-    it('is not a valid amount, not a valid number', () => {
         expect(isValidAmount('10-.1')).toStrictEqual(false);
-    });
-
-    it('is not a valid amount, less than 0', () => {
         expect(isValidAmount(-1)).toStrictEqual(false);
-    });
-
-    it('is not a valid amount, equals 0', () => {
         expect(isValidAmount(0)).toStrictEqual(false);
     });
 
+    // test('not a number is not a valid amount', () => {
+
+    // });
 });

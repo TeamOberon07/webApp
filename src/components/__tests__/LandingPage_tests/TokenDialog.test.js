@@ -30,12 +30,12 @@ describe('TokenDialog', () => {
         return unmount;
     }
 
-    it('asks to choose a token', async () => {
-        renderWithContext();
-        expect(await screen.findByText(/Choose a token for the payment:/i)).toBeInTheDocument();
-    });
+    // it('asks to choose a token', async () => {
+    //     renderWithContext();
+    //     expect(await screen.findByText(/Choose a token for the payment:/i)).toBeInTheDocument();
+    // });
 
-    it('renders all Tokens avaiable', async () => {
+    test('TU24 renders all tokens avaiable', async () => {
         renderWithContext();
         expect(await screen.findByText(/Choose a token for the payment:/i)).toBeInTheDocument();
         expect(screen.getByText('AVAX')).toBeInTheDocument();
@@ -45,14 +45,14 @@ describe('TokenDialog', () => {
         expect(screen.getByText(/fUSDT/i)).toBeInTheDocument();
     });
     
-    it('calls onClose after selecting AVAX', async () => {
+    test('TU25 calls onClose after selecting AVAX', async () => {
         renderWithContext();
         const avax_token = await screen.findByText('AVAX');
         fireEvent.click(avax_token);
         expect(onClose).toHaveBeenCalled();
     });
 
-    it('calls onClose after selecting a token', async () => {
+    test('TU26 calls onClose after selecting a token', async () => {
         renderWithContext();
         const JOE_token = await screen.findByText(/JOE/i);
         fireEvent.click(JOE_token);

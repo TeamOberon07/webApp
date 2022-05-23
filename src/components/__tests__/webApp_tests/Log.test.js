@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 
 describe('Log', () => {
-    it('renders Log with correct data', async () => {  
+    test('TU05 renders Log with correct data', async () => {  
 
         render(<StateContext.Provider  value={ {
               

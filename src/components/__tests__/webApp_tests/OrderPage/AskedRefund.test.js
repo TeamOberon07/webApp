@@ -26,8 +26,8 @@ jest.mock("react-router-dom", () => ({
     })
 }));
 
-describe('OrderPage', () => {
-    it('renders OrderPage with correct data', async () => {
+describe('OrderPage AskedRefund', () => {
+    test('TU19 refund buyer when user is Seller', async () => {
 
         global.window.ethereum = {chainId: "0x4"};
         
@@ -74,7 +74,7 @@ describe('OrderPage', () => {
         fireEvent.click(await screen.findByRole('button',{name:"Refund Buyer"}));
     });
 
-    it('renders OrderPage with correct data', async () => {
+    test('TU20 refund buyer button is not rendered when user is Buyer', async () => {
 
         global.window.ethereum = {chainId: "0x4"};
         
@@ -116,5 +116,7 @@ describe('OrderPage', () => {
                 <OrderPage />
             </BrowserRouter>
         </StateContext.Provider>)
+
+        expect(screen.queryByText('button',{name:"Refund Buyer"})).toBeNull();
     });
 });

@@ -30,7 +30,7 @@ describe('OrderPage', () => {
         0
     ];
 
-    it('renders OrderPage with correct data', async () => {
+    test('TU14 renders OrderPage with correct data for Seller', async () => {
         
         global.window.ethereum = {chainId: "0x4"};
 
@@ -75,7 +75,7 @@ describe('OrderPage', () => {
           fireEvent.click(await screen.findByText('Delete Order'));
     });
 
-    it('renders OrderPage with correct data', async () => {
+    test('TU15 renders OrderPage with correct data for Buyer', async () => {
         
         global.window.ethereum = {chainId: "0x4"};
 
@@ -116,11 +116,13 @@ describe('OrderPage', () => {
                 <OrderPage />
             </BrowserRouter>
         </StateContext.Provider>)
+        expect(screen.queryByText('Mark as Shipped')).toBeNull();
+        expect(screen.queryByText('Delete Order')).toBeNull();
     });
 
-    it('renders OrderPage No Metamask', async () => {
+    test('TU16 renders OrderPage No Metamask', async () => {
         
-        global.window.ethereum = "";
+        delete window.ethereum;
 
         render(<StateContext.Provider value={ {
             orderOperations: ["Delete", "SetAsShipped", "RefundBuyer", "AskRefund"],
@@ -159,9 +161,12 @@ describe('OrderPage', () => {
                 <OrderPage />
             </BrowserRouter>
         </StateContext.Provider>)
+        expect(screen.getByText(/No Ethereum wallet was detected/i)).toBeInTheDocument();
+
+        window.ethereum = true;
     });
 
-    it('renders OrderPage No Wallet', async () => {
+    test('TU17 renders OrderPage No Wallet', async () => {
         
         global.window.ethereum = "";
 
@@ -202,10 +207,11 @@ describe('OrderPage', () => {
                 <OrderPage />
             </BrowserRouter>
         </StateContext.Provider>)
+        expect(screen.getByText("Connect Wallet")).toBeInTheDocument();;
     });
 
 
-    it('renders OrderPage Switch Network', async () => {
+    test('TU18 renders OrderPage Switch Network', async () => {
         
         global.window.ethereum = {chainId:"0x2"};
 
@@ -246,5 +252,6 @@ describe('OrderPage', () => {
                 <OrderPage />
             </BrowserRouter>
         </StateContext.Provider>)
+        expect(screen.getByText("Switch Network")).toBeInTheDocument();;
     });
 });

@@ -100,7 +100,7 @@ describe('OrderData', () => {
 
     describe('Test display order data', () => {
 
-        it('renders order price as passed in prop', async () => {
+        test('TU27 renders order price as passed in prop', async () => {
             await renderWithContext();
             const expected = `$${order.price} fUSDt`;
             // const balance = parseFloat(tokenBalance.toFixed(4))
@@ -112,12 +112,12 @@ describe('OrderData', () => {
 
     describe('Test button to change token', () => {
 
-        it('initially renders AVAX as selected balance', async () => {
+        test('TU28 initially renders AVAX as selected token with correct balance', async () => {
             await renderWithContext();
             expect(await screen.findByText(`${TokenPrices.AVAX} AVAX`)).toBeInTheDocument();
         });
 
-        it('displays all avaiable tokens when clicking button to change balance', async () => {
+        test('TU29 displays all avaiable tokens when clicking button to change selected token', async () => {
             await renderWithContext();
             clickButton(ButtonTypes.tokenButton);
             expect(await screen.findByText('AVAX')).toBeInTheDocument();
@@ -127,7 +127,7 @@ describe('OrderData', () => {
             expect(screen.getAllByText(/fUSDT/i).length).toBe(3);
         });
 
-        it('updates balance when token changed', async () => {
+        test('TU30 updates balance when token changed', async () => {
             await renderWithContext();
             mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
             clickButton(ButtonTypes.tokenButton);
@@ -139,7 +139,7 @@ describe('OrderData', () => {
 
     describe('Test button to approve', () => {
 
-        it('renders Approve button when selecting fUSDT ..', async () => {
+        test('TU31 renders Approve button when selecting token different to AVAX', async () => {
             mocked_ERC20isApproved.mockReturnValue(Promise.resolve(false));
             await renderWithContext();
             clickButton(ButtonTypes.tokenButton);
@@ -165,14 +165,14 @@ describe('OrderData', () => {
     
     describe('Test button to confirm Tx', () => {
 
-        it('checks that transaction button is enabled when balance > price', async () => {
+        test('TU32 checks that transaction button is enabled when balance > price', async () => {
             await renderWithContext();
             const createButton = screen.getByText('Create transaction');
             expect(createButton).toBeInTheDocument();
             expect(createButton).toBeEnabled();
         });
         
-        it('checks that transaction button is NOT enabled when balance < price', async () => {
+        test('TU33 checks that transaction button is NOT enabled when balance < price', async () => {
             const oldTokenBalance = tokenBalance;
             tokenBalance = 1;
             await renderWithContext();
@@ -182,7 +182,7 @@ describe('OrderData', () => {
             tokenBalance = oldTokenBalance;
         });
 
-        it('calls createOrder with correct selected value and amount when button createOrder clicked', async () => {
+        test('TU34 calls createOrder with correct selected value and amount when button createOrder is clicked', async () => {
             mocked_ERC20isApproved.mockReturnValue(Promise.resolve(true));
             await renderWithContext();
             clickButton(ButtonTypes.tokenButton);
@@ -201,44 +201,44 @@ describe('OrderData', () => {
             
         // });
     
-        it('removes button to confirm Tx after it has been clicked', async () => {
+        test('TU35 removes button to confirm Tx after it has been clicked', async () => {
             await renderWithContext();
             const confirmButton = clickButton(ButtonTypes.createButton);
             expect(confirmButton).not.toBeVisible();
         });
     });
     
-    describe('Test Loading message', () => {
+    // describe('Test Loading message', () => {
 
-        beforeEach(() => {
-            order = {price: tokenPrice, sellerAddress: '0x123', confirmed: false};
-            loadingText = '';
-        });
+        // beforeEach(() => {
+        //     order = {price: tokenPrice, sellerAddress: '0x123', confirmed: false};
+        //     loadingText = '';
+        // });
 
-        it('initially does not render loading text when loadingText is an empty string', async () => {
-            await renderWithContext();
-            expect(screen.queryAllByText(/loading.../i).length).toBe(0);
-        });
+        // it('initially does not render loading text when loadingText is an empty string', async () => {
+        //     await renderWithContext();
+        //     expect(screen.queryAllByText(/loading.../i).length).toBe(0);
+        // });
     
-        it('does not render loading message when order is confirmed, regardless of loadingText (1: loadingText === "" )', async () => {
-            await renderWithContext();
-            order.confirmed = true;
-            expect(screen.queryAllByText(/Loading.../i).length).toBe(0);
-        });
+        // it('does not render loading message when order is confirmed, regardless of loadingText (1: loadingText === "" )', async () => {
+        //     await renderWithContext();
+        //     order.confirmed = true;
+        //     expect(screen.queryAllByText(/Loading.../i).length).toBe(0);
+        // });
     
-        it('does not render loading message when order is confirmed, regardless of loadingText (2: loadingText !== "" )', async () => {
-            await renderWithContext();
-            order.confirmed = true;
-            loadingText = 'Loading message...';
-            expect(screen.queryAllByText(/Loading message.../i).length).toBe(0);
-        });
+        // it('does not render loading message when order is confirmed, regardless of loadingText (2: loadingText !== "" )', async () => {
+        //     await renderWithContext();
+        //     order.confirmed = true;
+        //     loadingText = 'Loading message...';
+        //     expect(screen.queryAllByText(/Loading message.../i).length).toBe(0);
+        // });
 
         // it('asks to confirm transaction after clicking Create transaction ', async () => {
         //     await renderWithContext();
         //     clickButton(ButtonTypes.createButton);
         //     expect(screen.getByText(/Loading/i)).toBeInTheDocument();
         // });
-    });
+    // });
 
     
 });
