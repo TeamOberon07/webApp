@@ -70,7 +70,7 @@ describe('LandingPage', () => {
     //     renderWithContext();
     // });    
 
-    it('does not find wallet, renders NoWalletDetected', async () => {
+    test('TI01 does not find wallet, renders NoWalletDetected', async () => {
         delete window.ethereum;
         render(
             <StateContext.Provider value={{
@@ -103,7 +103,7 @@ describe('LandingPage', () => {
         window.ethereum = true;
     });
 
-    it('asks to connect wallet, renders ConnectWallet', async () => {
+    test('TI02 asks to connect wallet, renders ConnectWallet', async () => {
         const mockedConnectWallet = jest.fn();
         mockedFetch.mockImplementation(() => {
             return Promise.resolve({ ok: true, json: () => Promise.resolve({ price: balance, sellerAddress: '0x123', hash: '', confirmed: false }) });
@@ -209,7 +209,7 @@ describe('LandingPage', () => {
                 await waitFor(() => expect(screen.getByText(/Create transaction/i)).not.toHaveClass('disabled-button'));
             };
 
-            it('asks to confirm transaction on Metamask after clicking create transaction, then asks to wait', async () => {
+            test('TI03 asks to confirm transaction on Metamask after clicking create transaction, then asks to wait', async () => {
                 await renderWithContextWaitOnCreateOrder();
                 clickCreate();
                 expect(await screen.findByText(/Please confirm the transaction on MetaMask/i)).toBeInTheDocument();
@@ -218,7 +218,7 @@ describe('LandingPage', () => {
             });
         });
 
-        it('completes transaction successfully and renders Tx data', async () => {
+        test('TI04 completes transaction successfully and renders TxHash', async () => {
             await renderWithContext();
             clickCreate();
             expect(await screen.findByText(/Transaction completed successfully!/i)).toBeInTheDocument();
@@ -271,7 +271,7 @@ describe('LandingPage', () => {
             await waitFor(() => expect(screen.getByText(/Create transaction/i)).not.toHaveClass('disabled-button'));
         };
 
-        it('re-renders Create transaction button when createorder throws error', async () => {
+        test('TI05 re-renders Create transaction button when createorder throws error', async () => {
             await renderWithContextErrorOnCreateOrder();
             await waitFor(() => expect(screen.getByText(/Create transaction/i)).not.toHaveClass('disabled-button'));
         });
@@ -279,7 +279,7 @@ describe('LandingPage', () => {
     });
 
     describe('Order already on-chain', () => {
-        it('renders Tx is already in chain and Tx data', async () => {
+        test('TI06 renders Tx is already in chain and TxHash', async () => {
             const renderWithContextOrderConfirmed = async () => {
                 mockedFetch.mockImplementation(() => {
                     return Promise.resolve({ ok: true, json: () => Promise.resolve({ price: amountIn, sellerAddress: '0x123', hash: '0x987', confirmed: true }) });
@@ -342,7 +342,7 @@ describe('parseUrl', () => {
     delete window.location;
     window.location = new URL('https://www.ShopChain.com/landing-page?order=342');
 
-    it('parses URL correctrly', () => {
+    test('TU47 parses URL correctly', () => {
         expect(parseUrl()).toBe('http://localhost:8000/orders/342');
     });
 });
