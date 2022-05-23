@@ -9,7 +9,7 @@ describe('Log', () => {
     test('TU05 renders Log with correct data', async () => {  
 
         render(<StateContext.Provider  value={ {
-              
+          orderState: ['Created', 'Shipped', 'Confirmed', 'Deleted', 'Asked Refund', 'Refunded'],
               _getLog: async (id) => Promise.resolve([[0,1652118547],[1,1652118547],[2,1652118547],[3,1652118547],[4,1652118547],[5,1652118547],[6,1652118547]]) 
             }} >
                 <BrowserRouter>
