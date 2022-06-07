@@ -53,6 +53,16 @@ form > .cta-button {
   width: 50%;
 }
 
+#downloadQRbtn{
+  text-align: center;
+  margin: auto;
+  display: flex;
+  width: 3em;
+  font-size: 0.75em;
+  align-items: center;
+  justify-content: center;
+}
+
 #qrcode {
   height: 140px;
   width: 140px;

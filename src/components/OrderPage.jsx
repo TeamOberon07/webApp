@@ -77,6 +77,15 @@ export function OrderPage() {
         }
     }, [context.orderStateChanged]);
 
+    function downloadQR(){
+        var canvas = document.getElementById("qrcode");
+        var image = canvas.toDataURL();
+        var aDownloadLink = document.createElement('a');
+        aDownloadLink.download = 'qrcode' + id +'.png';
+        aDownloadLink.href = image;
+        aDownloadLink.click();
+    }
+
     const spinner = <div className="spinner"><div className="half-spinner"></div></div>;
 
     const buttonToApprove = 
@@ -242,6 +251,9 @@ export function OrderPage() {
                                             <h2>QRCode</h2>
                                             <canvas id="qrcode"></canvas>
                                         </div>
+                                        <button id="downloadQRbtn" className="cta-button order-button blur-light" onClick={() => {
+                                            downloadQR()
+                                        }}>Download</button>
                                     </td>
                             })()}
                         </tr>  
