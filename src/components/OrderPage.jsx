@@ -138,8 +138,7 @@ export function OrderPage() {
     }
 
     useEffect(async () => {
-        if(txWaiting[operations[2]])
-            setRefundButton(refundButtonOK);
+        setRefundButton(refundButtonOK);
     }, [txWaiting[operations[2]]])
 
     const callApprove = async () => {
@@ -186,25 +185,23 @@ export function OrderPage() {
                     setApproveButton("");
                     setRefundButton(refundButtonNOK);
                 } else {
-                    context._ERC20isApproved(context.stablecoinAddress, amount)
-                    .then((approved) => {
-                        if (approved) {
-                            setApproveButton(buttonApproved);
-                            setStepActive(1);
-                            setRefundButton(refundButtonOK);
-                        } else {
-                            setApproveButton(buttonToApprove);
-                            setStepActive(0);
-                            setRefundButton(refundButtonToApprove);
-                        }
-                    })
+                    let approved = await context._ERC20isApproved(context.stablecoinAddress, amount);
+                    if (approved) {
+                        setApproveButton(buttonApproved);
+                        setStepActive(1);
+                        setRefundButton(refundButtonOK);
+                    } else {
+                        setApproveButton(buttonToApprove);
+                        setStepActive(0);
+                        setRefundButton(refundButtonToApprove);
+                    }
                 }
             } else {
                 setApproveButton("");
                 setRefundButton(refundButtonToApprove);
             }
         }
-    }, [amount])
+    }, [amount, context.userIsSeller])
 
     if (window.ethereum === undefined) { return <NoWalletDetected/>; }
     

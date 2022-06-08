@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/matteo/Desktop/GitHub/webAppOberon/reactapp/contracts/Escrow.sol": {
-      "lastModificationDate": 1644401676175,
-      "contentHash": "aee495e075b7fbda3ddec4a5e84e2bc7",
+    "/home/matteo/Desktop/GitHub/webApp/contracts/Escrow.sol": {
+      "lastModificationDate": 1652038232121,
+      "contentHash": "30c8169151149c38543469c7335f89e7",
       "sourceName": "contracts/Escrow.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -29,17 +29,21 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/utils/Counters.sol"
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@traderjoe-xyz/core/contracts/traderjoe/interfaces/IJoeRouter01.sol",
+        "@traderjoe-xyz/core/contracts/traderjoe/interfaces/IJoeFactory.sol",
+        "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "Escrow"
+        "SCEscrow"
       ]
     },
-    "/home/matteo/Desktop/GitHub/webAppOberon/reactapp/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
-      "lastModificationDate": 1643878674178,
+    "/home/matteo/Desktop/GitHub/webApp/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
+      "lastModificationDate": 1651927818211,
       "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
       "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
       "solcConfig": {
@@ -71,6 +75,146 @@
       ],
       "artifacts": [
         "Counters"
+      ]
+    },
+    "/home/matteo/Desktop/GitHub/webApp/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1651927819275,
+      "contentHash": "302d9755e46bc69d7058b0cbe7185e37",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/home/matteo/Desktop/GitHub/webApp/node_modules/@traderjoe-xyz/core/contracts/traderjoe/interfaces/IJoeRouter01.sol": {
+      "lastModificationDate": 1651927824491,
+      "contentHash": "6fd6517139fb0577d3b722d2693c0bda",
+      "sourceName": "@traderjoe-xyz/core/contracts/traderjoe/interfaces/IJoeRouter01.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.2"
+      ],
+      "artifacts": [
+        "IJoeRouter01"
+      ]
+    },
+    "/home/matteo/Desktop/GitHub/webApp/node_modules/@traderjoe-xyz/core/contracts/traderjoe/interfaces/IJoeFactory.sol": {
+      "lastModificationDate": 1651927824487,
+      "contentHash": "c47e8259c4b620464aa69df10911eeec",
+      "sourceName": "@traderjoe-xyz/core/contracts/traderjoe/interfaces/IJoeFactory.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": [
+        "IJoeFactory"
+      ]
+    },
+    "/home/matteo/Desktop/GitHub/webApp/node_modules/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol": {
+      "lastModificationDate": 1651927820583,
+      "contentHash": "611f626b2447ccff9ba5332460fd217f",
+      "sourceName": "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "AggregatorV3Interface"
       ]
     }
   }
