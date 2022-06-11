@@ -108,7 +108,7 @@ export class StateProvider extends React.Component {
         },
     
         _setListenerMetamaskAccount: () => {
-            window.ethereum.on('accountsChanged', async     () => {
+            window.ethereum.on('accountsChanged', async () => {
                 await this.state._connectWallet();
             })
         },

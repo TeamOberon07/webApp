@@ -169,7 +169,7 @@ th {
 
 .orderTable {
   width: 100%;
-  margin-bottom: 5em;
+  margin-bottom: 1em;
 }
 
 nav .container {
@@ -601,6 +601,7 @@ body::-webkit-scrollbar-thumb {
 #paginator-buttons{
   display: flex;
   justify-content: space-around;
+  margin-bottom: 4em;
 }
 
 #imgLogo{
