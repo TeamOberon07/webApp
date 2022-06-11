@@ -60,7 +60,7 @@ describe('Integration tests', () => {
     await page.close()
   })
   
-  test("HomePage comunica correttamente con la blockchain", async () => {
+  test("TI01 - HomePage comunica correttamente con la blockchain", async () => {
 
     await timeout(3000)
     const table = await page.$("table tr td");
@@ -70,7 +70,7 @@ describe('Integration tests', () => {
 
   });
   
-  test("HomePage carica correttamente OrderPage, e OrderPage comunica correttamente con la blockchain", async () => {
+  test("TI03 - HomePage carica correttamente OrderPage, e OrderPage comunica correttamente con la blockchain", async () => {
     
     await timeout(3000)
     const button = await page.$('.order-button')
@@ -87,7 +87,7 @@ describe('Integration tests', () => {
   
   });  
 
-  test("Ecommerce ridireziona alla LandingPage correttamente, che comunica correttamente con la blockchain", async () => {
+  test("TI02 - Ecommerce ridireziona alla LandingPage correttamente, che comunica correttamente con la blockchain", async () => {
   
     await page.goto('http://localhost:3001')
 

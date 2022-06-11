@@ -55,7 +55,7 @@ describe('Integration tests', () => {
     await page.close()
   })
 
-  test("RegisterSellerPage correctly speaks with blockchain", async () => {
+  test("TI04 - RegisterSeller Page comunica correttamente con la blockchain", async () => {
     await page.goto('http://localhost:3000/register-seller')
     await timeout(1500)
     const button = await page.$('.cta-button')

@@ -6,9 +6,13 @@ let abi = require("../../../contracts/SCEscrow.json");
 abi = abi.abi;
 
 let browser, metamask, page, ecommercePage, landingPage, orderPage, registerSellerPage
+// BE SURE THESE 2 ACCOUNTS HAVE FUNDS, ALSO BUYER MUST HAVE STABLECOIN/JOE TO CREATE ORDERS
 const buyer1 = "f603a29a26ccc992cc66b2a871239f558e1d8fdde46134a6a62afbc87f60f2f0"
 const seller1 = "ae17644f94057fe74c4dd000b0f3594779bb05fc69b7edaabc34be2a77b08456"
 const contractAddress = "0xCB99efB19481eF91F3296a6E6a61caA7F02Af65D"
+// INSERT HERE A NEW PRIVATE KEY!!!
+// Create a new account on metamask, then go to the faucet and request funds, otherwise the last test (TS10) will fail
+const pkRegisterSeller = "4ec3db633ce43930ceb42b9c6d0279b5397c8a732d8c40faab3eae2a6182c85b"
 
 jest.setTimeout(5000000);
 
@@ -142,7 +146,7 @@ describe('System tests - Landing Page', () => {
         await openLandingFromEcommerce();
     })
 
-    test("Buyer può comprare con AVAX", async () => {
+    test("TS01 - Buyer può comprare con AVAX", async () => {
 
         landingPage = await getCurrentPage()
         await timeout(3000)
@@ -157,7 +161,7 @@ describe('System tests - Landing Page', () => {
 
     });
 
-    test("Buyer può comprare con la stablecoin", async () => {
+    test("TS02 - Buyer può comprare con la stablecoin", async () => {
         landingPage = await getCurrentPage()
         await timeout(3000)
         await clickElement(landingPage, '.select-button')
@@ -181,7 +185,7 @@ describe('System tests - Landing Page', () => {
         expect(value).toBeDefined();
     });  
 
-    test("Buyer può comprare con un token qualsiasi", async () => {
+    test("TS03 - Buyer può comprare con un token qualsiasi", async () => {
         landingPage = await getCurrentPage()
         await timeout(3000)
         await clickElement(landingPage, '.select-button')
@@ -221,7 +225,7 @@ describe('System tests - Order Page', () => {
         }
     })
 
-    test("Buyer può chiedere rimborso dopo aver comprato", async () => {
+    test("TS04 - Buyer può chiedere rimborso dopo aver comprato", async () => {
         await timeout(3000)
         // click See order
         await clickElement(orderPage, '#root > div > div > div > table > tbody > tr:nth-child(1) > td.order-button-cell > a')
@@ -237,7 +241,7 @@ describe('System tests - Order Page', () => {
         expect(value).toBe("Refunded");
     });
 
-    test("Seller può settare lo stato Shipped", async () => {
+    test("TS05 - Seller può settare lo stato Shipped", async () => {
         // BEGIN SWITCHING ACCOUNT
         await metamask.importPK(seller1);
         await metamask.switchAccount(2);
@@ -269,7 +273,7 @@ describe('System tests - Order Page', () => {
         expect(value).toBe("Shipped");
     });
 
-    test("Seller può cancellare ordine settato a Shipped", async () => {
+    test("TS06 - Seller può cancellare ordine settato a Shipped", async () => {
         // click Delete
         await clickElement(orderPage, '#order-page-container > tbody > tr:nth-child(5) > td > div > button')
         await confirm()
@@ -281,7 +285,7 @@ describe('System tests - Order Page', () => {
         expect(value).toBe("Deleted");
     });
 
-    test("Seller può cancellare ordine settato a Created", async () => {
+    test("TS07 - Seller può cancellare ordine settato a Created", async () => {
         await orderPage.goto("http://localhost:3000")
         // click See order
         await clickElement(orderPage, '#root > div > div > div > table > tbody > tr:nth-child(3) > td.order-button-cell > a')
@@ -297,7 +301,7 @@ describe('System tests - Order Page', () => {
         expect(value).toBe("Deleted");
     });
 
-    test("Buyer può chidere rimborso di un ordine Confirmed", async () => {
+    test("TS08 - Buyer può chidere rimborso di un ordine Confirmed", async () => {
         // BEGIN SWITCHING ACCOUNT
         await metamask.importPK(buyer1);
         await metamask.switchAccount(2);
@@ -334,7 +338,7 @@ describe('System tests - Order Page', () => {
         expect(value).toBe("Asked Refund");
     });
 
-    test("Seller può rimborsare l'utente", async () => {
+    test("TS09 - Seller può rimborsare l'utente", async () => {
         // BEGIN SWITCHING ACCOUNT
         await metamask.importPK(seller1);
         await metamask.switchAccount(2);
@@ -387,13 +391,10 @@ describe('System tests - Register Seller Page', () => {
         }
     })
 
-    test("Un utente può registrarsi come Seller", async () => {
-
-        // Create a new account on metamask, then go to the faucet and request funds, otherwise the script will fail
-        const pk = "4ec3db633ce43930ceb42b9c6d0279b5397c8a732d8c40faab3eae2a6182c85b"
+    test("TS10 - Un utente può registrarsi come Seller", async () => {
 
         // BEGIN SWITCHING ACCOUNT
-        await metamask.importPK(pk);
+        await metamask.importPK(pkRegisterSeller);
         await metamask.switchAccount(2);
         await clickElement(metamask.page, "#app-content > div > div.main-container-wrapper > div > div > div > div.menu-bar > button")
         await timeout(500)
